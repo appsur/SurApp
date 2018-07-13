@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_person"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_person_stroke"
+        android:title="Me"
+        android:iconTint="@color/black"/>
+    <item
+        android:id="@+id/action_message"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_messages_stroke"
+        android:title="Message" />
+    <item
+        android:id="@+id/action_friends"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_follow"
+        android:title="Friends" />
+    <item
+        android:id="@+id/action_emergency"
+        android:enabled="true"
+        android:icon="@drawable/ic_vector_notifications_stroke"
+        android:title="Emergency" />
+</menu>
