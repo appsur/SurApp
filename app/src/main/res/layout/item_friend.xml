@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="80dp"
+        android:layout_height="86dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/account" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:fontFamily="@font/arimo"
+        android:text="NAME"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:fontFamily="@font/arimo"
+        android:text="LOCATION"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvLocation"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:fontFamily="@font/arimo"
+        android:text="EVENT"
+        android:textColor="@android:color/black" />
+
+    <ProgressBar
+        android:id="@+id/pbTime"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="184dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginTop="27dp"
+        android:progressDrawable="@drawable/customprogressbar" />
+
+    <TextView
+        android:id="@+id/tvTimeElapsed"
+        android:layout_width="166dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/arimo"
+        android:text="TIME ELAPSED"
+        android:textAlignment="center"
+        android:textColor="@android:color/black" />
+
+</RelativeLayout>
