@@ -1,4 +1,7 @@
 <resources>
+
+
     <string name="app_name">SafetyApp</string>
     <string name="google_maps_api_key">AIzaSyAwL41hE4yMdykhmjG0AEjPtzslBnSLA-A</string>
+    <string name="vertical_ellipsis">&#8942;</string>
 </resources>

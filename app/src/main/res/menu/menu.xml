@@ -4,22 +4,21 @@
     <item
         android:id="@+id/action_person"
         android:enabled="true"
-        android:icon="@drawable/ic_vector_person_stroke"
-        android:title="Me"
-        android:iconTint="@color/black"/>
+        android:icon="@drawable/home_outline"
+        android:title="Home" />
     <item
         android:id="@+id/action_message"
         android:enabled="true"
-        android:icon="@drawable/ic_vector_messages_stroke"
+        android:icon="@drawable/message_outline"
         android:title="Message" />
     <item
         android:id="@+id/action_friends"
         android:enabled="true"
-        android:icon="@drawable/ic_vector_follow"
+        android:icon="@drawable/account_multiple_outline"
         android:title="Friends" />
     <item
         android:id="@+id/action_emergency"
         android:enabled="true"
-        android:icon="@drawable/ic_vector_notifications_stroke"
+        android:icon="@drawable/bell_ring_outline"
         android:title="Emergency" />
 </menu>

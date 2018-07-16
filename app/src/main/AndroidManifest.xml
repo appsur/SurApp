@@ -28,6 +28,11 @@
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
+
+        <activity android:name=".FriendsActivity"></activity>
+
+
+
     </application>
 
 </manifest>
