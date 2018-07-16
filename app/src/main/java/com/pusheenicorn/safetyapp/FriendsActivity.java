@@ -16,7 +16,7 @@ public class FriendsActivity extends AppCompatActivity {
         // get the Drawable custom_progressbar
         Drawable draw = getDrawable(R.drawable.customprogressbar);
         // set the drawable as progress drawable
-        progressBar.setProgressDrawable(draw);
+//        progressBar.setProgressDrawable(draw);
 
 
     }
