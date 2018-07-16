@@ -85,7 +85,9 @@
         android:layout_height="216dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="102dp" />
+        android:layout_marginTop="102dp"
+        android:visibility="visible"
+        tools:listitem="@layout/item_friend" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvSafe"
