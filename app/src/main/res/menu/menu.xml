@@ -4,21 +4,21 @@
     <item
         android:id="@+id/action_person"
         android:enabled="true"
-        android:icon="@drawable/home_outline"
+        android:icon="@drawable/select_home"
         android:title="Home" />
     <item
         android:id="@+id/action_message"
         android:enabled="true"
-        android:icon="@drawable/message_outline"
+        android:icon="@drawable/select_message"
         android:title="Message" />
     <item
         android:id="@+id/action_friends"
         android:enabled="true"
-        android:icon="@drawable/account_multiple_outline"
+        android:icon="@drawable/select_friends"
         android:title="Friends" />
     <item
         android:id="@+id/action_emergency"
         android:enabled="true"
-        android:icon="@drawable/bell_ring_outline"
+        android:icon="@drawable/select_alarm"
         android:title="Emergency" />
 </menu>
