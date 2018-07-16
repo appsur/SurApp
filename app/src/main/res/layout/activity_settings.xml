@@ -137,7 +137,7 @@
         android:textColor="@color/black" />
 
     <ImageButton
-        android:id="@+id/ibBell"
+        android:id="@+id/ibAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -152,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/ibProfileImage"
-        android:layout_alignTop="@+id/ibBell"
+        android:layout_alignTop="@+id/ibAlert"
         android:text="ON ALERT"
         android:textColor="@color/black" />
 
