@@ -17,7 +17,7 @@ android {
         }
     }
 }
-ext{
+ext {
     googlePlayVersion = "15.0.1"
 }
 
@@ -29,7 +29,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:$googlePlayVersion"
     implementation 'com.parse.bolts:bolts-android:1.4.0'
     implementation 'com.parse:parse-android:1.17.3'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // for logging API calls to LogCat
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
