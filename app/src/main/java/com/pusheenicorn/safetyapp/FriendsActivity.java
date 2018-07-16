@@ -12,12 +12,7 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-
-        // get the Drawable custom_progressbar
-        Drawable draw = getDrawable(R.drawable.customprogressbar);
-        // set the drawable as progress drawable
-//        progressBar.setProgressDrawable(draw);
-
+        
 
     }
 }
