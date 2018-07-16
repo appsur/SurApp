@@ -4,9 +4,8 @@
     <item
         android:id="@+id/action_person"
         android:enabled="true"
-        android:icon="@drawable/home_account"
-        android:title="Me"
-        android:iconTint="@color/black"/>
+        android:icon="@drawable/home_outline"
+        android:title="Home" />
     <item
         android:id="@+id/action_message"
         android:enabled="true"
@@ -15,11 +14,11 @@
     <item
         android:id="@+id/action_friends"
         android:enabled="true"
-        android:icon="@drawable/account_multiple"
+        android:icon="@drawable/account_multiple_outline"
         android:title="Friends" />
     <item
         android:id="@+id/action_emergency"
         android:enabled="true"
-        android:icon="@drawable/cellphone_sound"
+        android:icon="@drawable/bell_ring_outline"
         android:title="Emergency" />
 </menu>
