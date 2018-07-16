@@ -21,6 +21,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.action_person:
+                        // TODO -- link activities
+                        return true;
+                    case R.id.action_message:
+                        // TODO -- link activities
+                        return true;
+                    case R.id.action_emergency:
+                        // TODO -- link activities
+                        return true;
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
                         Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
