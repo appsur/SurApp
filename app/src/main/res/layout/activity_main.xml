@@ -44,13 +44,22 @@
                 android:textStyle="bold" />
 
             <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="39dp"
+                android:id="@+id/ibMenu"
+                android:layout_width="46dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/menu_icon" />
+
+            <ImageView
+                android:id="@+id/ibSettings"
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="15dp"
+                app:srcCompat="@drawable/dots_vertical" />
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
