@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,5 +42,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.action_person);
+    }
+
+    public void onSettings(View view) {
+        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        Toast.makeText(MainActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG ).show();
+        startActivity(intent);
     }
 }
