@@ -143,7 +143,8 @@
         android:layout_alignStart="@+id/ibProfileImage"
         android:layout_marginTop="224dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/bell_outline" />
+        app:srcCompat="@drawable/bell_outline"
+        android:tint="@color/coral"/>
 
     <TextView
         android:id="@+id/tvOnAlert"
@@ -162,7 +163,8 @@
         android:layout_alignStart="@+id/ibProfileImage"
         android:layout_marginBottom="225dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/compass_outline" />
+        app:srcCompat="@drawable/compass_outline"
+        android:tint="@color/coral"/>
 
     <ImageButton
         android:id="@+id/ibLocator"
@@ -171,7 +173,8 @@
         android:layout_alignStart="@+id/ibProfileImage"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_vector_location_stroke" />
+        app:srcCompat="@drawable/ic_vector_location_stroke"
+        android:tint="@color/coral"/>
 
     <TextView
         android:id="@+id/tvLocation"
@@ -244,24 +247,27 @@
         android:text="Every Hour"
         android:textColor="@color/black" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
         android:layout_marginBottom="179dp"
-        app:srcCompat="@drawable/clock_outline" />
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/clock_outline"
+        android:tint="@color/coral"/>
 
     <ImageButton
-        android:id="@+id/imageButton8"
+        android:id="@+id/ibEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/ibProfileImage"
         android:layout_marginEnd="46dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/account_edit" />
+        app:srcCompat="@drawable/account_edit"
+        android:tint="@color/coral"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
