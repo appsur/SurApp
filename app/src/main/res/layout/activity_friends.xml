@@ -79,20 +79,20 @@
         android:text="ALERT"
         android:textColor="#000000" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriendList"
-        android:layout_width="323dp"
-        android:layout_height="216dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="102dp" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvFriendList"-->
+        <!--android:layout_width="323dp"-->
+        <!--android:layout_height="216dp"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="102dp" />-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvSafe"
-        android:layout_width="319dp"
-        android:layout_height="130dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvSafe"
-        android:layout_marginBottom="65dp" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rvSafe"-->
+        <!--android:layout_width="319dp"-->
+        <!--android:layout_height="130dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignStart="@+id/tvSafe"-->
+        <!--android:layout_marginBottom="65dp" />-->
 
 </RelativeLayout>
