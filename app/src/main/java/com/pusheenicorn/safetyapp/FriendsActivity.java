@@ -1,8 +1,8 @@
 package com.pusheenicorn.safetyapp;
 
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
 
 public class FriendsActivity extends AppCompatActivity {
@@ -17,7 +17,5 @@ public class FriendsActivity extends AppCompatActivity {
         Drawable draw = getDrawable(R.drawable.customprogressbar);
         // set the drawable as progress drawable
 //        progressBar.setProgressDrawable(draw);
-
-
     }
 }

@@ -39,5 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        
+        bottomNavigationView.setSelectedItemId(R.id.action_person);
     }
 }
