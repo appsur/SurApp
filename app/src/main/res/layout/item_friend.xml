@@ -14,7 +14,7 @@
         android:src="@drawable/account" />
 
     <TextView
-        android:id="@+id/tvName"
+        android:id="@+id/tvEventName"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -27,7 +27,7 @@
         android:id="@+id/tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
+        android:layout_below="@+id/tvEventName"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:fontFamily="@font/arimo"
         android:text="LOCATION"
