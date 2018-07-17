@@ -105,6 +105,7 @@
         android:layout_above="@+id/etMessage"
         android:layout_alignStart="@+id/ibSMS"
         android:layout_alignTop="@+id/tvPhone"
+        android:layout_marginEnd="-6dp"
         android:layout_toStartOf="@+id/tvPhone"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_handy" />
