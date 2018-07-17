@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(friendsAction);
                         return true;
                 }
-                return false;
+                return true;
             }
         });
 

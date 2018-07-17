@@ -105,7 +105,7 @@
         android:layout_below="@+id/reminder_text"
         android:layout_marginTop="14dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/phone_icon" />
+        app:srcCompat="@drawable/phone" />
 
     <EditText
         android:id="@+id/etMessage"
@@ -129,7 +129,7 @@
         android:layout_alignBottom="@+id/etMessage"
         android:layout_toStartOf="@+id/etMessage"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/message_icon" />
+        app:srcCompat="@drawable/message" />
 
     <TextView
         android:id="@+id/tvPhone"
