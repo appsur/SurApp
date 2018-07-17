@@ -74,47 +74,50 @@
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="275dp"
+        android:layout_height="250dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar" />
 
     <ImageButton
         android:id="@+id/ibCheckin"
-        android:layout_width="50dp"
+        android:layout_width="140dp"
         android:layout_height="50dp"
         android:layout_alignStart="@+id/reminder_text"
         android:layout_below="@+id/map"
-        android:layout_marginStart="14dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/check_outline" />
+        app:srcCompat="@drawable/ic_chick" />
 
     <ImageButton
         android:id="@+id/ibAlert"
-        android:layout_width="50dp"
+        android:layout_width="110dp"
         android:layout_height="50dp"
-        android:layout_alignEnd="@+id/tvPhone"
+        android:layout_above="@+id/reminder_text"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/map"
+        android:layout_marginEnd="28dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/bell_outline" />
+        app:srcCompat="@drawable/ic_alert" />
 
     <ImageButton
         android:id="@+id/ibPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/reminder_text"
-        android:layout_below="@+id/reminder_text"
-        android:layout_marginTop="14dp"
+        android:layout_above="@+id/etMessage"
+        android:layout_alignStart="@+id/ibSMS"
+        android:layout_alignTop="@+id/tvPhone"
+        android:layout_toStartOf="@+id/tvPhone"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/phone" />
+        app:srcCompat="@drawable/ic_handy" />
 
     <EditText
         android:id="@+id/etMessage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
 
-        android:layout_alignStart="@+id/tvPhone"
-        android:layout_below="@+id/ibPhone"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_alignEnd="@+id/ibAlert"
         android:ems="10"
+        android:fontFamily="@font/arimo"
         android:hint="message"
         android:inputType="textPersonName"
         android:textColor="@color/black"
@@ -124,42 +127,45 @@
         android:id="@+id/ibSMS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/etMessage"
-        android:layout_alignStart="@+id/ibPhone"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_alignStart="@+id/ibCheckin"
+        android:layout_alignTop="@+id/etMessage"
+        android:layout_toStartOf="@+id/etMessage"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/message" />
+        app:srcCompat="@drawable/ic_massage" />
 
     <TextView
         android:id="@+id/tvPhone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/ibPhone"
-        android:layout_marginEnd="101dp"
-        android:text="phone number here"
+        android:layout_height="50dp"
+        android:layout_above="@+id/etMessage"
+        android:layout_alignEnd="@+id/etMessage"
+        android:layout_toEndOf="@+id/ibSMS"
+        android:fontFamily="@font/arimo"
+        android:text="PHONE NUMBER HERE"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/reminder_text"
-        android:layout_width="80dp"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/ibCheckin"
-        android:layout_marginStart="87dp"
+        android:layout_toStartOf="@+id/etMessage"
+        android:fontFamily="@font/arimo"
         android:gravity="center"
-        android:text="Check-in Reminder"
+        android:text="CHECK-IN             REMINDER"
         android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/alarm_text"
-        android:layout_width="80dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/ibAlert"
-        android:layout_alignStart="@+id/ibAlert"
+        android:layout_alignEnd="@+id/tvPhone"
         android:layout_below="@+id/ibAlert"
+        android:fontFamily="@font/arimo"
         android:gravity="center"
-        android:text="Alarm"
+        android:text="ALARM"
         android:textColor="@color/black" />
 
     <android.support.design.widget.BottomNavigationView

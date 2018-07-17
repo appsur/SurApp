@@ -121,13 +121,13 @@
         android:layout_marginBottom="65dp"
         tools:listitem="@layout/item_friend" />
 
-    <ImageView
-        android:id="@+id/ivBanner"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/ibBanner"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_above="@+id/tvFriendsTitle"
-        android:layout_alignParentStart="true"
-        app:srcCompat="@drawable/bannerimage" />
+        android:layout_alignParentStart="true" />
+        <!--app:srcCompat="@drawable/bannerimage" />-->
 
     <TextView
         android:id="@+id/tvEventTitle"
