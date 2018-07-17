@@ -37,8 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_person:
-                        Intent personAction = new Intent(SettingsActivity.this, MainActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Main Page Accessed", Toast.LENGTH_LONG ).show();
+                        Intent personAction = new Intent(SettingsActivity.this,
+                                MainActivity.class);
+                        Toast.makeText(SettingsActivity.this, "Main Page Accessed",
+                                Toast.LENGTH_LONG ).show();
                         startActivity(personAction);
                         return true;
                     case R.id.action_message:
@@ -48,8 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
                         // TODO -- link activities
                         return true;
                     case R.id.action_friends:
-                        Intent friendsAction = new Intent(SettingsActivity.this, FriendsActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
+                        Intent friendsAction = new Intent(SettingsActivity.this,
+                                FriendsActivity.class);
+                        Toast.makeText(SettingsActivity.this, "Friends Page Accessed",
+                                Toast.LENGTH_LONG ).show();
                         startActivity(friendsAction);
                         return true;
                 }
@@ -62,6 +66,11 @@ public class SettingsActivity extends AppCompatActivity {
         ibLocator = (ImageButton) findViewById(R.id.ibLocator);
         ibCompass = (ImageButton) findViewById(R.id.ibCompass);
         ibAlert = (ImageButton) findViewById(R.id.ibAlert);
+
+        if (isClock)
+        {
+            ibClock.setImageResource(R.drawable.clock);
+        }
     }
 
     public void onClock(View view) {
