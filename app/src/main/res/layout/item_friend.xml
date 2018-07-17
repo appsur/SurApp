@@ -75,8 +75,8 @@
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/pbTime"
         app:srcCompat="@drawable/clock_outline" />
 
 </RelativeLayout>
