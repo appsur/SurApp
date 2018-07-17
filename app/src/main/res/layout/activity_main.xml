@@ -80,9 +80,9 @@
         android:id="@+id/ibProfileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/tvName"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-158dp"
+        android:layout_marginTop="64dp"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="158dp"
+        android:layout_marginTop="172dp"
         android:fontFamily="@font/arimo"
         android:text="NAME"
         android:textColor="@color/black"
@@ -101,29 +101,30 @@
         android:id="@+id/tvUpcomingActivities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tvLastCheckin"
+        android:layout_marginBottom="234dp"
         android:text="UPCOMING ACTIVITIES: "
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvLastCheckin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvUpcomingActivities"
+        android:layout_alignEnd="@+id/tvName"
         android:layout_alignTop="@+id/ibCheckin"
         android:text="LAST CHECK IN: "
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <ImageButton
         android:id="@+id/ibCheckin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="229dp"
+        android:layout_alignStart="@+id/rvActivities"
+        android:layout_marginTop="242dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/check_outline" />
 
@@ -131,50 +132,52 @@
         android:id="@+id/tvRelativeCheckinTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/ibProfileImage"
-        android:layout_alignTop="@+id/tvLastCheckin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/ibCheckin"
+        android:layout_marginEnd="71dp"
         android:text="10:35 PM"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tvCheckinTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/tvLastCheckin"
-        android:layout_marginEnd="60dp"
+        android:layout_alignBottom="@+id/ibCheckin"
+        android:layout_alignStart="@+id/tvRelativeCheckinTime"
         android:text="10 hours ago"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="15sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvActivities"
-        android:layout_width="313dp"
-        android:layout_height="199dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/ibCheckin"
-        android:layout_marginBottom="61dp"
+        android:layout_width="334dp"
+        android:layout_height="157dp"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_centerHorizontal="true"
         android:background="@color/white"
         tools:listitem="@layout/item_event" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ibCheckin"
-        android:layout_centerVertical="true"
-        app:srcCompat="@drawable/star" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="203dp"
         android:text="USERNAME"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/ibCheckin"
+        android:layout_marginBottom="227dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/star" />
 
 </RelativeLayout>

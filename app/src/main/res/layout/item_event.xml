@@ -15,7 +15,7 @@
         android:fontFamily="@font/arimo"
         android:text="NAME"
         android:textColor="@color/teal"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tvLocation"

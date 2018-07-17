@@ -12,7 +12,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/tvUsername"
+        android:layout_alignTop="@+id/tvName"
         android:layout_marginStart="29dp"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -77,64 +77,13 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:id="@+id/tvPassword"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvUsername"
-        android:layout_marginTop="129dp"
-        android:text="PASSWORD: "
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="138dp"
+        android:layout_alignStart="@+id/btnDaily"
         android:layout_marginTop="99dp"
-        android:text="USERNAME: "
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/tvPasswordValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvPassword"
-        android:layout_toEndOf="@+id/tvPassword"
-        android:text="johndoe99"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tvPhoneNumberValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvPasswordValue"
-        android:layout_alignTop="@+id/tvPhoneNumber"
-        android:text="(408) 476-9775"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tvUsernameValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/ibProfileImage"
-        android:layout_toEndOf="@+id/tvPassword"
-        android:text="John Doe"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tvPhoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvPassword"
-        android:layout_marginTop="163dp"
-        android:text="PHONE: "
+        android:text="NAME: "
         android:textColor="@color/black" />
 
     <ImageButton
@@ -200,7 +149,7 @@
         android:id="@+id/tvFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvPassword"
+        android:layout_alignStart="@+id/tvOnAlert"
         android:layout_alignTop="@+id/ibClock"
         android:text="CHECK IN FREQUENCY: "
         android:textColor="@color/black" />
@@ -244,8 +193,8 @@
         android:id="@+id/tvCheckinFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnWeekly"
         android:layout_alignTop="@+id/tvFrequency"
-        android:layout_toEndOf="@+id/tvPassword"
         android:text="Every Hour"
         android:textColor="@color/black" />
 
@@ -265,10 +214,9 @@
         android:id="@+id/ibEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="-30dp"
-        android:layout_marginTop="59dp"
-        android:layout_toEndOf="@+id/btnWeekly"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
         android:background="@android:color/transparent"
         android:tint="@color/coral"
         app:srcCompat="@drawable/account_edit" />
@@ -282,5 +230,53 @@
         android:background="@color/lightGray"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"/>
+
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvPhoneNumber"
+        android:layout_alignStart="@+id/btnDaily"
+        android:layout_marginBottom="-146dp"
+        android:text="USERNAME: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvUsernameValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvUsername"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:text="johndoe99"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/btnDaily"
+        android:layout_marginTop="153dp"
+        android:text="PHONE: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvNameValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvName"
+        android:layout_toEndOf="@id/tvName"
+        android:text="John Doe"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvPhoneValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvPhoneNumber"
+        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:text="(555) 555-5555"
+        android:textColor="@color/black" />
 
 </RelativeLayout>
