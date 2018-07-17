@@ -34,7 +34,9 @@
         <activity android:name=".FriendsActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".EventsActivity"></activity>
+        <activity android:name=".EventsActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>
