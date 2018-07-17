@@ -12,7 +12,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/tvUsername"
+        android:layout_alignTop="@+id/tvName"
         android:layout_marginStart="29dp"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -81,13 +81,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvUsername"
+        android:layout_alignStart="@+id/tvName"
         android:layout_marginTop="127dp"
         android:text="PASSWORD: "
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/tvUsername"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -121,8 +121,8 @@
         android:id="@+id/tvUsernameValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvUsername"
-        android:layout_toEndOf="@+id/tvUsername"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
         android:text="John Doe"
         android:textColor="@color/black"
         android:textSize="14sp" />

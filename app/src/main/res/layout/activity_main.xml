@@ -80,19 +80,20 @@
         android:id="@+id/ibProfileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/tvName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"
+        android:layout_marginBottom="-158dp"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
-        android:id="@+id/tvUsername"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ibProfileImage"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="158dp"
         android:fontFamily="@font/arimo"
-        android:text="USERNAME"
+        android:text="NAME"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
@@ -164,5 +165,16 @@
         android:layout_alignStart="@+id/ibCheckin"
         android:layout_centerVertical="true"
         app:srcCompat="@drawable/star" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_centerHorizontal="true"
+        android:text="USERNAME"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
 </RelativeLayout>
