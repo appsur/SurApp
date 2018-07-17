@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -25,6 +26,11 @@ public class SettingsActivity extends AppCompatActivity {
     boolean isCompass = false;
     boolean isAlert = false;
 
+    // Define variables for making frequency buttons appear
+    Button btnHourly;
+    Button btnDaily;
+    Button btnWeekly;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +43,10 @@ public class SettingsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_person:
-                        Intent personAction = new Intent(SettingsActivity.this, MainActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Main Page Accessed", Toast.LENGTH_LONG ).show();
+                        Intent personAction = new Intent(SettingsActivity.this,
+                                MainActivity.class);
+                        Toast.makeText(SettingsActivity.this, "Main Page Accessed",
+                                Toast.LENGTH_LONG ).show();
                         startActivity(personAction);
                         return true;
                     case R.id.action_message:
@@ -48,8 +56,10 @@ public class SettingsActivity extends AppCompatActivity {
                         // TODO -- link activities
                         return true;
                     case R.id.action_friends:
-                        Intent friendsAction = new Intent(SettingsActivity.this, FriendsActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
+                        Intent friendsAction = new Intent(SettingsActivity.this,
+                                FriendsActivity.class);
+                        Toast.makeText(SettingsActivity.this, "Friends Page Accessed",
+                                Toast.LENGTH_LONG ).show();
                         startActivity(friendsAction);
                         return true;
                 }
@@ -62,6 +72,12 @@ public class SettingsActivity extends AppCompatActivity {
         ibLocator = (ImageButton) findViewById(R.id.ibLocator);
         ibCompass = (ImageButton) findViewById(R.id.ibCompass);
         ibAlert = (ImageButton) findViewById(R.id.ibAlert);
+
+        // Initialize buttons for frequency setup
+        btnHourly = (Button) findViewById(R.id.btnHourly);
+        btnWeekly = (Button) findViewById(R.id.btnWeekly);
+        btnDaily = (Button) findViewById(R.id.btnDaily);
+
     }
 
     public void onClock(View view) {
@@ -71,12 +87,18 @@ public class SettingsActivity extends AppCompatActivity {
         if (isClock)
         {
             ibClock.setImageResource(R.drawable.clock);
+            // Functionality
+            btnHourly.setVisibility(View.VISIBLE);
+            btnDaily.setVisibility(View.VISIBLE);
+            btnWeekly.setVisibility(View.VISIBLE);
         }
         else {
             ibClock.setImageResource(R.drawable.clock_outline);
+            // Functionality
+            btnHourly.setVisibility(View.INVISIBLE);
+            btnDaily.setVisibility(View.INVISIBLE);
+            btnWeekly.setVisibility(View.INVISIBLE);
         }
-
-        // Functionality
     }
 
     public void onLocator(View view) {
