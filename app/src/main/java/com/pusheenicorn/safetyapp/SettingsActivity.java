@@ -5,15 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.File;
+
 public class SettingsActivity extends AppCompatActivity {
 
-    // Define bottom navigation view
+    // Define bottom navigation view.
     BottomNavigationView bottomNavigationView;
 
     // Define variables for image toggle.
@@ -26,10 +35,14 @@ public class SettingsActivity extends AppCompatActivity {
     boolean isCompass = false;
     boolean isAlert = false;
 
-    // Define variables for making frequency buttons appear
+    // Define variables for making frequency buttons appear.
     Button btnHourly;
     Button btnDaily;
     Button btnWeekly;
+    public File photoFile;
+
+    // Define global current user.
+    ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +91,28 @@ public class SettingsActivity extends AppCompatActivity {
         btnWeekly = (Button) findViewById(R.id.btnWeekly);
         btnDaily = (Button) findViewById(R.id.btnDaily);
 
+        ParseUser.logInInBackground("grace", "password", new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    Log.d("Login Activity", "Login successful");
+                }
+                else {
+                    Log.d("Login Activity", "Login failure");
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        currentUser = ParseUser.getCurrentUser();
+        final ParseFile parsefile = new ParseFile(new File(String.valueOf(photoFile)));
+        parsefile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //blah;
+            }
+        });
+
     }
 
     public void onClock(View view) {
@@ -107,6 +142,8 @@ public class SettingsActivity extends AppCompatActivity {
         isLocator = !isLocator;
         if (isLocator) {
             ibLocator.setImageResource(R.drawable.ic_vector_location);
+            currentUser.put("trackable", true);
+
         }
         else
         {

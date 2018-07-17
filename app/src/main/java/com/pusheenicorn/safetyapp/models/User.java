@@ -2,11 +2,11 @@ package com.pusheenicorn.safetyapp.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 @ParseClassName("User")
-public class User extends ParseObject {
+public class User extends ParseUser {
     private final static String KEY_USERNAME = "username";
     private final static String KEY_PROFILE_IMAGE = "profileimage";
     private final static String KEY_NAME = "name";
