@@ -111,11 +111,9 @@
         android:id="@+id/etMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvPhone"
-        android:layout_marginLeft="5dp"
-        android:layout_below="@+id/ibPhone"
-        android:layout_toEndOf="@+id/ibPhone"
 
+        android:layout_alignStart="@+id/tvPhone"
+        android:layout_below="@+id/ibPhone"
         android:ems="10"
         android:hint="message"
         android:inputType="textPersonName"
@@ -127,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/etMessage"
-        android:layout_toStartOf="@+id/etMessage"
+        android:layout_alignStart="@+id/ibPhone"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/message" />
 
@@ -135,8 +133,9 @@
         android:id="@+id/tvPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/ibPhone"
-        android:layout_toEndOf="@+id/ibCheckin"
+        android:layout_marginEnd="101dp"
         android:text="phone number here"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black" />

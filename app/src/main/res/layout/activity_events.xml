@@ -85,7 +85,8 @@
         android:layout_alignStart="@+id/rvFriendList"
         android:fontFamily="@font/arimo"
         android:text="MEMBERS"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tvFriendsTitle"
@@ -96,12 +97,13 @@
         android:layout_marginBottom="-189dp"
         android:fontFamily="@font/arimo"
         android:text="FRIENDS"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvFriendList"
         android:layout_width="327dp"
-        android:layout_height="157dp"
+        android:layout_height="172dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="189dp"
@@ -111,7 +113,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvSafe"
         android:layout_width="319dp"
-        android:layout_height="130dp"
+        android:layout_height="116dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="65dp"
@@ -140,10 +142,10 @@
 
     <ImageButton
         android:id="@+id/imageButton3"
-        android:layout_width="69dp"
-        android:layout_height="73dp"
-        android:layout_alignBottom="@+id/ivBanner"
-        android:layout_toEndOf="@+id/tvEventTitle"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_above="@+id/tvFriendsTitle"
+        android:layout_alignEnd="@+id/rvFriendList"
         android:background="@android:color/transparent"
         android:tint="@android:color/white"
         app:srcCompat="@drawable/account_multiple_plus_outline" />
