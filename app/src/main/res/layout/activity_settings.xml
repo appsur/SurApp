@@ -201,7 +201,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/tvPassword"
-        android:layout_alignTop="@+id/imageView2"
+        android:layout_alignTop="@+id/ibClock"
         android:text="CHECK IN FREQUENCY: "
         android:textColor="@color/black" />
 
@@ -250,7 +250,7 @@
         android:textColor="@color/black" />
 
     <ImageButton
-        android:id="@+id/imageView2"
+        android:id="@+id/ibClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -258,7 +258,8 @@
         android:layout_marginBottom="179dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/clock_outline"
-        android:tint="@color/coral"/>
+        android:tint="@color/coral"
+        android:onClick="onClock"/>
 
     <ImageButton
         android:id="@+id/ibEdit"
@@ -269,7 +270,7 @@
         android:layout_marginEnd="46dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/account_edit"
-        android:tint="@color/coral"/>
+        android:tint="@color/coral" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
