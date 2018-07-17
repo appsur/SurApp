@@ -95,7 +95,8 @@
         android:layout_marginTop="224dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/bell_outline"
-        android:tint="@color/coral"/>
+        android:tint="@color/coral"
+        android:onClick="onAlert"/>
 
     <TextView
         android:id="@+id/tvOnAlert"
@@ -115,7 +116,8 @@
         android:layout_marginBottom="225dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/compass_outline"
-        android:tint="@color/coral"/>
+        android:tint="@color/coral"
+        android:onClick="onCompass"/>
 
     <ImageButton
         android:id="@+id/ibLocator"
@@ -125,7 +127,8 @@
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_vector_location_stroke"
-        android:tint="@color/coral"/>
+        android:tint="@color/coral"
+        android:onClick="onLocator"/>
 
     <TextView
         android:id="@+id/tvLocation"
@@ -163,7 +166,8 @@
         android:background="@color/lightGray"
         android:text="DAILY"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnWeekly"
@@ -175,7 +179,8 @@
         android:background="@color/lightGray"
         android:text="WEEKLY"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnHourly"
@@ -187,7 +192,8 @@
         android:background="@color/lightGray"
         android:text="HOURLY"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/tvCheckinFrequency"

@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -24,6 +25,11 @@ public class SettingsActivity extends AppCompatActivity {
     boolean isLocator = false;
     boolean isCompass = false;
     boolean isAlert = false;
+
+    // Define variables for making frequency buttons appear
+    Button btnHourly;
+    Button btnDaily;
+    Button btnWeekly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +73,11 @@ public class SettingsActivity extends AppCompatActivity {
         ibCompass = (ImageButton) findViewById(R.id.ibCompass);
         ibAlert = (ImageButton) findViewById(R.id.ibAlert);
 
-        if (isClock)
-        {
-            ibClock.setImageResource(R.drawable.clock);
-        }
+        // Initialize buttons for frequency setup
+        btnHourly = (Button) findViewById(R.id.btnHourly);
+        btnWeekly = (Button) findViewById(R.id.btnWeekly);
+        btnDaily = (Button) findViewById(R.id.btnDaily);
+
     }
 
     public void onClock(View view) {
@@ -80,12 +87,18 @@ public class SettingsActivity extends AppCompatActivity {
         if (isClock)
         {
             ibClock.setImageResource(R.drawable.clock);
+            // Functionality
+            btnHourly.setVisibility(View.VISIBLE);
+            btnDaily.setVisibility(View.VISIBLE);
+            btnWeekly.setVisibility(View.VISIBLE);
         }
         else {
             ibClock.setImageResource(R.drawable.clock_outline);
+            // Functionality
+            btnHourly.setVisibility(View.INVISIBLE);
+            btnDaily.setVisibility(View.INVISIBLE);
+            btnWeekly.setVisibility(View.INVISIBLE);
         }
-
-        // Functionality
     }
 
     public void onLocator(View view) {
