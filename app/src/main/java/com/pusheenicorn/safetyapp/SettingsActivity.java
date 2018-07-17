@@ -14,9 +14,7 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.io.File;
 
@@ -105,14 +103,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         currentUser = ParseUser.getCurrentUser();
-        final ParseFile parsefile = new ParseFile(new File(String.valueOf(photoFile)));
-        parsefile.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                //blah;
-            }
-        });
-
     }
 
     public void onClock(View view) {
