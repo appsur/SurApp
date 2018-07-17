@@ -1,18 +1,13 @@
 package com.pusheenicorn.safetyapp;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
-public class FriendsActivity extends AppCompatActivity {
-    ProgressBar progressBar;
+public class EventsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
-
-
+        setContentView(R.layout.activity_events);
     }
 }
