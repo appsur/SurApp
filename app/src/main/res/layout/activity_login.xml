@@ -27,7 +27,7 @@
                 android:id="@+id/ivBrand"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ig_logo" />
+                />
 
         </android.support.v7.widget.Toolbar>
 
