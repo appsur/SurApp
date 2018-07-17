@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvUsername"
-        android:layout_marginTop="127dp"
+        android:layout_marginTop="129dp"
         android:text="PASSWORD: "
         android:textColor="@color/black" />
 
@@ -111,8 +111,8 @@
         android:id="@+id/tvPhoneNumberValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvPhoneNumber"
-        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:layout_alignEnd="@+id/tvPasswordValue"
+        android:layout_alignTop="@+id/tvPhoneNumber"
         android:text="(408) 476-9775"
         android:textColor="@color/black"
         android:textSize="14sp" />
@@ -121,8 +121,8 @@
         android:id="@+id/tvUsernameValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvUsername"
-        android:layout_toEndOf="@+id/tvUsername"
+        android:layout_alignTop="@+id/ibProfileImage"
+        android:layout_toEndOf="@+id/tvPassword"
         android:text="John Doe"
         android:textColor="@color/black"
         android:textSize="14sp" />
@@ -133,7 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvPassword"
-        android:layout_marginTop="154dp"
+        android:layout_marginTop="163dp"
         android:text="PHONE: "
         android:textColor="@color/black" />
 
@@ -265,12 +265,13 @@
         android:id="@+id/ibEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/ibProfileImage"
-        android:layout_marginEnd="46dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-30dp"
+        android:layout_marginTop="59dp"
+        android:layout_toEndOf="@+id/btnWeekly"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/account_edit"
-        android:tint="@color/coral" />
+        android:tint="@color/coral"
+        app:srcCompat="@drawable/account_edit" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
