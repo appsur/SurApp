@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/loginbackground"
     tools:context=".LoginActivity">
 
     <LinearLayout
@@ -16,19 +17,60 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@color/colorAccent"
+            android:background="@color/lightGray"
             android:minHeight="?attr/actionBarSize"
-            app:titleTextColor="@android:color/white">
+            app:titleTextColor="@android:color/black">
 
-            <ImageView
-                android:id="@+id/ivBrand"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="50dp">
 
+                <ProgressBar
+                    android:id="@+id/pbLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="99dp"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="93dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/arimo"
+                    android:gravity="center"
+                    android:linksClickable="true"
+                    android:text="HOME"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/ibMenu"
+                    android:layout_width="46dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/menu_icon" />
+
+                <ImageButton
+                    android:id="@+id/ibSettings"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="15dp"
+                    android:background="@android:color/transparent" />
+                    //android:onClick="onSettings"
+                    app:srcCompat="@drawable/dots_vertical" />
+
+            </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
     </LinearLayout>
@@ -43,6 +85,7 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textMultiLine"
+        android:textColor="@android:color/background_light"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="45dp" />
 
@@ -55,6 +98,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textMultiLine"
+        android:textColor="@color/lightGray"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="91dp" />
 
@@ -67,9 +111,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="168dp"
         android:layout_marginEnd="27dp"
-        android:background="#000000"
+        android:background="@color/lightGray"
         android:text="Log In"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/black"
         tools:layout_editor_absoluteX="26dp"
         tools:layout_editor_absoluteY="161dp" />
 

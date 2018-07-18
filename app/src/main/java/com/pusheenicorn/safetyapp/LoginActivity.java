@@ -23,9 +23,9 @@ public class LoginActivity extends AppCompatActivity {
         if (ParseUser.getCurrentUser() != null) {
             ParseUser.logOut();
         }
-//        etUsername = (EditText) findViewById(R.id.etUsername);
-//        etPassword = (EditText) findViewById(R.id.etPassword);
-//        btnLogin = (Button) findViewById(R.id.btnLogIn);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        btnLogin = (Button) findViewById(R.id.btnLogIn);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
