@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/white"
@@ -70,13 +71,16 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <fragment
+    <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar" />
+        android:layout_below="@+id/toolbar"
+        map:cameraBearing="112.5"
+
+        />
 
     <ImageButton
         android:id="@+id/ibCheckin"
@@ -86,6 +90,7 @@
         android:layout_below="@+id/map"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_chick" />
+
 
     <ImageButton
         android:id="@+id/ibAlert"
@@ -97,6 +102,20 @@
         android:layout_marginEnd="28dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_alert" />
+
+    <TextView
+        android:id="@+id/alarm_text"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvPhone"
+        android:layout_below="@+id/ibAlert"
+        android:fontFamily="@font/arimo"
+        android:gravity="center"
+        android:text="ALARM"
+        android:textColor="@color/black" />
+
+
+
 
     <ImageButton
         android:id="@+id/ibPhone"
@@ -158,16 +177,7 @@
         android:text="CHECK-IN             REMINDER"
         android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/alarm_text"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvPhone"
-        android:layout_below="@+id/ibAlert"
-        android:fontFamily="@font/arimo"
-        android:gravity="center"
-        android:text="ALARM"
-        android:textColor="@color/black" />
+
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

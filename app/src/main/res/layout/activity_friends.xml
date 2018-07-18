@@ -32,13 +32,13 @@
 
             <TextView
                 android:id="@+id/toolbar_title"
-                android:layout_width="93dp"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:fontFamily="@font/arimo"
                 android:gravity="center"
                 android:linksClickable="true"
-                android:text="HOME"
+                android:text="FRIENDS"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />

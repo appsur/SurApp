@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -44,5 +45,11 @@ public class FriendsActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
 
+    }
+
+    public void onSettings(View view) {
+        Intent intent = new Intent(FriendsActivity.this, MapActivity.class);
+        Toast.makeText(FriendsActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG ).show();
+        startActivity(intent);
     }
 }
