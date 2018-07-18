@@ -2,11 +2,11 @@ package com.pusheenicorn.safetyapp.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 @ParseClassName("_User")
-public class ParseUser extends ParseObject {
+public class User extends ParseUser {
     private final static String KEY_USERNAME = "username";
     private final static String KEY_PROFILE_IMAGE = "profileimage";
     private final static String KEY_NAME = "name";
@@ -14,6 +14,7 @@ public class ParseUser extends ParseObject {
     private final static String KEY_TRACKABLE = "trackable";
     private final static String KEY_SAFE = "safe";
     private final static String KEY_LOCATION = "location";
+    private final static String KEY_RINGABLE = "ringable";
 
     public String getUserName() {
         return getString(KEY_USERNAME);
@@ -71,9 +72,17 @@ public class ParseUser extends ParseObject {
         put(KEY_LOCATION, location);
     }
 
-    public static class Query extends ParseQuery<ParseUser> {
+    public boolean getRingable() {
+        return getBoolean(KEY_RINGABLE);
+    }
+
+    public void setRingable(boolean ringable) {
+        put(KEY_RINGABLE, ringable);
+    }
+
+    public static class Query extends ParseQuery<User> {
         public Query() {
-            super(ParseUser.class);
+            super(User.class);
         }
 
         public Query getTop() {

@@ -1,12 +1,10 @@
 package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +12,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import java.io.File;
+import com.pusheenicorn.safetyapp.models.User;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -32,22 +28,20 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton ibCompass;
     ImageButton ibAlert;
     boolean isClock = false;
-    boolean isLocator = false;
-    boolean isCompass = false;
-    boolean isAlert = false;
 
     // Define variables for making frequency buttons appear.
     Button btnHourly;
     Button btnDaily;
     Button btnWeekly;
-    public File photoFile;
-    Uri photoURI;
-    static final int REQUEST_TAKE_PHOTO = 1;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final String AUTHORITY = "com.pusheenicorn.sur-app";
+
+//    public File photoFile;
+//    Uri photoURI;
+//    static final int REQUEST_TAKE_PHOTO = 1;
+//    static final int REQUEST_IMAGE_CAPTURE = 1;
+//    private static final String AUTHORITY = "com.pusheenicorn.sur-app";
 
     // Define global current user.
-    ParseUser currentUser;
+    User currentUser;
 
     // Define Text Views
     TextView tvNameValue;
@@ -96,41 +90,33 @@ public class SettingsActivity extends AppCompatActivity {
         ibCompass = (ImageButton) findViewById(R.id.ibCompass);
         ibAlert = (ImageButton) findViewById(R.id.ibAlert);
 
-        // Initialize buttons for frequency setup
+        // Initialize buttons for frequency setup.
         btnHourly = (Button) findViewById(R.id.btnHourly);
         btnWeekly = (Button) findViewById(R.id.btnWeekly);
         btnDaily = (Button) findViewById(R.id.btnDaily);
 
-        // Initialize buttons for textview setup
+        // Initialize buttons for text view setup.
         tvUsernameValue = (TextView) findViewById(R.id.tvUsernameValue);
         tvPhoneValue = (TextView) findViewById(R.id.tvPhoneValue);
         tvNameValue = (TextView) findViewById(R.id.tvNameValue);
 
-        // Set Text Views
-        tvNameValue.setText(currentUser.getString("name"));
-        tvUsernameValue.setText(currentUser.getUsername());
-        tvNameValue.setText(currentUser.getString("phonenumber"));
+        // Get the current user and cast appropriately.
+        currentUser = (User) ParseUser.getCurrentUser();
 
+        // Set initial values for text views.
+        tvUsernameValue.setText(currentUser.getUserName());
+        tvNameValue.setText(currentUser.getName());
 
-        ParseUser.logInInBackground("grace", "password", new LogInCallback() {
-            @Override
-            public void done(ParseUser user, ParseException e) {
-                if (e == null) {
-                    Log.d("Login Activity", "Login successful");
-                }
-                else {
-                    Log.d("Login Activity", "Login failure");
-                    e.printStackTrace();
-                }
-            }
-        });
+        // Format the phone number and set the text view.
+        String phoneNumber = currentUser.getPhonNumber();
+        phoneNumber = "(" + phoneNumber.substring(0, 3) + ") "
+                + phoneNumber.substring(3, 6) + " - "
+                + phoneNumber.substring(6, 10);
+        tvPhoneValue.setText(phoneNumber);
 
-        //////////////
-        currentUser = ParseUser.getCurrentUser();
     }
 
     public void onClock(View view) {
-
         // UI response
         isClock = !isClock;
         if (isClock)
@@ -151,17 +137,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onLocator(View view) {
-
-        // UI response
-        isLocator = !isLocator;
-        if (isLocator) {
+        if (!currentUser.getTrackable()) {
                 ibLocator.setImageResource(R.drawable.ic_vector_location);
                 currentUser.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null){
-                            final ParseUser user = ParseUser.getCurrentUser();
-                            user.put("trackable", true);
+                            final User user = (User) ParseUser.getCurrentUser();
+                            user.setTrackable(true);
                             user.saveInBackground();
                         } else {
                             e.printStackTrace();
@@ -176,8 +159,8 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
-                        final ParseUser user = ParseUser.getCurrentUser();
-                        user.put("trackable", false);
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setTrackable(false);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
@@ -188,17 +171,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onCompass(View view) {
-
-        // UI response
-        isCompass = !isCompass;
-        if (isCompass) {
+        if (!currentUser.getRingable()) {
             ibCompass.setImageResource(R.drawable.compass);
             currentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
-                        final ParseUser user = ParseUser.getCurrentUser();
-                        user.put("ringable", true);
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setRingable(true);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
@@ -212,8 +192,8 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
-                        final ParseUser user = ParseUser.getCurrentUser();
-                        user.put("ringable", false);
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setRingable(false);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
@@ -224,17 +204,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onAlert(View view) {
-
-        //UI response
-        isAlert = !isAlert;
-        if (isAlert) {
+        if (!currentUser.getSafe()) {
             ibAlert.setImageResource(R.drawable.bell);
             currentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
-                        final ParseUser user = ParseUser.getCurrentUser();
-                        user.put("safe", true);
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setSafe(true);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
@@ -248,8 +225,8 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
-                        final ParseUser user = ParseUser.getCurrentUser();
-                        user.put("safe", false);
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setSafe(false);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
