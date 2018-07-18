@@ -12,11 +12,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvCheckinTime;
     TextView tvRelativeCheckinTime;
     User currentUser;
+    Checkin checkin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +89,32 @@ public class MainActivity extends AppCompatActivity {
 
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
-//        Date date = currentUser.getLastCheckin().getCreatedAt();
+
+        final String checkinId = currentUser.getLastCheckin().getObjectId();
+        final Checkin.Query postQuery = new Checkin.Query();
+        postQuery.getTop().findByUsername(checkinId);
+
+        postQuery.findInBackground(new FindCallback<Checkin>() {
+            @Override
+            public void done(List<Checkin> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    checkin = objects.get(0);
+                }
+                else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+//        Date date = pobject.getCreatedAt();
+//        if (date != null) {
+//            Toast.makeText(this, "JARD LION", Toast.LENGTH_LONG).show();
+//        }
 //        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
 //        String formatedDate = dateFormat.format(date);
 //        String newString = getRelativeTimeAgo(formatedDate);
+//
+//        tvRelativeCheckinTime.setText(newString);
     }
 
     public void onSettings(View view) {

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -22,6 +23,7 @@ public class ParseApp extends Application{
 
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Friend.class);
+        ParseObject.registerSubclass(Checkin.class);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
