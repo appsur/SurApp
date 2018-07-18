@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -46,6 +47,15 @@
         <activity android:name=".EventsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pusheenicorn.safetyapp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
         <activity android:name=".LoginActivity"></activity>
     </application>
 

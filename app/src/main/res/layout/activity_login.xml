@@ -45,7 +45,7 @@
                     android:fontFamily="@font/arimo"
                     android:gravity="center"
                     android:linksClickable="true"
-                    android:text="HOME"
+                    android:text="LOG IN"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="197dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textMultiLine"

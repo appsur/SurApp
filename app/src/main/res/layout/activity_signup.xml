@@ -39,14 +39,14 @@
                     android:visibility="invisible" />
 
                 <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="93dp"
+                    android:id="@+id/tbTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/arimo"
                     android:gravity="center"
                     android:linksClickable="true"
-                    android:text="HOME"
+                    android:text="SIGN UP"
                     android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -127,18 +127,19 @@
         android:text="Sign Up"
         android:textColor="@android:color/black" />
 
-    <!--<EditText-->
-        <!--android:id="@+id/etPhoneNumber"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_marginBottom="118dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:text="Phone Number"-->
-        <!--android:textColor="@android:color/white" />-->
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="118dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="textPersonName"
+        android:textColor="@color/white"
+        android:visibility="visible" />
 
     <ImageButton
         android:id="@+id/ibProfileImage"
