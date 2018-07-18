@@ -15,6 +15,7 @@ public class User extends ParseUser {
     private final static String KEY_SAFE = "safe";
     private final static String KEY_LOCATION = "location";
     private final static String KEY_RINGABLE = "ringable";
+    private final static String KEY_FREQUENCY = "checkin";
 
     public String getUserName() {
         return getString(KEY_USERNAME);
@@ -78,6 +79,34 @@ public class User extends ParseUser {
 
     public void setRingable(boolean ringable) {
         put(KEY_RINGABLE, ringable);
+    }
+
+    public String getFrequency() {
+        int num = (int) getNumber(KEY_FREQUENCY);
+        switch (num) {
+            case 10080:
+                return "Every week";
+            case 1440:
+                return "Every day";
+            case 60:
+                return "Every hour";
+            default:
+                return "Error";
+        }
+    }
+
+    public void setFrequency(String frequency) {
+        if (frequency.equals("Daily")) {
+            put(KEY_FREQUENCY, 1440);
+        }
+
+        else if (frequency.equals("Hourly")) {
+            put(KEY_FREQUENCY, 60);
+        }
+
+        else if (frequency.equals("Weekly")) {
+            put(KEY_FREQUENCY, 10080);
+        }
     }
 
     public static class Query extends ParseQuery<User> {
