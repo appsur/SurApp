@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
     EditText etName;
 
     //button for logging out
-    private ImageButton logOutButton;
+    private Button logOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
