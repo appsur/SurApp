@@ -14,16 +14,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
-    private List<User> mFriends;
+    private List<Friend> mFriends;
     Context context;
 
     //pass in the Tweets array in the constructor
-    public FriendsAdapter(List<User> friends) {
+    public FriendsAdapter(List<Friend> friends) {
         mFriends = friends;
     }
 
@@ -44,7 +47,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    public void addAll(List<User> list) {
+    public void addAll(List<Friend> list) {
         mFriends.addAll(list);
         notifyDataSetChanged();
     }
@@ -53,7 +56,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         //get the data according to position
-        User friends = mFriends.get(position);
+        Friend friends = mFriends.get(position);
         //populate the views according to this data
 //        holder.tvTimeElapsed.setText(friends.getDescription());
 //        holder.tvUsername.setText(post.getUser().getUsername());
@@ -70,7 +73,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     //create the ViewHolder class
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tvName;
         public TextView location;
         public TextView tvTimeElapsed;
@@ -88,7 +91,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             tvTime = (TextView) itemView.findViewById(R.id.tvTime);
 
             user = ParseUser.getCurrentUser();
+            itemView.setOnClickListener(this);
 
+        }
+        @Override
+        public void onClick(View v){
+            int position = getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION){
+                Friend friend = mFriends.get(position);
+                Intent i = new Intent(context, MapActivity.class);
+                i.putExtra(Friend.class.getSimpleName(), Parcels.wrap(friend));
+
+                //show activity
+                context.startActivity(i);
+            }
         }
     }
 }

@@ -6,9 +6,14 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+
+import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -18,6 +23,7 @@ public class MapActivity extends AppCompatActivity {
     Location mCurrentLocation;
     private long Update_interval = 60000;
     private long Fastest_interval = 5000;
+    private static final LatLng home = new LatLng(33.870789,-84.221874);
 
     private final static String Key_location = "location";
 
@@ -29,7 +35,7 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_more);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
         if (mapFragment != null) {
             mapFragment.getMapAsync(new OnMapReadyCallback() {
                 @Override
@@ -47,9 +53,26 @@ public class MapActivity extends AppCompatActivity {
         map = googleMap;
         if (map != null) {
             // Map is ready
+
+            //Move camera instantly to chosen location
+            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
+            //have the camera zoom in
+            //map.animateCamera(CameraUpdateFactory.zoomIn());
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(home)      // Sets the center of the map to Mountain View
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+
+
+
+
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
-            //MapDemoActivityPermissionsDispatcher.getMyLocationWithPermissionCheck(this);
-            //MapDemoActivityPermissionsDispatcher.startLocationUpdatesWithPermissionCheck(this);
+
         } else {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
