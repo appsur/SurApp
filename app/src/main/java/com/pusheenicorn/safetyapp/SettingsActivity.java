@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton ibLocator;
     ImageButton ibCompass;
     ImageButton ibAlert;
+    ImageButton ibEdit;
+    Button btnDone;
     boolean isClock = false;
 
     // Define variables for making frequency buttons appear.
@@ -47,6 +50,12 @@ public class SettingsActivity extends AppCompatActivity {
     TextView tvNameValue;
     TextView tvPhoneValue;
     TextView tvUsernameValue;
+    TextView tvCheckinFrequency;
+
+    // Define Edit Texts
+    EditText etUsername;
+    EditText etPhoneNumber;
+    EditText etName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,8 @@ public class SettingsActivity extends AppCompatActivity {
         ibLocator = (ImageButton) findViewById(R.id.ibLocator);
         ibCompass = (ImageButton) findViewById(R.id.ibCompass);
         ibAlert = (ImageButton) findViewById(R.id.ibAlert);
+        ibEdit = (ImageButton) findViewById(R.id.ibEdit);
+        btnDone = (Button) findViewById(R.id.btnDone);
 
         // Initialize buttons for frequency setup.
         btnHourly = (Button) findViewById(R.id.btnHourly);
@@ -99,6 +110,10 @@ public class SettingsActivity extends AppCompatActivity {
         tvUsernameValue = (TextView) findViewById(R.id.tvUsernameValue);
         tvPhoneValue = (TextView) findViewById(R.id.tvPhoneValue);
         tvNameValue = (TextView) findViewById(R.id.tvNameValue);
+        tvCheckinFrequency = (TextView) findViewById(R.id.tvCheckinFrequency);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        etName = (EditText) findViewById(R.id.etName);
+        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumber);
 
         // Get the current user and cast appropriately.
         currentUser = (User) ParseUser.getCurrentUser();
@@ -106,11 +121,12 @@ public class SettingsActivity extends AppCompatActivity {
         // Set initial values for text views.
         tvUsernameValue.setText(currentUser.getUserName());
         tvNameValue.setText(currentUser.getName());
+        tvCheckinFrequency.setText(currentUser.getFrequency());
 
         // Format the phone number and set the text view.
         String phoneNumber = currentUser.getPhonNumber();
-        phoneNumber = "(" + phoneNumber.substring(0, 3) + ") "
-                + phoneNumber.substring(3, 6) + " - "
+        phoneNumber = "(" + phoneNumber.substring(0, 3) + ")"
+                + phoneNumber.substring(3, 6) + "-"
                 + phoneNumber.substring(6, 10);
         tvPhoneValue.setText(phoneNumber);
 
@@ -234,5 +250,132 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onHourly(View view) {
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    final User user = (User) ParseUser.getCurrentUser();
+                    user.setFrequency("Hourly");
+                    user.saveInBackground();
+                    tvCheckinFrequency.setText(user.getFrequency());
+                    isClock = !isClock;
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnHourly.setVisibility(View.INVISIBLE);
+        btnDaily.setVisibility(View.INVISIBLE);
+        btnWeekly.setVisibility(View.INVISIBLE);
+        ibClock.setImageResource(R.drawable.clock_outline);
+    }
+
+    public void onWeekly(View view) {
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    final User user = (User) ParseUser.getCurrentUser();
+                    user.setFrequency("Weekly");
+                    user.saveInBackground();
+                    tvCheckinFrequency.setText(user.getFrequency());
+                    isClock = !isClock;
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnHourly.setVisibility(View.INVISIBLE);
+        btnDaily.setVisibility(View.INVISIBLE);
+        btnWeekly.setVisibility(View.INVISIBLE);
+        ibClock.setImageResource(R.drawable.clock_outline);
+    }
+
+    public void onDaily(View view) {
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    final User user = (User) ParseUser.getCurrentUser();
+                    user.setFrequency("Daily");
+                    user.saveInBackground();
+                    tvCheckinFrequency.setText(user.getFrequency());
+                    isClock = !isClock;
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnHourly.setVisibility(View.INVISIBLE);
+        btnDaily.setVisibility(View.INVISIBLE);
+        btnWeekly.setVisibility(View.INVISIBLE);
+        ibClock.setImageResource(R.drawable.clock_outline);
+    }
+
+    public void onEdit(View view) {
+
+        // Hide views
+        ibEdit.setVisibility(View.INVISIBLE);
+        tvUsernameValue.setVisibility(View.INVISIBLE);
+        tvNameValue.setVisibility(View.INVISIBLE);
+        tvPhoneValue.setVisibility(View.INVISIBLE);
+
+        // Show edit views
+        etUsername.setVisibility(View.VISIBLE);
+        etPhoneNumber.setVisibility(View.VISIBLE);
+        etName.setVisibility(View.VISIBLE);
+        btnDone.setVisibility(View.VISIBLE);
+    }
+
+    public void onDone(View view) {
+        String username = etUsername.getText().toString();
+        String phoneNumber = etPhoneNumber.getText().toString();
+        String name = etName.getText().toString();
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null){
+                    // save new data
+                    final User user = (User) ParseUser.getCurrentUser();
+                    user.setUserName(etUsername.getText().toString());
+                    user.setName(etName.getText().toString());
+                    user.setPhoneNumber(etPhoneNumber.getText().toString());
+                    user.saveInBackground();
+
+                    // update text views
+                    tvNameValue.setText(user.getName());
+                    tvUsernameValue.setText(user.getUserName());
+                    String phoneNumber = etPhoneNumber.getText().toString();
+                    phoneNumber = "(" + phoneNumber.substring(0, 3) +") "
+                            + phoneNumber.substring(3, 6) + "-"
+                            + phoneNumber.substring(6, 10);
+                    tvPhoneValue.setText(phoneNumber);
+
+                    // hide edit vies
+                    etName.setVisibility(View.INVISIBLE);
+                    etUsername.setVisibility(View.INVISIBLE);
+                    etPhoneNumber.setVisibility(View.INVISIBLE);
+                    btnDone.setVisibility(View.INVISIBLE);
+
+                    // show text views
+                    tvNameValue.setVisibility(View.VISIBLE);
+                    tvUsernameValue.setVisibility(View.VISIBLE);
+                    tvPhoneValue.setVisibility(View.VISIBLE);
+                    ibEdit.setVisibility(View.VISIBLE);
+
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }

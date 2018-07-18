@@ -167,7 +167,8 @@
         android:text="DAILY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:onClick="onDaily"/>
 
     <Button
         android:id="@+id/btnWeekly"
@@ -180,7 +181,8 @@
         android:text="WEEKLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:onClick="onWeekly"/>
 
     <Button
         android:id="@+id/btnHourly"
@@ -193,7 +195,8 @@
         android:text="HOURLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"/>
+        android:visibility="invisible"
+        android:onClick="onHourly"/>
 
     <TextView
         android:id="@+id/tvCheckinFrequency"
@@ -225,7 +228,8 @@
         android:layout_marginEnd="15dp"
         android:background="@android:color/transparent"
         android:tint="@color/coral"
-        app:srcCompat="@drawable/account_edit" />
+        app:srcCompat="@drawable/account_edit"
+        android:onClick="onEdit"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -284,5 +288,53 @@
         android:layout_toEndOf="@+id/tvPhoneNumber"
         android:text="(555) 555-5555"
         android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvName"
+        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:hint="Enter name"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="12sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:hint="Enter username"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="12sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginTop="145dp"
+        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:hint="XXXXXXXXXX"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="12sp"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="50dp"
+        android:layout_height="31dp"
+        android:layout_alignBottom="@+id/ibProfileImage"
+        android:layout_alignEnd="@+id/ibEdit"
+        android:background="@color/teal"
+        android:text="Done"
+        android:visibility="invisible"
+        android:onClick="onDone"/>
 
 </RelativeLayout>
