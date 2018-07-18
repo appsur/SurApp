@@ -127,18 +127,18 @@
         android:text="Sign Up"
         android:textColor="@android:color/black" />
 
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="118dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Phone Number"
-        android:textColor="@android:color/white" />
+    <!--<EditText-->
+        <!--android:id="@+id/etPhoneNumber"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginBottom="118dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Phone Number"-->
+        <!--android:textColor="@android:color/white" />-->
 
     <ImageButton
         android:id="@+id/ibProfileImage"

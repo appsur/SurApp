@@ -285,4 +285,17 @@
         android:text="(555) 555-5555"
         android:textColor="@color/black" />
 
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnWeekly"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="76dp"
+        android:background="@color/lightGray"
+        android:text="Log Out"
+        android:textColor="@android:color/black"
+        tools:layout_editor_absoluteX="266dp"
+        tools:layout_editor_absoluteY="426dp" />
+
 </RelativeLayout>

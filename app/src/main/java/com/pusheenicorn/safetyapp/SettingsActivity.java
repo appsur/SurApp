@@ -17,6 +17,8 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.User;
 
+import java.io.Serializable;
+
 public class SettingsActivity extends AppCompatActivity {
 
     // Define bottom navigation view.
@@ -48,10 +50,24 @@ public class SettingsActivity extends AppCompatActivity {
     TextView tvPhoneValue;
     TextView tvUsernameValue;
 
+    //button for logging out
+    private ImageButton logOutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        //log out button implementation
+        logOutButton = findViewById(R.id.btnLogOut);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent logOut = new Intent(SettingsActivity.this, HomeActivity.class);
+                ParseUser.logOut();
+                startActivity(logOut);
+            }
+        });
 
         // Implementation of bottom navigation view.
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
