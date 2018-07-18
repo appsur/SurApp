@@ -19,11 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,6 +56,7 @@ public class SignupActivity extends AppCompatActivity {
             ParseUser.logOut();
         }
         // Create the ParseUser
+        user = new ParseUser();
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -64,7 +68,6 @@ public class SignupActivity extends AppCompatActivity {
                 dispatchTakePictureIntent(v);
             }
         });
-        user = new ParseUser();
     }
 
     private void checkPermissionsPlease() {
