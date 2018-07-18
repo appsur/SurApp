@@ -81,11 +81,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="169dp"
+        android:layout_marginTop="230dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="textMultiLine"
         android:textColor="@android:color/background_light"
+        android:textColorHint="@color/white"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="45dp" />
 
@@ -93,12 +94,14 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="234dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textMultiLine"
         android:textColor="@color/lightGray"
+        android:textColorHint="@color/white"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="91dp" />
 
