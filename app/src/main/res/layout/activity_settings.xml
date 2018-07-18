@@ -337,4 +337,17 @@
         android:visibility="invisible"
         android:onClick="onDone"/>
 
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="73dp"
+        android:background="@color/lightGray"
+        android:text="Log Out"
+        android:textColor="@android:color/black"
+        tools:layout_editor_absoluteX="266dp"
+        tools:layout_editor_absoluteY="426dp" />
+
 </RelativeLayout>
