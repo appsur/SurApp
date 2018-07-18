@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -22,6 +24,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Define bottom navigation view.
     BottomNavigationView bottomNavigationView;
+
+    // Define profile image view.
+    ImageView ibProfileImage;
 
     // Define variables for image toggle.
     ImageButton ibClock;
@@ -93,6 +98,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize profile image view.
+        ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+
         // Initialize buttons for image toggle.
         ibClock = (ImageButton) findViewById(R.id.ibClock);
         ibLocator = (ImageButton) findViewById(R.id.ibLocator);
@@ -130,6 +138,22 @@ public class SettingsActivity extends AppCompatActivity {
                 + phoneNumber.substring(6, 10);
         tvPhoneValue.setText(phoneNumber);
 
+        if (!currentUser.getSafe()) {
+            ibAlert.setImageResource(R.drawable.bell);
+        }
+
+        if (currentUser.getTrackable()) {
+            ibLocator.setImageResource(R.drawable.ic_vector_location);
+        }
+
+        if (currentUser.getRingable()) {
+            ibLocator.setImageResource(R.drawable.compass);
+        }
+
+        if (currentUser.getProfileImage() != null)
+        {
+            Glide.with(this).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+        }
     }
 
     public void onClock(View view) {
@@ -220,14 +244,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onAlert(View view) {
-        if (!currentUser.getSafe()) {
+        if (currentUser.getSafe()) {
             ibAlert.setImageResource(R.drawable.bell);
             currentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     if (e == null){
                         final User user = (User) ParseUser.getCurrentUser();
-                        user.setSafe(true);
+                        user.setSafe(false);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();
@@ -242,7 +266,7 @@ public class SettingsActivity extends AppCompatActivity {
                 public void done(ParseException e) {
                     if (e == null){
                         final User user = (User) ParseUser.getCurrentUser();
-                        user.setSafe(false);
+                        user.setSafe(true);
                         user.saveInBackground();
                     } else {
                         e.printStackTrace();

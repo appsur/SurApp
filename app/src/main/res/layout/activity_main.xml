@@ -132,9 +132,8 @@
         android:id="@+id/tvRelativeCheckinTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/ibCheckin"
-        android:layout_marginEnd="71dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/ibProfileImage"
         android:text="10:35 PM"
         android:textColor="@color/black"
         android:textSize="15sp" />
@@ -143,8 +142,8 @@
         android:id="@+id/tvCheckinTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ibCheckin"
-        android:layout_alignStart="@+id/tvRelativeCheckinTime"
+        android:layout_alignTop="@+id/tvLastCheckin"
+        android:layout_toEndOf="@+id/ibProfileImage"
         android:text="10 hours ago"
         android:textColor="@color/black"
         android:textSize="15sp" />

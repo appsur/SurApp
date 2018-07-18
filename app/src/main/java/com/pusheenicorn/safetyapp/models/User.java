@@ -5,6 +5,8 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Date;
+
 @ParseClassName("_User")
 public class User extends ParseUser {
     private final static String KEY_USERNAME = "username";
@@ -16,6 +18,15 @@ public class User extends ParseUser {
     private final static String KEY_LOCATION = "location";
     private final static String KEY_RINGABLE = "ringable";
     private final static String KEY_FREQUENCY = "checkin";
+    private final static String KEY_LAST_CHECKIN = "lastCheckin";
+
+    public Date getLastCheckin() {
+        return getDate(KEY_LAST_CHECKIN);
+    }
+
+    public void setLastCheckin(Date date) {
+        put(KEY_LAST_CHECKIN, date);
+    }
 
     public String getUserName() {
         return getString(KEY_USERNAME);
