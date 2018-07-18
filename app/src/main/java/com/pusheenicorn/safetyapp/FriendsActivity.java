@@ -27,8 +27,8 @@ public class FriendsActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_person:
                         Intent returnHome = new Intent(FriendsActivity.this, MainActivity.class);
-                        startActivity(returnHome);
-                        return true;
+                    startActivity(returnHome);
+                    return true;
                     case R.id.action_message:
                         // TODO -- link activities
                         return true;
