@@ -7,6 +7,7 @@ import com.parse.ParseUser;
 
 @ParseClassName("User")
 public class User extends ParseUser {
+    //TODO  - Ask Bala about User not being a parse object :')
     private final static String KEY_USERNAME = "username";
     private final static String KEY_PROFILE_IMAGE = "profileimage";
     private final static String KEY_NAME = "name";
