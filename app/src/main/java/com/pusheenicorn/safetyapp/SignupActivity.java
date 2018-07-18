@@ -39,14 +39,15 @@ public class SignupActivity extends AppCompatActivity {
     EditText etUsername;
     EditText etPassword;
     EditText etEmail;
+    EditText etPhoneNumber;
     Button btnSignUp;
-    ParseUser user;
+    User user;
     ImageButton ibProfileImage;
     public File photoFile;
     Uri photoURI;
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final String AUTHORITY = "com.pusheenicorn.sur-app";
+    private static final String AUTHORITY = "com.pusheenicorn.safetyapp";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +57,12 @@ public class SignupActivity extends AppCompatActivity {
             ParseUser.logOut();
         }
         // Create the ParseUser
-        user = new ParseUser();
+        user = (User) ParseUser.create("_User");
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etEmail = (EditText) findViewById(R.id.etEmail);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
+        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumber);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
         ibProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,12 +82,14 @@ public class SignupActivity extends AppCompatActivity {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
         String email = etEmail.getText().toString();
+        String phoneNumber = etPhoneNumber.getText().toString();
         final ParseFile parseFile = new ParseFile(new File(photoFile.getAbsolutePath()));
 
         // Set core properties
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
+        user.put("username", username);
+        user.put("password", password);
+        user.put("email", email);
+        user.put("phonenumber", phoneNumber);
         parseFile.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
