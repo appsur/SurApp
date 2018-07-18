@@ -20,8 +20,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.User;
 
-import java.io.Serializable;
-
 public class SettingsActivity extends AppCompatActivity {
 
     // Define bottom navigation view.

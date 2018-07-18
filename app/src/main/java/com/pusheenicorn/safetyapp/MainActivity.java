@@ -85,13 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
-
-//        Date date = currentUser.getLastCheckin();
-//        long dateint = date.getTime();
+//        Date date = currentUser.getLastCheckin().getCreatedAt();
 //        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
 //        String formatedDate = dateFormat.format(date);
 //        String newString = getRelativeTimeAgo(formatedDate);
-//        tvRelativeCheckinTime.setText(newString);
     }
 
     public void onSettings(View view) {

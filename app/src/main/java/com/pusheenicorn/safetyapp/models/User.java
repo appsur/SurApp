@@ -2,10 +2,9 @@ package com.pusheenicorn.safetyapp.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.Date;
 
 @ParseClassName("_User")
 public class User extends ParseUser {
@@ -20,12 +19,8 @@ public class User extends ParseUser {
     private final static String KEY_FREQUENCY = "checkin";
     private final static String KEY_LAST_CHECKIN = "lastCheckin";
 
-    public Date getLastCheckin() {
-        return getDate(KEY_LAST_CHECKIN);
-    }
-
-    public void setLastCheckin(Date date) {
-        put(KEY_LAST_CHECKIN, date);
+    public ParseObject getLastCheckin() {
+        return getParseObject(KEY_LAST_CHECKIN);
     }
 
     public String getUserName() {
