@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
-import com.pusheenicorn.safetyapp.models.User;
+import com.parse.ParseUser;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,7 +19,7 @@ public class ParseApp extends Application{
     public void onCreate() {
         super.onCreate();
 
-        ParseObject.registerSubclass(User.class);
+        ParseUser.registerSubclass(ParseUser.class);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();

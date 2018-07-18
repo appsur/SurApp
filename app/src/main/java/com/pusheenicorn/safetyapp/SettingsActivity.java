@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -47,6 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Define global current user.
     ParseUser currentUser;
+
+    // Define Text Views
+    TextView tvNameValue;
+    TextView tvPhoneValue;
+    TextView tvUsernameValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +100,17 @@ public class SettingsActivity extends AppCompatActivity {
         btnHourly = (Button) findViewById(R.id.btnHourly);
         btnWeekly = (Button) findViewById(R.id.btnWeekly);
         btnDaily = (Button) findViewById(R.id.btnDaily);
+
+        // Initialize buttons for textview setup
+        tvUsernameValue = (TextView) findViewById(R.id.tvUsernameValue);
+        tvPhoneValue = (TextView) findViewById(R.id.tvPhoneValue);
+        tvNameValue = (TextView) findViewById(R.id.tvNameValue);
+
+        // Set Text Views
+        tvNameValue.setText(currentUser.getString("name"));
+        tvUsernameValue.setText(currentUser.getUsername());
+        tvNameValue.setText(currentUser.getString("phonenumber"));
+
 
         ParseUser.logInInBackground("grace", "password", new LogInCallback() {
             @Override
