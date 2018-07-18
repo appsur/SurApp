@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -14,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
     <application
         android:name=".ParseApp"
@@ -47,6 +47,7 @@
         <activity android:name=".EventsActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.pusheenicorn.safetyapp"
@@ -56,7 +57,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
-        <activity android:name=".LoginActivity"></activity>
+
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MessageActivity"></activity>
     </application>
 
 </manifest>

@@ -60,7 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         // TODO -- link activities
                         return true;
                     case R.id.action_message:
-                        // TODO -- link activities
+                        Intent messageAction = new Intent(MainActivity.this, MessageActivity.class);
+                        Toast.makeText(MainActivity.this, "Message Page Accessed", Toast.LENGTH_LONG).show();
+                        startActivity(messageAction);
                         return true;
                     case R.id.action_emergency:
                         // TODO -- link activities
