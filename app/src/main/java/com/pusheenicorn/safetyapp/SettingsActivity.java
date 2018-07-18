@@ -1,15 +1,10 @@
 package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,12 +16,9 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -146,16 +138,36 @@ public class SettingsActivity extends AppCompatActivity {
         // UI response
         isLocator = !isLocator;
         if (isLocator) {
-            ibLocator.setImageResource(R.drawable.ic_vector_location);
-            currentUser.put("trackable", true);
-
+                ibLocator.setImageResource(R.drawable.ic_vector_location);
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null){
+                            final ParseUser user = ParseUser.getCurrentUser();
+                            user.put("trackable", true);
+                            user.saveInBackground();
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
         }
         else
         {
             ibLocator.setImageResource(R.drawable.ic_vector_location_stroke);
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null){
+                        final ParseUser user = ParseUser.getCurrentUser();
+                        user.put("trackable", false);
+                        user.saveInBackground();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
-
-        // Functionality
     }
 
     public void onCompass(View view) {
@@ -164,12 +176,34 @@ public class SettingsActivity extends AppCompatActivity {
         isCompass = !isCompass;
         if (isCompass) {
             ibCompass.setImageResource(R.drawable.compass);
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null){
+                        final ParseUser user = ParseUser.getCurrentUser();
+                        user.put("ringable", true);
+                        user.saveInBackground();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         else {
             ibCompass.setImageResource(R.drawable.compass_outline);
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null){
+                        final ParseUser user = ParseUser.getCurrentUser();
+                        user.put("ringable", false);
+                        user.saveInBackground();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
-
-        // Functionality
     }
 
     public void onAlert(View view) {
@@ -178,65 +212,33 @@ public class SettingsActivity extends AppCompatActivity {
         isAlert = !isAlert;
         if (isAlert) {
             ibAlert.setImageResource(R.drawable.bell);
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null){
+                        final ParseUser user = ParseUser.getCurrentUser();
+                        user.put("safe", true);
+                        user.saveInBackground();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         else {
             ibAlert.setImageResource(R.drawable.bell_outline);
-        }
-
-        // Functionality
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            ByteArrayOutputStream bs = new ByteArrayOutputStream();
-            Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);
-
-
-//            ibProfileImage.setImageBitmap(bitmap);
-
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null){
+                        final ParseUser user = ParseUser.getCurrentUser();
+                        user.put("safe", false);
+                        user.saveInBackground();
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
     }
-
-    String mCurrentPhotoPath;
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    public void dispatchTakePictureIntent(View v) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//             Create the File where the photo should go
-            photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                photoURI = FileProvider.getUriForFile(this,
-                        AUTHORITY,
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
 }
