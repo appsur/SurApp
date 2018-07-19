@@ -23,6 +23,10 @@ public class User extends ParseUser {
         return getParseObject(KEY_LAST_CHECKIN);
     }
 
+    public void setLastCheckin(Checkin checkin) {
+        put(KEY_LAST_CHECKIN, checkin);
+    }
+
     public String getUserName() {
         return getString(KEY_USERNAME);
     }
