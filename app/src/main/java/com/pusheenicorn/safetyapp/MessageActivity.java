@@ -54,6 +54,7 @@ public class MessageActivity extends AppCompatActivity{
                         Intent goHome = new Intent(MessageActivity.this, MainActivity.class);
                         Toast.makeText(MessageActivity.this, "Success!", Toast.LENGTH_LONG ).show();
                         startActivity(goHome);
+                        finish();
                         return true;
                     case R.id.action_message:
 //                      //Toast.makeText(MessageActivity.this, "Already on Messages Page!", Toast.LENGTH_LONG ).show();
@@ -65,6 +66,7 @@ public class MessageActivity extends AppCompatActivity{
                         Intent goFriends = new Intent(MessageActivity.this, FriendsActivity.class);
                         Toast.makeText(MessageActivity.this, "Success!", Toast.LENGTH_LONG).show();
                         startActivity(goFriends);
+                        finish();
                         return true;
                 }
                 return true;
@@ -77,8 +79,6 @@ public class MessageActivity extends AppCompatActivity{
             public void onClick(View v) {
                 sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
                 Toast.makeText(MessageActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
-                Intent returnHome = new Intent(MessageActivity.this, MainActivity.class);
-                startActivity(returnHome);
             }
         });
 

@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent messageAction = new Intent(MainActivity.this, MessageActivity.class);
                         Toast.makeText(MainActivity.this, "Message Page Accessed", Toast.LENGTH_LONG).show();
                         startActivity(messageAction);
+                        finish();
                         return true;
                     case R.id.action_emergency:
                         // TODO -- link activities
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
                         Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG).show();
                         startActivity(friendsAction);
+                        finish();
                         return true;
                 }
                 return true;
