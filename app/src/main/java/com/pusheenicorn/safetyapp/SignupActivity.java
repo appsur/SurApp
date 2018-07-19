@@ -60,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         etEmail = (EditText) findViewById(R.id.etEmail);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumber);
+        etPhoneNumber = (EditText) findViewById(R.id.tvPhoneNumberSettings);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
         ibProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override

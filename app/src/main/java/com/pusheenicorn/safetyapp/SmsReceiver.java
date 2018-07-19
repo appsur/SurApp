@@ -6,39 +6,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SmsReceiver extends BroadcastReceiver {
-    private String TAG = SmsReceiver.class.getSimpleName();
 
-    public SmsReceiver() {
-    }
+    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Get the data (SMS data) bound to intent
-        Bundle bundle = intent.getExtras();
-
-        SmsMessage[] msgs = null;
-
-        String str = "";
-
-        if (bundle != null) {
-            // Retrieve the SMS Messages received
-            Object[] pdus = (Object[]) bundle.get("pdus");
-            msgs = new SmsMessage[pdus.length];
-
-            // For every SMS message received
-            for (int i=0; i < msgs.length; i++) {
-                // Convert Object array
-                msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                // Sender's phone number
-                str += "SMS from " + msgs[i].getOriginatingAddress() + " : ";
-                // Fetch the text message
-                str += msgs[i].getMessageBody().toString();
-                str += "\n";
+        if (intent.getAction().equals(SMS_RECEIVED)) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                // get sms objects
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                if (pdus.length == 0) {
+                    return;
+                }
+                // large message might be broken into many
+                SmsMessage[] messages = new SmsMessage[pdus.length];
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < pdus.length; i++) {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                    sb.append(messages[i].getMessageBody());
+                }
+                String sender = messages[0].getOriginatingAddress();
+                String message = sb.toString();
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                // prevent any other broadcast receivers from receiving broadcast
+                // abortBroadcast();
             }
-
-            // Display the entire SMS Message
-            Log.d(TAG, str);
         }
     }
 }
