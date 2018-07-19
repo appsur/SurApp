@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -212,7 +213,11 @@ public class MainActivity extends AppCompatActivity {
     public void onCheckin(View view) {
         final Checkin checkin;
         final Date newCheckinDate;
-      /*  LocationListener locationListener = new LocationListener();
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //Location loc;
+        //double lat = loc.getLatitude()
+
+        LocationListener locationListener = new MyLocationListener();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         }
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-        */
+
 
         if (!isCheckedIn)
         {
