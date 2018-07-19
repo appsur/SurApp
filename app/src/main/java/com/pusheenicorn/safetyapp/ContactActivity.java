@@ -2,10 +2,9 @@ package com.pusheenicorn.safetyapp;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Message;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -23,12 +22,13 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.User;
 
-public class MessageActivity extends AppCompatActivity{
+public class ContactActivity extends AppCompatActivity{
     BottomNavigationView bottomNavigationView;
     Button btnSendMessage;
     EditText etMessage;
     EditText etPhoneNumber;
     String phonenumber;
+    Button btnCall;
     // Define global current user.
     User currentUser;
 
@@ -36,10 +36,18 @@ public class MessageActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_contact);
         checkPermissionsPlease();
         btnSendMessage = findViewById(R.id.btnSendMessage);
         etMessage = findViewById(R.id.etMessage);
+        btnCall = findViewById(R.id.btnCall);
+        btnCall.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialContactPhone(etPhoneNumber.getText().toString());
+            }
+        });
         // Get the current user and cast appropriately.
         currentUser = (User) ParseUser.getCurrentUser();
         phonenumber = currentUser.getPhonNumber();
@@ -51,20 +59,20 @@ public class MessageActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_person:
-                        Intent goHome = new Intent(MessageActivity.this, MainActivity.class);
-                        Toast.makeText(MessageActivity.this, "Success!", Toast.LENGTH_LONG ).show();
+                        Intent goHome = new Intent(ContactActivity.this, MainActivity.class);
+                        Toast.makeText(ContactActivity.this, "Success!", Toast.LENGTH_LONG ).show();
                         startActivity(goHome);
                         finish();
                         return true;
                     case R.id.action_message:
-//                      //Toast.makeText(MessageActivity.this, "Already on Messages Page!", Toast.LENGTH_LONG ).show();
+//                      //Toast.makeText(ContactActivity.this, "Already on Messages Page!", Toast.LENGTH_LONG ).show();
                         return true;
                     case R.id.action_emergency:
                         // TODO -- link activities
                         return true;
                     case R.id.action_friends:
-                        Intent goFriends = new Intent(MessageActivity.this, FriendsActivity.class);
-                        Toast.makeText(MessageActivity.this, "Success!", Toast.LENGTH_LONG).show();
+                        Intent goFriends = new Intent(ContactActivity.this, FriendsActivity.class);
+                        Toast.makeText(ContactActivity.this, "Success!", Toast.LENGTH_LONG).show();
                         startActivity(goFriends);
                         finish();
                         return true;
@@ -78,7 +86,7 @@ public class MessageActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
-                Toast.makeText(MessageActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
+                Toast.makeText(ContactActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -93,9 +101,13 @@ public class MessageActivity extends AppCompatActivity{
             Log.v("phoneNumber", phoneNumber);
             Log.v("Message", message);
             PendingIntent pi = PendingIntent.getActivity(this, 0,
-                    new Intent(this, MessageActivity.class), 0);
+                    new Intent(this, ContactActivity.class), 0);
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, message, pi, null);
+    }
+
+    private void dialContactPhone(final String phoneNumber) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
     }
 
 
