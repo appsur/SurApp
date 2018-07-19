@@ -4,14 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MessageActivity">
+
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="1"
+        android:background="@color/lightGray"
+        android:fontFamily="@font/arimo"
+        android:text="BUTTON"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="297dp"
+        android:layout_height="243dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="157dp"
+        android:layout_marginEnd="31dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Enter message here."
+        android:inputType="textMultiLine"
+        android:textColor="@color/black" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:visibility="visible"
-        tools:ignore="Orientation"/>
+        tools:ignore="Orientation">
+
+    </LinearLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
