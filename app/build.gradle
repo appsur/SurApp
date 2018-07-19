@@ -47,5 +47,8 @@ dependencies {
     implementation 'com.parse.bolts:bolts-android:1.+'
     implementation 'com.parse:parseui-login-android:0.0.2'
     implementation 'com.parse:parseui-login-android:0.0.1'
-    implementation 'com.parse:parseui-widget-android:0.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

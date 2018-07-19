@@ -68,6 +68,7 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".ContactActivity" />
+
     </application>
 
 </manifest>
