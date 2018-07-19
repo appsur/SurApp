@@ -39,12 +39,14 @@ public class MainActivity extends AppCompatActivity {
     User currentUser;
     Checkin checkin;
     Context context;
+    boolean isCheckedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        isCheckedIn = false;
         context = this;
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -120,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
                             " " + formatedDateArr[3];
                     tvRelativeCheckinTime.setText(newString);
                     tvCheckinTime.setText(formatedDate);
+                    isCheckedIn = isCheckedIn(date);
+                    if (isCheckedIn)
+                    {
+                        ibCheckin.setImageResource(R.drawable.check);
+                    }
+                    else
+                    {
+                        ibCheckin.setImageResource(R.drawable.check_outline);
+                    }
                 }
                 else {
                     e.printStackTrace();
@@ -140,12 +151,10 @@ public class MainActivity extends AppCompatActivity {
         sf.setLenient(true);
 
         String relativeDate = "";
-        String newDate = "";
         try {
             long dateMillis = sf.parse(rawDate).getTime();
             relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-            Toast.makeText(context, newDate, Toast.LENGTH_LONG).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -153,6 +162,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCheckin(View view) {
-        ibCheckin.setImageResource(R.drawable.check);
+        if (!isCheckedIn)
+        {
+            ibCheckin.setImageResource(R.drawable.check);
+
+        }
+    }
+
+    public boolean isCheckedIn(Date prevDate) {
+        // Define format type.
+        DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
+
+        // Get current Date.
+        Date currDate = new Date();
+
+        // Split by regex "/" convert to int array and find time difference.
+        String[] currDateArr = df.format(currDate).split("/");
+        String[] prevDateArr = df.format(prevDate).split("/");
+        int[] currDateInts = new int[5];
+        int[] prevDateInts = new int[5];
+        for (int i = 0; i < 5; i++) {
+            currDateInts[i] = Integer.parseInt(currDateArr[i]);
+            prevDateInts[i] = Integer.parseInt(prevDateArr[i]);
+        }
+        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
+                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
+        int truPrev = (prevDateInts[0] * 43800) + (prevDateInts[1] * 1440)
+                + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
+        int threshold = (int) currentUser.getNumber("checkin");
+
+        if (trueCurr - truPrev > threshold)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
