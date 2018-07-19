@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -165,7 +166,30 @@ public class MainActivity extends AppCompatActivity {
         if (!isCheckedIn)
         {
             ibCheckin.setImageResource(R.drawable.check);
+            final Checkin checkin = new Checkin();
+            checkin.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    checkin.saveInBackground();
+                }
+            });
 
+//            currentUser.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(com.parse.ParseException e) {
+//                    if (e == null){
+//                        final User user = (User) ParseUser.getCurrentUser();
+//                        newPost.setLikes((Number) 0);
+//                        user.saveInBackground();
+//
+//                        Intent intent = new Intent(PostActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//
+//                    } else {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
         }
     }
 
