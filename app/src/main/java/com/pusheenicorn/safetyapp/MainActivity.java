@@ -1,10 +1,17 @@
 package com.pusheenicorn.safetyapp;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
@@ -42,11 +49,22 @@ public class MainActivity extends AppCompatActivity {
     Checkin checkin;
     Context context;
     boolean isCheckedIn;
+    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //check to see if the phone's gps is enabled
+
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        } else {
+            showGPSDisabledAlertToUser();
+        }
 
         isCheckedIn = false;
         context = this;
@@ -127,17 +145,13 @@ public class MainActivity extends AppCompatActivity {
                     tvRelativeCheckinTime.setText(newString);
                     tvCheckinTime.setText(formatedDate);
                     isCheckedIn = isCheckedIn(date);
-                    if (isCheckedIn)
-                    {
+                    if (isCheckedIn) {
                         ibCheckin.setImageResource(R.drawable.check);
-                    }
-                    else
-                    {
+                    } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
                         Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
                     }
-                }
-                else {
+                } else {
                     e.printStackTrace();
                 }
             }
@@ -146,9 +160,34 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
     }
 
+    //this will open a prompt to let the user know that gps is not enabled on their phone and will
+    //allow the user to turn it on
+    private void showGPSDisabledAlertToUser() {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
     public void onSettings(View view) {
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        Toast.makeText(MainActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG ).show();
+        Toast.makeText(MainActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 
@@ -168,9 +207,25 @@ public class MainActivity extends AppCompatActivity {
         return relativeDate;
     }
 
+
     public void onCheckin(View view) {
         final Checkin checkin;
         final Date newCheckinDate;
+      /*  LocationListener locationListener = new LocationListener();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+        */
+
         if (!isCheckedIn)
         {
             ibCheckin.setImageResource(R.drawable.check);
@@ -225,6 +280,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(context, "Thanks, but you've already checked in!",
                     Toast.LENGTH_LONG).show();
         }
+
+
+
     }
 
     public boolean isCheckedIn(Date prevDate) {
