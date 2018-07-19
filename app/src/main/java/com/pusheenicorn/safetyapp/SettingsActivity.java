@@ -1,10 +1,12 @@
 package com.pusheenicorn.safetyapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -65,10 +67,13 @@ public class SettingsActivity extends AppCompatActivity {
     //button for logging out
     private Button logOutButton;
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        context = this;
         //log out button implementation
         logOutButton = findViewById(R.id.btnLogOut);
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -373,50 +378,57 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void onDone(View view) {
-        final String username = etUsername.getText().toString();
-        final String phoneNumber = etPhoneNumber.getText().toString();
-        final String name = etName.getText().toString();
-
-        final String oldUsername = tvUsernameValue.getText().toString();
-        final String oldPhoneNumber = tvPhoneValue.getText().toString();
-        final String oldName = tvNameValue.getText().toString();
 
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     // save new data
-                    //TODO - put failsafes for if the fields are not updated
                     final User user = (User) ParseUser.getCurrentUser();
-                    if (username.equals("") || !username.equals(oldUsername)) {
-                        user.setUserName(etUsername.getText().toString());
+
+                    String username = etUsername.getText().toString();
+                    String phoneNumber = etPhoneNumber.getText().toString();
+                    String name = etName.getText().toString();
+                    String oldUsername = tvUsernameValue.getText().toString();
+                    String oldPhoneNumber = tvPhoneValue.getText().toString();
+                    String oldName = tvNameValue.getText().toString();
+
+                    if (username != "") {
+                        user.setUserName(username);
                     } else {
-                        user.setUserName(tvUsernameValue.getText().toString());
+                        user.setUserName(oldUsername);
                     }
 
-                    if (name.equals("") || !name.equals(oldName)) {
-                        user.setName(etName.getText().toString());
+                    if (phoneNumber != "" && phoneNumber.length() >= 10) {
+                        Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG);
+                        user.setPhoneNumber(phoneNumber);
+                        String num = "(" + phoneNumber.substring(0, 3) + ") "
+                                + phoneNumber.substring(3, 6) + "-"
+                                + phoneNumber.substring(6, 10);
+                        tvPhoneValue.setText(num);
                     } else {
-                        user.setName(tvNameValue.getText().toString());
+                        Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG);
+                        user.setPhoneNumber(oldPhoneNumber);
                     }
 
-                    if (phoneNumber.equals("") || !phoneNumber.equals(oldPhoneNumber)) {
-                        user.setPhoneNumber(etPhoneNumber.getText().toString());
+                    if (name != "") {
+                        user.setName(name);
                     } else {
-                        user.setPhoneNumber(tvPhoneValue.getText().toString());
+                        user.setName(oldName);
                     }
-
                     user.saveInBackground();
 
                     // update text views
                     tvNameValue.setText(user.getName());
                     tvUsernameValue.setText(user.getUserName());
-
-                        String phoneNumber = etPhoneNumber.getText().toString();
-                        phoneNumber = "(" + phoneNumber.substring(0, 3) + ") "
+                    String newNumber = user.getPhonNumber();
+                    if (newNumber.length() >= 20)
+                    {
+                        newNumber = "(" + phoneNumber.substring(0, 3) + ") "
                                 + phoneNumber.substring(3, 6) + "-"
                                 + phoneNumber.substring(6, 10);
-                        tvPhoneValue.setText(phoneNumber);
+                        tvPhoneValue.setText(newNumber);
+                    }
 
                     // hide edit vies
                     etName.setVisibility(View.INVISIBLE);
