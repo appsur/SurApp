@@ -7,13 +7,37 @@
     android:background="@color/white"
     tools:context=".ContactActivity">
 
+    <TextView
+        android:id="@+id/tvFriendsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/rvFriendList"
+        android:layout_marginTop="87dp"
+        android:fontFamily="@font/arimo"
+        android:text="FRIENDS"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvFriendList"
+        android:layout_width="327dp"
+        android:layout_height="227dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="122dp"
+        android:visibility="visible"
+        tools:listitem="@layout/item_friend" />
+
     <EditText
         android:id="@+id/tvPhoneNumber"
         android:layout_width="295dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/etMessage"
-        android:layout_marginBottom="212dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="146dp"
+        android:layout_marginEnd="19dp"
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="textPersonName"
@@ -22,7 +46,7 @@
 
     <ImageButton
         android:id="@+id/btnSendMessage"
-        android:layout_width="349dp"
+        android:layout_width="52dp"
         android:layout_height="46dp"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/etMessage"
@@ -39,10 +63,10 @@
 
     <ImageButton
         android:id="@+id/btnCall"
-        android:layout_width="349dp"
+        android:layout_width="53dp"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/etPhoneNumber"
+        android:layout_alignTop="@+id/tvPhoneNumber"
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:backgroundTint="@color/coral"
@@ -57,9 +81,8 @@
         android:layout_width="297dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="153dp"
-        android:layout_marginEnd="31dp"
+        android:layout_alignStart="@+id/tvPhoneNumber"
+        android:layout_marginBottom="81dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="Enter message here."

@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -24,11 +25,11 @@ import com.pusheenicorn.safetyapp.models.User;
 
 public class ContactActivity extends AppCompatActivity{
     BottomNavigationView bottomNavigationView;
-    Button btnSendMessage;
+    ImageButton btnSendMessage;
     EditText etMessage;
     EditText etPhoneNumber;
     String phonenumber;
-    Button btnCall;
+    ImageButton btnCall;
     // Define global current user.
     User currentUser;
 
