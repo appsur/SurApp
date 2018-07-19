@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +18,10 @@ import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,16 +37,18 @@ public class MainActivity extends AppCompatActivity {
     TextView tvRelativeCheckinTime;
     User currentUser;
     Checkin checkin;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         ibEvents = (ImageButton) findViewById(R.id.ibEvents);
-        ibEvents.setOnClickListener(new View.OnClickListener(){
+        ibEvents.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
-                        Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
+                        Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG).show();
                         startActivity(friendsAction);
                         return true;
                 }
@@ -93,30 +98,31 @@ public class MainActivity extends AppCompatActivity {
         tvName.setText(currentUser.getName());
 
         final String checkinId = currentUser.getLastCheckin().getObjectId();
+
         final Checkin.Query postQuery = new Checkin.Query();
-        postQuery.getTop().findByUsername(checkinId);
+        postQuery.getTop();
 
         postQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
                     checkin = objects.get(0);
+                    Date date = checkin.getCreatedAt();
+                    DateFormat dateFormat =
+                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                    String formatedDate = dateFormat.format(date);
+                    String newString = getRelativeTimeAgo(formatedDate);
+                    String[] formatedDateArr = formatedDate.split(" ");
+                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " + formatedDateArr[2] +
+                            " " + formatedDateArr[3];
+                    tvRelativeCheckinTime.setText(newString);
+                    tvCheckinTime.setText(formatedDate);
                 }
                 else {
                     e.printStackTrace();
                 }
             }
         });
-
-//        Date date = pobject.getCreatedAt();
-//        if (date != null) {
-//            Toast.makeText(this, "JARD LION", Toast.LENGTH_LONG).show();
-//        }
-//        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-//        String formatedDate = dateFormat.format(date);
-//        String newString = getRelativeTimeAgo(formatedDate);
-//
-//        tvRelativeCheckinTime.setText(newString);
     }
 
     public void onSettings(View view) {
