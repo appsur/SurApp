@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     User currentUser;
     Checkin checkin;
     Context context;
-//    boolean isCheckedIn;
-    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    boolean isCheckedIn;
+
 
 
     @Override
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //check to see if the phone's gps is enabled
-
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             showGPSDisabledAlertToUser();
         }
 
-//        isCheckedIn = false;
+        isCheckedIn = false;
         context = this;
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.action_emergency:
-//                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "6304862146", null)));
+                        // TODO -- link activities
                         return true;
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
@@ -145,13 +144,13 @@ public class MainActivity extends AppCompatActivity {
                             " " + formatedDateArr[3];
                     tvRelativeCheckinTime.setText(newString);
                     tvCheckinTime.setText(formatedDate);
-//                    isCheckedIn = isCheckedIn(date);
-//                    if (isCheckedIn) {
-//                        ibCheckin.setImageResource(R.drawable.check);
-//                    } else {
-//                        ibCheckin.setImageResource(R.drawable.check_outline);
-//                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
-//                    }
+                    isCheckedIn = isCheckedIn(date);
+                    if (isCheckedIn) {
+                        ibCheckin.setImageResource(R.drawable.check);
+                    } else {
+                        ibCheckin.setImageResource(R.drawable.check_outline);
+                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     e.printStackTrace();
                 }
@@ -227,60 +226,60 @@ public class MainActivity extends AppCompatActivity {
                 LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
         */
 
-//        if (!isCheckedIn)
-//        {
-//            ibCheckin.setImageResource(R.drawable.check);
-//            checkin = new Checkin();
-//            newCheckinDate = new Date();
-//            checkin.saveInBackground(new SaveCallback() {
-//                @Override
-//                public void done(com.parse.ParseException e) {
-//                    if (e == null)
-//                    {
-//                        checkin.saveInBackground();
-//                    }
-//                    else {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//            currentUser.saveInBackground(new SaveCallback() {
-//                @Override
-//                public void done(com.parse.ParseException e) {
-//                    if (e == null)
-//                    {
-//                        final User user = (User) ParseUser.getCurrentUser();
-//                        user.setLastCheckin(checkin);
-//                        user.saveInBackground();
-//                    }
-//                    else {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-//            String formatedDate = dateFormat.format(newCheckinDate);
-//            String newString = getRelativeTimeAgo(formatedDate);
-//            String[] formatedDateArr = formatedDate.split(" ");
-//            formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-//                    formatedDateArr[2] + " " + formatedDateArr[3];
-//            tvRelativeCheckinTime.setText(newString);
-//            tvCheckinTime.setText(formatedDate);
-//            isCheckedIn = isCheckedIn(newCheckinDate);
-//            if (isCheckedIn)
-//            {
-//                ibCheckin.setImageResource(R.drawable.check);
-//            }
-//            else {
-//                ibCheckin.setImageResource(R.drawable.check_outline);
-//            }
-//        }
+        if (!isCheckedIn)
+        {
+            ibCheckin.setImageResource(R.drawable.check);
+            checkin = new Checkin();
+            newCheckinDate = new Date();
+            checkin.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    if (e == null)
+                    {
+                        checkin.saveInBackground();
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    if (e == null)
+                    {
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setLastCheckin(checkin);
+                        user.saveInBackground();
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-//        else {
-//            Toast.makeText(context, "Thanks, but you've already checked in!",
-//                    Toast.LENGTH_LONG).show();
-//        }
+            DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+            String formatedDate = dateFormat.format(newCheckinDate);
+            String newString = getRelativeTimeAgo(formatedDate);
+            String[] formatedDateArr = formatedDate.split(" ");
+            formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                    formatedDateArr[2] + " " + formatedDateArr[3];
+            tvRelativeCheckinTime.setText(newString);
+            tvCheckinTime.setText(formatedDate);
+            isCheckedIn = isCheckedIn(newCheckinDate);
+            if (isCheckedIn)
+            {
+                ibCheckin.setImageResource(R.drawable.check);
+            }
+            else {
+                ibCheckin.setImageResource(R.drawable.check_outline);
+            }
+        }
+
+        else {
+            Toast.makeText(context, "Thanks, but you've already checked in!",
+                    Toast.LENGTH_LONG).show();
+        }
 
 
 
