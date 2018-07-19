@@ -69,7 +69,7 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".ContactActivity" />
-        <activity android:name=".ChatActivity"></activity>
+
     </application>
 
 </manifest>
