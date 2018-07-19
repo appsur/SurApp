@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -104,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Find time of last checkin by geting checkin id and making query.
         final String checkinId = currentUser.getLastCheckin().getObjectId();
-        final Checkin.Query postQuery = new Checkin.Query();
-        postQuery.getTop();
-        postQuery.findInBackground(new FindCallback<Checkin>() {
+        final Checkin.Query checkinQuery = new Checkin.Query();
+        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+        checkinQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                     {
                         ibCheckin.setImageResource(R.drawable.check_outline);
+                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
@@ -165,7 +167,70 @@ public class MainActivity extends AppCompatActivity {
         if (!isCheckedIn)
         {
             ibCheckin.setImageResource(R.drawable.check);
-
+            final Checkin checkin = new Checkin();
+            checkin.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    if (e == null)
+                    {
+                        checkin.saveInBackground();
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+                    if (e == null)
+                    {
+                        final User user = (User) ParseUser.getCurrentUser();
+                        user.setLastCheckin(checkin);
+                        user.saveInBackground();
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            final String checkinId = currentUser.getLastCheckin().getObjectId();
+            final Checkin.Query checkinQuery = new Checkin.Query();
+            checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+            checkinQuery.findInBackground(new FindCallback<Checkin>() {
+                @Override
+                public void done(List<Checkin> objects, com.parse.ParseException e) {
+                    if (e == null) {
+                        Checkin newCheckin = objects.get(0);
+                        Date date = newCheckin.getCreatedAt();
+                        DateFormat dateFormat =
+                                new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                        String formatedDate = dateFormat.format(date);
+                        String newString = getRelativeTimeAgo(formatedDate);
+                        String[] formatedDateArr = formatedDate.split(" ");
+                        formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                                formatedDateArr[2] +
+                                " " + formatedDateArr[3];
+                        tvRelativeCheckinTime.setText(newString);
+                        tvCheckinTime.setText(formatedDate);
+                        isCheckedIn = isCheckedIn(date);
+                        if (isCheckedIn)
+                        {
+                            ibCheckin.setImageResource(R.drawable.check);
+                        }
+                        else
+                        {
+                            ibCheckin.setImageResource(R.drawable.check_outline);
+                        }
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+        else {
+            Toast.makeText(context, "Thanks, but you've already checked in!", Toast.LENGTH_LONG).show();
         }
     }
 
