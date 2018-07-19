@@ -1,6 +1,7 @@
 package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -30,7 +31,8 @@ public class FriendsActivity extends AppCompatActivity {
                     startActivity(returnHome);
                     return true;
                     case R.id.action_message:
-                        // TODO -- link activities
+                        Intent goMessages = new Intent (FriendsActivity.this, ContactActivity.class);
+                        startActivity(goMessages);
                         return true;
                     case R.id.action_emergency:
                         // TODO -- link activities

@@ -57,6 +57,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         //get the data according to position
         Friend friends = mFriends.get(position);
+        //TODO - populate the fields in friends adapter
+        holder.tvName.setText(friends.getUser().getUsername());
         //populate the views according to this data
 //        holder.tvTimeElapsed.setText(friends.getDescription());
 //        holder.tvUsername.setText(post.getUser().getUsername());
@@ -75,7 +77,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView tvName;
-        public TextView location;
+        public TextView tvPhoneNumber;
         public TextView tvTimeElapsed;
         public TextView tvTime;
 

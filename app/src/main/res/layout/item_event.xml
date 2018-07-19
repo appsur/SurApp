@@ -18,7 +18,7 @@
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/tvLocation"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvEventName"
@@ -33,7 +33,7 @@
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvLocation"
+        android:layout_below="@id/tvPhoneNumber"
         android:fontFamily="@font/arimo"
         android:text="TIME"
         android:textColor="@color/black"
