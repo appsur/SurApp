@@ -27,6 +27,7 @@ public class MessageActivity extends AppCompatActivity{
     BottomNavigationView bottomNavigationView;
     Button btnSendMessage;
     EditText etMessage;
+    EditText etPhoneNumber;
     String phonenumber;
     // Define global current user.
     User currentUser;
@@ -43,6 +44,7 @@ public class MessageActivity extends AppCompatActivity{
         currentUser = (User) ParseUser.getCurrentUser();
         phonenumber = currentUser.getPhonNumber();
         etMessage = findViewById(R.id.etMessage);
+        etPhoneNumber  = findViewById(R.id.etPhoneNumber);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -54,7 +56,7 @@ public class MessageActivity extends AppCompatActivity{
                         startActivity(goHome);
                         return true;
                     case R.id.action_message:
-                        Toast.makeText(MessageActivity.this, "Already on Messages Page!", Toast.LENGTH_LONG ).show();
+//                      //Toast.makeText(MessageActivity.this, "Already on Messages Page!", Toast.LENGTH_LONG ).show();
                         return true;
                     case R.id.action_emergency:
                         // TODO -- link activities
@@ -62,6 +64,7 @@ public class MessageActivity extends AppCompatActivity{
                     case R.id.action_friends:
                         Intent goFriends = new Intent(MessageActivity.this, FriendsActivity.class);
                         Toast.makeText(MessageActivity.this, "Success!", Toast.LENGTH_LONG).show();
+                        startActivity(goFriends);
                         return true;
                 }
                 return true;
@@ -72,7 +75,7 @@ public class MessageActivity extends AppCompatActivity{
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendSMS("6304862146", etMessage.getText().toString());
+                sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
                 Toast.makeText(MessageActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
                 Intent returnHome = new Intent(MessageActivity.this, MainActivity.class);
                 startActivity(returnHome);

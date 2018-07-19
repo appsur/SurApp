@@ -7,6 +7,19 @@
     android:background="@color/white"
     tools:context=".MessageActivity">
 
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="295dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/etMessage"
+        android:layout_marginBottom="213dp"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray" />
+
     <Button
         android:id="@+id/btnSendMessage"
         android:layout_width="wrap_content"
@@ -24,20 +37,21 @@
     <EditText
         android:id="@+id/etMessage"
         android:layout_width="297dp"
-        android:layout_height="243dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="157dp"
+        android:layout_marginBottom="155dp"
         android:layout_marginEnd="31dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="Enter message here."
         android:inputType="textMultiLine"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:visibility="visible"
