@@ -103,7 +103,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/tvLastCheckin"
-        android:layout_marginBottom="234dp"
+        android:layout_marginBottom="224dp"
         android:text="UPCOMING ACTIVITIES: "
         android:textColor="@color/black"
         android:textSize="18sp" />
@@ -126,13 +126,15 @@
         android:layout_alignStart="@+id/rvActivities"
         android:layout_marginTop="242dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/check_outline" />
+        app:srcCompat="@drawable/check_outline"
+        android:onClick="onCheckin"/>
 
     <TextView
         android:id="@+id/tvRelativeCheckinTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_below="@id/tvCheckinTime"
         android:layout_toEndOf="@+id/ibProfileImage"
         android:text="10:35 PM"
         android:textColor="@color/black"
@@ -146,7 +148,8 @@
         android:layout_toEndOf="@+id/ibProfileImage"
         android:text="10 hours ago"
         android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:layout_marginBottom="5dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvActivities"
@@ -175,7 +178,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibCheckin"
-        android:layout_marginBottom="227dp"
+        android:layout_marginBottom="216dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/star" />
 

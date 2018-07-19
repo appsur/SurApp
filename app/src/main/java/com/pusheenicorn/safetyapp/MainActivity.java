@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,8 +18,10 @@ import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,22 +31,27 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
     ImageButton ibProfileImage;
+    ImageButton ibCheckin;
     TextView tvName;
     TextView tvUsername;
     TextView tvCheckinTime;
     TextView tvRelativeCheckinTime;
     User currentUser;
     Checkin checkin;
+    Context context;
+    boolean isCheckedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        isCheckedIn = false;
+        context = this;
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         ibEvents = (ImageButton) findViewById(R.id.ibEvents);
-        ibEvents.setOnClickListener(new View.OnClickListener(){
+        ibEvents.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -69,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
-                        Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
+                        Toast.makeText(MainActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG).show();
                         startActivity(friendsAction);
                         return true;
                 }
@@ -88,35 +96,47 @@ public class MainActivity extends AppCompatActivity {
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvName = (TextView) findViewById(R.id.tvName);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+        ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
 
+        // Set values.
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
 
+        // Find time of last checkin by geting checkin id and making query.
         final String checkinId = currentUser.getLastCheckin().getObjectId();
         final Checkin.Query postQuery = new Checkin.Query();
-        postQuery.getTop().findByUsername(checkinId);
-
+        postQuery.getTop();
         postQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
                     checkin = objects.get(0);
+                    Date date = checkin.getCreatedAt();
+                    DateFormat dateFormat =
+                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                    String formatedDate = dateFormat.format(date);
+                    String newString = getRelativeTimeAgo(formatedDate);
+                    String[] formatedDateArr = formatedDate.split(" ");
+                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                            formatedDateArr[2] +
+                            " " + formatedDateArr[3];
+                    tvRelativeCheckinTime.setText(newString);
+                    tvCheckinTime.setText(formatedDate);
+                    isCheckedIn = isCheckedIn(date);
+                    if (isCheckedIn)
+                    {
+                        ibCheckin.setImageResource(R.drawable.check);
+                    }
+                    else
+                    {
+                        ibCheckin.setImageResource(R.drawable.check_outline);
+                    }
                 }
                 else {
                     e.printStackTrace();
                 }
             }
         });
-
-//        Date date = pobject.getCreatedAt();
-//        if (date != null) {
-//            Toast.makeText(this, "JARD LION", Toast.LENGTH_LONG).show();
-//        }
-//        DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-//        String formatedDate = dateFormat.format(date);
-//        String newString = getRelativeTimeAgo(formatedDate);
-//
-//        tvRelativeCheckinTime.setText(newString);
     }
 
     public void onSettings(View view) {
@@ -125,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public static String getRelativeTimeAgo(String rawDate) {
+    public String getRelativeTimeAgo(String rawDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
@@ -139,5 +159,45 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return relativeDate;
+    }
+
+    public void onCheckin(View view) {
+        if (!isCheckedIn)
+        {
+            ibCheckin.setImageResource(R.drawable.check);
+
+        }
+    }
+
+    public boolean isCheckedIn(Date prevDate) {
+        // Define format type.
+        DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
+
+        // Get current Date.
+        Date currDate = new Date();
+
+        // Split by regex "/" convert to int array and find time difference.
+        String[] currDateArr = df.format(currDate).split("/");
+        String[] prevDateArr = df.format(prevDate).split("/");
+        int[] currDateInts = new int[5];
+        int[] prevDateInts = new int[5];
+        for (int i = 0; i < 5; i++) {
+            currDateInts[i] = Integer.parseInt(currDateArr[i]);
+            prevDateInts[i] = Integer.parseInt(prevDateArr[i]);
+        }
+        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
+                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
+        int truPrev = (prevDateInts[0] * 43800) + (prevDateInts[1] * 1440)
+                + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
+        int threshold = (int) currentUser.getNumber("checkin");
+
+        if (trueCurr - truPrev > threshold)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }
