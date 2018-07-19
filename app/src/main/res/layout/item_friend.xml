@@ -26,14 +26,14 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/tvLocation"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:fontFamily="@font/arimo"
-        android:text="LOCATION"
+        android:text="PHONE NUMBER"
         android:textColor="@android:color/black" />
 
     <ProgressBar
@@ -41,7 +41,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLocation"
+        android:layout_below="@+id/tvPhoneNumber"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:progressDrawable="@color/teal" />
