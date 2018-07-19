@@ -126,7 +126,8 @@
         android:layout_alignStart="@+id/rvActivities"
         android:layout_marginTop="242dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/check_outline" />
+        app:srcCompat="@drawable/check_outline"
+        android:onClick="onCheckin"/>
 
     <TextView
         android:id="@+id/tvRelativeCheckinTime"

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
     ImageButton ibProfileImage;
+    ImageButton ibCheckin;
     TextView tvName;
     TextView tvUsername;
     TextView tvCheckinTime;
@@ -93,15 +94,16 @@ public class MainActivity extends AppCompatActivity {
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvName = (TextView) findViewById(R.id.tvName);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+        ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
 
+        // Set values.
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
 
+        // Find time of last checkin by geting checkin id and making query.
         final String checkinId = currentUser.getLastCheckin().getObjectId();
-
         final Checkin.Query postQuery = new Checkin.Query();
         postQuery.getTop();
-
         postQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
@@ -113,7 +115,8 @@ public class MainActivity extends AppCompatActivity {
                     String formatedDate = dateFormat.format(date);
                     String newString = getRelativeTimeAgo(formatedDate);
                     String[] formatedDateArr = formatedDate.split(" ");
-                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " + formatedDateArr[2] +
+                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                            formatedDateArr[2] +
                             " " + formatedDateArr[3];
                     tvRelativeCheckinTime.setText(newString);
                     tvCheckinTime.setText(formatedDate);
@@ -131,19 +134,25 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public static String getRelativeTimeAgo(String rawDate) {
+    public String getRelativeTimeAgo(String rawDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
 
         String relativeDate = "";
+        String newDate = "";
         try {
             long dateMillis = sf.parse(rawDate).getTime();
             relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                     System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+            Toast.makeText(context, newDate, Toast.LENGTH_LONG).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return relativeDate;
+    }
+
+    public void onCheckin(View view) {
+        ibCheckin.setImageResource(R.drawable.check);
     }
 }
