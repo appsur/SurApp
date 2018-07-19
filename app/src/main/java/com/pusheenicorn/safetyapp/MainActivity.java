@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     Checkin checkin;
     Context context;
     boolean isCheckedIn;
-
 
 
     @Override
@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
         tvName.setText(currentUser.getName());
 
         // Find time of last checkin by geting checkin id and making query.
-        final String checkinId = currentUser.getLastCheckin().getObjectId();
+        final String checkinId;
+        checkinId = currentUser.getLastCheckin().getObjectId();
         final Checkin.Query checkinQuery = new Checkin.Query();
         checkinQuery.getTop().whereEqualTo("objectId", checkinId);
         checkinQuery.findInBackground(new FindCallback<Checkin>() {
@@ -212,7 +213,11 @@ public class MainActivity extends AppCompatActivity {
     public void onCheckin(View view) {
         final Checkin checkin;
         final Date newCheckinDate;
-      /*  LocationListener locationListener = new LocationListener();
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //Location loc;
+        //double lat = loc.getLatitude()
+
+        LocationListener locationListener = new MyLocationListener();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -225,21 +230,18 @@ public class MainActivity extends AppCompatActivity {
         }
         locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-        */
 
-        if (!isCheckedIn)
-        {
+
+        if (!isCheckedIn) {
             ibCheckin.setImageResource(R.drawable.check);
             checkin = new Checkin();
             newCheckinDate = new Date();
             checkin.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(com.parse.ParseException e) {
-                    if (e == null)
-                    {
+                    if (e == null) {
                         checkin.saveInBackground();
-                    }
-                    else {
+                    } else {
                         e.printStackTrace();
                     }
                 }
@@ -247,13 +249,11 @@ public class MainActivity extends AppCompatActivity {
             currentUser.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(com.parse.ParseException e) {
-                    if (e == null)
-                    {
+                    if (e == null) {
                         final User user = (User) ParseUser.getCurrentUser();
                         user.setLastCheckin(checkin);
                         user.saveInBackground();
-                    }
-                    else {
+                    } else {
                         e.printStackTrace();
                     }
                 }
@@ -268,20 +268,15 @@ public class MainActivity extends AppCompatActivity {
             tvRelativeCheckinTime.setText(newString);
             tvCheckinTime.setText(formatedDate);
             isCheckedIn = isCheckedIn(newCheckinDate);
-            if (isCheckedIn)
-            {
+            if (isCheckedIn) {
                 ibCheckin.setImageResource(R.drawable.check);
-            }
-            else {
+            } else {
                 ibCheckin.setImageResource(R.drawable.check_outline);
             }
-        }
-
-        else {
+        } else {
             Toast.makeText(context, "Thanks, but you've already checked in!",
                     Toast.LENGTH_LONG).show();
         }
-
 
 
     }
@@ -308,12 +303,9 @@ public class MainActivity extends AppCompatActivity {
                 + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
         int threshold = (int) currentUser.getNumber("checkin");
 
-        if (trueCurr - truPrev > threshold)
-        {
+        if (trueCurr - truPrev > threshold) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
