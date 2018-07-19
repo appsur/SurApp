@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Checkin checkin;
     Context context;
     boolean isCheckedIn;
-    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
 
 
     @Override
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //check to see if the phone's gps is enabled
-
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
