@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -141,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
     }
 
     public void onSettings(View view) {
@@ -166,10 +169,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCheckin(View view) {
+        final Checkin checkin;
+        final Date newCheckinDate;
         if (!isCheckedIn)
         {
             ibCheckin.setImageResource(R.drawable.check);
-            final Checkin checkin = new Checkin();
+            checkin = new Checkin();
+            newCheckinDate = new Date();
             checkin.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(com.parse.ParseException e) {
@@ -196,43 +202,28 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            final String checkinId = currentUser.getLastCheckin().getObjectId();
-            final Checkin.Query checkinQuery = new Checkin.Query();
-            checkinQuery.getTop().whereEqualTo("objectId", checkinId);
-            checkinQuery.findInBackground(new FindCallback<Checkin>() {
-                @Override
-                public void done(List<Checkin> objects, com.parse.ParseException e) {
-                    if (e == null) {
-                        Checkin newCheckin = objects.get(0);
-                        Date date = newCheckin.getCreatedAt();
-                        DateFormat dateFormat =
-                                new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-                        String formatedDate = dateFormat.format(date);
-                        String newString = getRelativeTimeAgo(formatedDate);
-                        String[] formatedDateArr = formatedDate.split(" ");
-                        formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                                formatedDateArr[2] +
-                                " " + formatedDateArr[3];
-                        tvRelativeCheckinTime.setText(newString);
-                        tvCheckinTime.setText(formatedDate);
-                        isCheckedIn = isCheckedIn(date);
-                        if (isCheckedIn)
-                        {
-                            ibCheckin.setImageResource(R.drawable.check);
-                        }
-                        else
-                        {
-                            ibCheckin.setImageResource(R.drawable.check_outline);
-                        }
-                    }
-                    else {
-                        e.printStackTrace();
-                    }
-                }
-            });
+
+            DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+            String formatedDate = dateFormat.format(newCheckinDate);
+            String newString = getRelativeTimeAgo(formatedDate);
+            String[] formatedDateArr = formatedDate.split(" ");
+            formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                    formatedDateArr[2] + " " + formatedDateArr[3];
+            tvRelativeCheckinTime.setText(newString);
+            tvCheckinTime.setText(formatedDate);
+            isCheckedIn = isCheckedIn(newCheckinDate);
+            if (isCheckedIn)
+            {
+                ibCheckin.setImageResource(R.drawable.check);
+            }
+            else {
+                ibCheckin.setImageResource(R.drawable.check_outline);
+            }
         }
+
         else {
-            Toast.makeText(context, "Thanks, but you've already checked in!", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Thanks, but you've already checked in!",
+                    Toast.LENGTH_LONG).show();
         }
     }
 

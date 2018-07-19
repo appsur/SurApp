@@ -19,10 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -62,7 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         etEmail = (EditText) findViewById(R.id.etEmail);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
-        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumber);
+        etPhoneNumber = (EditText) findViewById(R.id.tvPhoneNumber);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
         ibProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override

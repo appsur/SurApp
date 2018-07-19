@@ -8,7 +8,7 @@
     tools:context=".ContactActivity">
 
     <EditText
-        android:id="@+id/etPhoneNumber"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="295dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -84,7 +84,8 @@
         android:layout_alignStart="@+id/btnDaily"
         android:layout_marginTop="99dp"
         android:text="NAME: "
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:layout_marginLeft="5dp"/>
 
     <ImageButton
         android:id="@+id/ibAlert"
@@ -246,9 +247,9 @@
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etPhoneNumber"
-        android:layout_alignStart="@+id/btnDaily"
-        android:layout_marginBottom="-146dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tvName"
+        android:layout_marginTop="136dp"
         android:text="USERNAME: "
         android:textColor="@color/black" />
 
@@ -262,12 +263,11 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/etPhoneNumber"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/btnDaily"
-        android:layout_marginTop="153dp"
+        android:layout_alignStart="@+id/tvName"
+        android:layout_alignTop="@+id/btnDone"
         android:text="PHONE: "
         android:textColor="@color/black" />
 
@@ -284,8 +284,8 @@
         android:id="@+id/tvPhoneValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/etPhoneNumber"
-        android:layout_toEndOf="@+id/etPhoneNumber"
+        android:layout_alignTop="@+id/tvPhoneNumber"
+        android:layout_toEndOf="@+id/tvPhoneNumber"
         android:text="(555) 555-5555"
         android:textColor="@color/black" />
 
@@ -294,7 +294,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvName"
-        android:layout_toEndOf="@+id/etPhoneNumber"
+        android:layout_toEndOf="@+id/tvPhoneNumber"
         android:hint="Enter name"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
@@ -308,19 +308,6 @@
         android:layout_below="@+id/tvName"
         android:layout_toEndOf="@+id/tvUsername"
         android:hint="Enter username"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray"
-        android:textSize="12sp"
-        android:visibility="invisible" />
-
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsername"
-        android:layout_marginTop="145dp"
-        android:layout_toEndOf="@+id/etPhoneNumber"
-        android:hint="XXXXXXXXXX"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
         android:textSize="12sp"
@@ -349,5 +336,16 @@
         android:textColor="@android:color/black"
         tools:layout_editor_absoluteX="266dp"
         tools:layout_editor_absoluteY="426dp" />
+
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ibProfileImage"
+        android:layout_toStartOf="@+id/btnWeekly"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
