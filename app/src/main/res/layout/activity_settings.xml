@@ -132,7 +132,7 @@
         android:onClick="onLocator"/>
 
     <TextView
-        android:id="@+id/tvPhoneNumber"
+        android:id="@+id/etPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvOnAlert"
@@ -263,7 +263,7 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/tvPhoneNumber"
+        android:id="@+id/etPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvName"
@@ -284,8 +284,8 @@
         android:id="@+id/tvPhoneValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tvPhoneNumber"
-        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:layout_alignTop="@+id/etPhoneNumber"
+        android:layout_toEndOf="@+id/etPhoneNumber"
         android:text="(555) 555-5555"
         android:textColor="@color/black" />
 
@@ -294,7 +294,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvName"
-        android:layout_toEndOf="@+id/tvPhoneNumber"
+        android:layout_toEndOf="@+id/etPhoneNumber"
         android:hint="Enter name"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"

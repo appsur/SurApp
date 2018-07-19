@@ -18,10 +18,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.User;
+
+import java.util.ArrayList;
 
 public class ContactActivity extends AppCompatActivity{
     BottomNavigationView bottomNavigationView;
@@ -29,9 +32,11 @@ public class ContactActivity extends AppCompatActivity{
     EditText etMessage;
     EditText etPhoneNumber;
     String phonenumber;
+    TextView tvFriendsTitle;
     ImageButton btnCall;
     // Define global current user.
     User currentUser;
+    static final int MAX_SMS_MESSAGE_LENGTH = 160;
 
 
     @Override
@@ -40,8 +45,16 @@ public class ContactActivity extends AppCompatActivity{
         setContentView(R.layout.activity_contact);
         checkPermissionsPlease();
         btnSendMessage = findViewById(R.id.btnSendMessage);
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
+                Toast.makeText(ContactActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
+            }
+        });
         etMessage = findViewById(R.id.etMessage);
         btnCall = findViewById(R.id.btnCall);
+        tvFriendsTitle = findViewById(R.id.tvFriendsTitle);
         btnCall.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -83,13 +96,6 @@ public class ContactActivity extends AppCompatActivity{
 
         });
         bottomNavigationView.setSelectedItemId(R.id.action_message);
-        btnSendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
-                Toast.makeText(ContactActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
-            }
-        });
 
     }
 
@@ -105,6 +111,18 @@ public class ContactActivity extends AppCompatActivity{
                     new Intent(this, ContactActivity.class), 0);
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(phoneNumber, null, message, pi, null);
+        int length = message.length();
+
+        if(length > MAX_SMS_MESSAGE_LENGTH)
+        {
+            ArrayList<String> messagelist = sms.divideMessage(message);
+
+            sms.sendMultipartTextMessage(phonenumber, null, messagelist, null, null);
+        }
+        else
+        {
+            sms.sendTextMessage(phonenumber, null, message, pi, null);
+        }
     }
 
     private void dialContactPhone(final String phoneNumber) {
