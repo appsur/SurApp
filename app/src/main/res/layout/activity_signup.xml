@@ -128,7 +128,7 @@
         android:textColor="@android:color/black" />
 
     <EditText
-        android:id="@+id/etPhoneNumber"
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

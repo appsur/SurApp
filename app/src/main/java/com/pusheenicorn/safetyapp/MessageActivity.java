@@ -2,10 +2,8 @@ package com.pusheenicorn.safetyapp;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -44,7 +42,7 @@ public class MessageActivity extends AppCompatActivity{
         currentUser = (User) ParseUser.getCurrentUser();
         phonenumber = currentUser.getPhonNumber();
         etMessage = findViewById(R.id.etMessage);
-        etPhoneNumber  = findViewById(R.id.etPhoneNumber);
+        etPhoneNumber  = findViewById(R.id.tvPhoneNumber);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
