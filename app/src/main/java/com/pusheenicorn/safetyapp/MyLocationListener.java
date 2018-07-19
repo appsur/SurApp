@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.User;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -21,19 +25,23 @@ import static com.pusheenicorn.safetyapp.EventsActivity.TAG;
 
 public class MyLocationListener implements LocationListener{
 
+    User currentUser;
+
     @Override
     public void onLocationChanged(Location loc) {
         //editLocation.setText("");
         //pb.setVisibility(View.INVISIBLE);
         //Toast.makeText(
-             //   getBaseContext(),
-              //  "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-               //         + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+             //  ,
+             //  "Location changed: Lat: " + loc.getLatitude() + " Lng: "
+                  //      + loc.getLongitude(), Toast.LENGTH_SHORT).show();
         String longitude = "Longitude: " + loc.getLongitude();
         Log.v(TAG, longitude);
         String latitude = "Latitude: " + loc.getLatitude();
         Log.v(TAG, latitude);
-
+        ParseGeoPoint current = new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
+        currentUser = (User) ParseUser.getCurrentUser();
+        currentUser.setPlace(current);
         /*------- To get city name from coordinates --------
         String cityName = null;
         Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
