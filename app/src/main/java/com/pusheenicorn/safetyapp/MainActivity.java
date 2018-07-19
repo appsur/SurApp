@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         return true;
                     case R.id.action_emergency:
-                        // TODO -- link activities
+                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "6304862146", null)));
                         return true;
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this, FriendsActivity.class);
