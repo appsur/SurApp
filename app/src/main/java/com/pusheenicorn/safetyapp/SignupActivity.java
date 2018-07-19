@@ -24,6 +24,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.ByteArrayOutputStream;
@@ -88,10 +89,25 @@ public class SignupActivity extends AppCompatActivity {
         user.put("password", password);
         user.put("email", email);
         user.put("phonenumber", phoneNumber);
+
+        final Checkin checkin = new Checkin();
+        checkin.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    checkin.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         parseFile.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 user.put("profileimage", parseFile);
+                user.setLastCheckin(checkin);
+                user.setFrequency("Hourly");
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
