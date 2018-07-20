@@ -27,17 +27,22 @@ public class Receiver extends WakefulBroadcastReceiver {
 
     User currentUser;
     Checkin checkin;
-    boolean isCheckedIn;
     Context mContext;
     private static final String CHANNEL_ID = "checkin";
 
+    // Called automatically when the Broadcast Receiver is triggered.
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
         int mins = 0;
 
+        // Make sure that we are indeed receiving a checkin broadcast
         String action = intent.getStringExtra("actionName");
         if (action.equals("checkIn")) {
+            // If so, register the user passed in from the intent
+            // and extract values as needed. Schedule the next
+            // checkin at the appropriate time based on what the
+            // user's checkin frequency is.
             currentUser = intent.getParcelableExtra("user");
             mins = (int) currentUser.getNumber("checkin");
             scheduleNotification(getNotification(), mins * 60000);
@@ -48,11 +53,17 @@ public class Receiver extends WakefulBroadcastReceiver {
         context.sendBroadcast(it);
     }
 
+    /**
+     * This function checks whether a user is already checked in.
+     */
     public void startCheckIn() {
-        // Find time of last checkin by geting checkin id and making query.
+        // Find time of last checkin by geting the checkin id and making a query.
         final String checkinId;
-        isCheckedIn = false;
+
+        // Get the user's most recent checkin id.
         checkinId = currentUser.getLastCheckin().getObjectId();
+
+        // Make a query for the checkin by searching for the id.
         final Checkin.Query checkinQuery = new Checkin.Query();
         checkinQuery.getTop().whereEqualTo("objectId", checkinId);
         checkinQuery.findInBackground(new FindCallback<Checkin>() {
@@ -61,14 +72,10 @@ public class Receiver extends WakefulBroadcastReceiver {
                 if (e == null) {
                     checkin = objects.get(0);
                     Date date = checkin.getCreatedAt();
-                    DateFormat dateFormat =
-                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-                    String formatedDate = dateFormat.format(date);
-                    String[] formatedDateArr = formatedDate.split(" ");
-                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                            formatedDateArr[2] +
-                            " " + formatedDateArr[3];
-                    nowCheckin();
+                    if (!isChecked(date))
+                    {
+                        nowCheckin();
+                    }
                 } else {
                     e.printStackTrace();
                 }
@@ -76,58 +83,15 @@ public class Receiver extends WakefulBroadcastReceiver {
         });
     }
 
-    public void nowCheckin()
-    {
-        final Checkin checkin;
-        final Date newCheckinDate;
-
-        if (!isCheckedIn ){
-            checkin = new Checkin();
-            newCheckinDate = new Date();
-            checkin.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        checkin.saveInBackground();
-                        currentUser.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(com.parse.ParseException e) {
-                                if (e == null) {
-                                    final User user = (User) ParseUser.getCurrentUser();
-                                    user.setLastCheckin(checkin);
-                                    user.saveInBackground();
-                                    if (Helper.isAppRunning(mContext,
-                                            "com.pusheenicorn.safetyapp")) {
-                                        Intent i = new Intent();
-                                        i.setClassName("com.pusheenicorn.safetyapp",
-                                                "com.pusheenicorn.safetyapp." +
-                                                        "MainActivity");
-                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        mContext.startActivity(i);
-                                    }
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-            String formatedDate = dateFormat.format(newCheckinDate);
-            String[] formatedDateArr = formatedDate.split(" ");
-            formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                    formatedDateArr[2] + " " + formatedDateArr[3];
-
-            int mins = (int) currentUser.getNumber("checkin");
-        }
-    }
-
-    public boolean isCheckedIn(Date prevDate) {
+    /**
+     * This function takes a date and determines whether the checkin made at that
+     * date has expired or not.
+     *
+     * @param prevDate the date of the last check in
+     * @return true if the current user is already checked in
+     *         false if the current user is not checked in
+     */
+    public boolean isChecked(Date prevDate) {
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
 
@@ -156,6 +120,58 @@ public class Receiver extends WakefulBroadcastReceiver {
         }
     }
 
+    /**
+     * This function performs the task of checking in if the user is not
+     * already checked in.
+     */
+    public void nowCheckin()
+    {
+        // Create a new checkin.
+        final Checkin checkin = new Checkin();
+        checkin.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    // Save the new checkin to Parse.
+                    checkin.saveInBackground();
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(com.parse.ParseException e) {
+                            if (e == null) {
+                                // Save the updated state to Parse.
+                                final User user = (User) ParseUser.getCurrentUser();
+                                user.setLastCheckin(checkin);
+                                user.saveInBackground();
+
+                                // If the main activity is already running, resume it.
+                                if (Helper.isAppRunning(mContext,
+                                        "com.pusheenicorn.safetyapp")) {
+                                    Intent i = new Intent();
+                                    i.setClassName("com.pusheenicorn.safetyapp",
+                                            "com.pusheenicorn.safetyapp." +
+                                                    "MainActivity");
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    mContext.startActivity(i);
+                                }
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * This function constructs a notification with an intent to fire the
+     * Broadcast receiver.
+     *
+     * @return notification: the notification constructed
+     */
     public Notification getNotification() {
         Intent intent = new Intent(mContext, Receiver.class);
         intent.putExtra("actionName", "checkIn");
@@ -177,6 +193,12 @@ public class Receiver extends WakefulBroadcastReceiver {
         return builder.build();
     }
 
+    /**
+     * Schedule a new notification at a given delay.
+     *
+     * @param notification: the notification to schedule
+     * @param delay: the delay to send it at
+     */
     public void scheduleNotification(Notification notification, int delay) {
         //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
         //+ " minutes", Toast.LENGTH_LONG).show();
