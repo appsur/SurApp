@@ -178,8 +178,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
-
-        scheduleNotification(getNotification(), 5000);
+        // for testing
+        scheduleNotification(getNotification(),  10000);
+        // end of testing
     }
 
     //this will open a prompt to let the user know that gps is not enabled on their phone and will

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -21,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Receiver extends BroadcastReceiver {
+public class Receiver extends WakefulBroadcastReceiver {
 
     User currentUser;
     Checkin checkin;
@@ -32,13 +33,15 @@ public class Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
+        int mins = 0;
+
         String action = intent.getStringExtra("actionName");
         if (action.equals("checkIn")) {
             currentUser = intent.getParcelableExtra("user");
+            mins = (int) currentUser.getNumber("checkin");
+            scheduleNotification(getNotification(), mins * 60000);
             startCheckIn();
         }
-
-        scheduleNotification(getNotification(), 3600000);
 
         Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         context.sendBroadcast(it);
@@ -74,7 +77,6 @@ public class Receiver extends BroadcastReceiver {
 
     public void nowCheckin()
     {
-        Toast.makeText(mContext, "I am here", Toast.LENGTH_LONG).show();
         final Checkin checkin;
         final Date newCheckinDate;
 
