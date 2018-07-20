@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -173,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
     //this will open a prompt to let the user know that gps is not enabled on their phone and will
     //allow the user to turn it on
     private void showGPSDisabledAlertToUser() {
-
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
                 .setCancelable(false)

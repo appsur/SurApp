@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvCheckinFrequency = (TextView) findViewById(R.id.tvCheckinFrequency);
         etUsername = (EditText) findViewById(R.id.etUsername);
         etName = (EditText) findViewById(R.id.etName);
-        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumber);
+        etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumberSettings);
 
         // Get the current user and cast appropriately.
         currentUser = (User) ParseUser.getCurrentUser();
