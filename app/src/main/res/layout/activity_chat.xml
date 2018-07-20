@@ -133,7 +133,7 @@
     <TextView
         android:id="@+id/tvTextMessage"
         android:layout_width="328dp"
-        android:layout_height="120dp"
+        android:layout_height="138dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="124dp"
