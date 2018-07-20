@@ -15,16 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChatActivity extends AppCompatActivity {
+    //declare necessary variables for fields on the screen
     Button btnSendText;
     EditText etTextMessage;
     IntentFilter intentFilter;
     TextView tvTextMessage;
 
+    //created a broadcast receiver to receive sms messages by responding to system-wide broadcast announcements
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
+            //set text view with the message and phone number from the reply
+            //TODO - create adapter to hold more than one message
             tvTextMessage.setText(intent.getExtras().getString("message"));
         }
     };
@@ -33,18 +37,20 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        //intent filter allows activity to know what the broadcast receiver can respond to
         intentFilter = new IntentFilter();
         intentFilter.addAction("SMS_RECEIVED_ACTION");
+        //declare fields
         btnSendText = (Button) findViewById(R.id.btnSendText);
         etTextMessage = (EditText) findViewById(R.id.etTextMessage);
         btnSendText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //code for sending the message
                 String message = etTextMessage.getText().toString();
                 //TODO - allow clicking on the friend object to take user to chat activity and auto-populate phone number
                 String number = "6304862146";
                 sendMessage(number, message);
-//                tvTextMessage.setText(message);
             }
         });
     }
@@ -53,10 +59,12 @@ public class ChatActivity extends AppCompatActivity {
         String SENT = "Message Sent!!";
         String DELIVERED = "Message Delivered!";
 
+        //token given to allow foreign application to access permissions and execute code
         PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
         PendingIntent delieveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
+        //toast if the text is successfully made
         Toast.makeText(ChatActivity.this, "YOU SENT A MESSAGE!!", Toast.LENGTH_SHORT).show();
     }
 

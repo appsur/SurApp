@@ -110,7 +110,7 @@
     <Button
         android:id="@+id/btnSendText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:layout_alignEnd="@+id/tvTextMessage"
         android:layout_below="@+id/tvTextMessage"
         android:layout_marginTop="-110dp"
@@ -120,23 +120,25 @@
     <EditText
         android:id="@+id/etTextMessage"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/gray"
+        android:layout_height="42dp"
         android:layout_alignStart="@+id/tvTextMessage"
         android:layout_below="@+id/tvTextMessage"
         android:layout_marginTop="-110dp"
+        android:background="@color/lightGray"
         android:ems="10"
         android:hint="Enter Message Here."
         android:inputType="textPersonName"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray" />
 
     <TextView
         android:id="@+id/tvTextMessage"
         android:layout_width="328dp"
-        android:layout_height="138dp"
+        android:layout_height="159dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="124dp"
+        android:fontFamily="@font/arimo"
         android:text="TextView"
         android:textColor="@color/black" />
 
