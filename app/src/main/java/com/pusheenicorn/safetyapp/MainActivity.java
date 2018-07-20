@@ -274,6 +274,49 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // Find id of last checkin.
+        final String checkinId;
+        currentUser = (User) ParseUser.getCurrentUser();
+        checkinId = currentUser.getLastCheckin().getObjectId();
+
+        // Get the actual checkin object by making a query.
+        final Checkin.Query checkinQuery = new Checkin.Query();
+        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+        checkinQuery.findInBackground(new FindCallback<Checkin>() {
+            @Override
+            public void done(List<Checkin> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    checkin = objects.get(0);
+                    Date date = checkin.getCreatedAt();
+                    DateFormat dateFormat =
+                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                    String formatedDate = dateFormat.format(date);
+                    String newString = getRelativeTimeAgo(formatedDate);
+                    String[] formatedDateArr = formatedDate.split(" ");
+                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                            formatedDateArr[2] +
+                            " " + formatedDateArr[3];
+                    tvRelativeCheckinTime.setText(newString);
+                    tvCheckinTime.setText(formatedDate);
+                    isCheckedIn = isCheckedIn(date);
+                    if (isCheckedIn) {
+                        ibCheckin.setImageResource(R.drawable.check);
+                    } else {
+                        ibCheckin.setImageResource(R.drawable.check_outline);
+                        Toast.makeText(context, "Click the check button to checkin!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     //this will open a prompt to let the user know that gps is not enabled on their phone and will
     //allow the user to turn it on
     private void showGPSDisabledAlertToUser() {
@@ -349,40 +392,42 @@ public class MainActivity extends AppCompatActivity {
                 public void done(com.parse.ParseException e) {
                     if (e == null) {
                         checkin.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setLastCheckin(checkin);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
+                        currentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(com.parse.ParseException e) {
+                                if (e == null) {
+                                    final User user = (User) ParseUser.getCurrentUser();
+                                    user.setLastCheckin(checkin);
+                                    user.saveInBackground();
+                                    DateFormat dateFormat =
+                                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                                    String formatedDate = dateFormat.format(newCheckinDate);
+                                    String newString = getRelativeTimeAgo(formatedDate);
+                                    String[] formatedDateArr = formatedDate.split(" ");
+                                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                                            formatedDateArr[2] + " " + formatedDateArr[3];
+                                    tvRelativeCheckinTime.setText(newString);
+                                    tvCheckinTime.setText(formatedDate);
+                                    isCheckedIn = isCheckedIn(newCheckinDate);
+                                    if (isCheckedIn) {
+                                        ibCheckin.setImageResource(R.drawable.check);
+                                    } else {
+                                        ibCheckin.setImageResource(R.drawable.check_outline);
+                                    }
+                                    int mins = (int) currentUser.getNumber("checkin");
+                                    scheduleNotification(getNotification(), mins * 60000);
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
 
-            DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-            String formatedDate = dateFormat.format(newCheckinDate);
-            String newString = getRelativeTimeAgo(formatedDate);
-            String[] formatedDateArr = formatedDate.split(" ");
-            formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                    formatedDateArr[2] + " " + formatedDateArr[3];
-            tvRelativeCheckinTime.setText(newString);
-            tvCheckinTime.setText(formatedDate);
-            isCheckedIn = isCheckedIn(newCheckinDate);
-            if (isCheckedIn) {
-                ibCheckin.setImageResource(R.drawable.check);
-            } else {
-                ibCheckin.setImageResource(R.drawable.check_outline);
-            }
-            int mins = (int) currentUser.getNumber("checkin");
-            scheduleNotification(getNotification(), mins * 60000);
+                    }
+                    else {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
         else {
             Toast.makeText(this, "You are already checked in!", Toast.LENGTH_LONG).show();
