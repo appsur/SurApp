@@ -173,9 +173,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
-        makeNotification();
-        scheduleNotification(getNotification("30 second delay"), 30000);
-
     }
 
     //this will open a prompt to let the user know that gps is not enabled on their phone and will
@@ -286,6 +283,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 ibCheckin.setImageResource(R.drawable.check_outline);
             }
+            int mins = (int) currentUser.getNumber("checkin");
+            scheduleNotification(getNotification(), mins * 60000);
         } else {
             Toast.makeText(context, "Thanks, but you've already checked in!",
                     Toast.LENGTH_LONG).show();
@@ -323,23 +322,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void makeNotification() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.check)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1234, mBuilder.build());
-    }
+//    public void makeNotification() {
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//
+//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setSmallIcon(R.drawable.check)
+//                .setContentTitle("My notification")
+//                .setContentText("Hello World!")
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                // Set the intent that will fire when the user taps the notification
+//                .setContentIntent(pendingIntent)
+//                .setAutoCancel(true);
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+//        notificationManager.notify(1234, mBuilder.build());
+//    }
 
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -357,16 +355,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Notification getNotification(String content) {
+    private Notification getNotification() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID);
-        builder.setContentTitle("Scheduled Notification");
-        builder.setContentText(content);
+        builder.setContentTitle("Sûr");
         builder.setSmallIcon(R.drawable.check);
+        builder.setContentText("Please remember to check in!");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(true);
         return builder.build();
     }
 
     private void scheduleNotification(Notification notification, int delay) {
-
+        Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
+                + " minutes", Toast.LENGTH_LONG).show();
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
