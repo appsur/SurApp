@@ -182,5 +182,15 @@
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/star" />
 
+    <ImageButton
+        android:id="@+id/ibRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/rvActivities"
+        android:layout_alignTop="@+id/ibProfileImage"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke"
+        android:onClick="onRefresh"/>
+
 
 </RelativeLayout>

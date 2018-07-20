@@ -181,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
                         ibCheckin.setImageResource(R.drawable.check);
                     } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
-                        //Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
+                        scheduleNotification(getNotification(), 0);
+                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     e.printStackTrace();
@@ -594,7 +595,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    public void onRefresh(View v)
+    {
+        onResume();
+    }
 
 }
