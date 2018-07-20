@@ -181,8 +181,6 @@ public class MainActivity extends AppCompatActivity {
                         ibCheckin.setImageResource(R.drawable.check);
                     } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
-                        scheduleNotification(getNotification(), 0);
-                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     e.printStackTrace();
@@ -191,9 +189,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
-        // for testing
-        scheduleNotification(getNotification(), 10000);
-        // end of testing
 
 //
 //        //check to see if the phone's gps is enabled
@@ -310,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
                         ibCheckin.setImageResource(R.drawable.check_outline);
                         Toast.makeText(context, "Click the check button to checkin!",
                                 Toast.LENGTH_LONG).show();
+                        scheduleNotification(getNotification(), 0);
                     }
                 } else {
                     e.printStackTrace();

@@ -170,7 +170,7 @@ public class Receiver extends WakefulBroadcastReceiver {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
-        builder.addAction(R.drawable.ic_vector_heart, "Check in now", pendingIntent);
+        builder.addAction(R.drawable.check_outline, "Check in now!", pendingIntent);
         builder.setOngoing(true);
         return builder.build();
     }
