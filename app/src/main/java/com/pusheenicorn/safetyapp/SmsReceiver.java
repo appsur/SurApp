@@ -15,54 +15,51 @@ import java.util.StringTokenizer;
 
 public class SmsReceiver extends BroadcastReceiver {
 
-    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private Intent mIntent;
 
-    @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(SMS_RECEIVED)) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                // get sms objects
-                Object[] pdus = (Object[]) bundle.get("pdus");
-                if (pdus.length == 0) {
-                    return;
+        mIntent = intent;
+        String action = intent.getAction();
+
+        if (action.equals(ACTION_SMS_RECEIVED)) {
+            String address = null, str = "";
+            SmsMessage[] msgs = getMessagesFromIntent(mIntent);
+
+            if (msgs != null) {
+                for (int i = 0; i < msgs.length; i++) {
+                    address = msgs[i].getOriginatingAddress();
+                    str += msgs[i].getMessageBody().toString();
+                    str += "\n";
                 }
-                // large message might be broken into many
-                SmsMessage[] messages = new SmsMessage[pdus.length];
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < pdus.length; i++) {
-                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                    sb.append(messages[i].getMessageBody());
-                }
-                String sender = messages[0].getOriginatingAddress();
-                String message = sb.toString();
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                // prevent any other broadcast receivers from receiving broadcast
-                // abortBroadcast();
             }
+
+            if (address != null) {
+                // manage message and address ...
+            }
+
+        }
+
+    }
+
+    public static SmsMessage[] getMessagesFromIntent(Intent intent) {
+        Object[] messages = (Object[]) intent.getSerializableExtra("pdus");
+        byte[][] pduObjs = new byte[messages.length][];
+
+        for (int i = 0; i < messages.length; i++) {
+            pduObjs[i] = (byte[]) messages[i];
+        }
+
+        byte[][] pdus = new byte[pduObjs.length][];
+        int pduCount = pdus.length;
+        SmsMessage[] msgs = new SmsMessage[pduCount];
+
+        for (int i = 0; i < pduCount; i++) {
+            pdus[i] = pduObjs[i];
+            msgs[i] = SmsMessage.createFromPdu(pdus[i]);
+        }
+
+        return msgs;
         }
     }
-//        String phoneNumbers = PreferenceManager.getDefaultSharedPreferences(
-//                context).getString("phone_entries", "");
-//        StringTokenizer tokenizer = new StringTokenizer(phoneNumbers, ",");
-//        Set<String> phoneEnrties = new HashSet<String>();
-//        while (tokenizer.hasMoreTokens()) {
-//            phoneEnrties.add(tokenizer.nextToken().trim());
-//        }
-//        Bundle bundle = intent.getExtras();
-//        Object[] pdus = (Object[]) bundle.get("pdus");
-//        SmsMessage[] messages = new SmsMessage[pdus.length];
-//        for (int i = 0; i < messages.length; i++) {
-//            messages[i]= SmsMessage.createFromPdu((byte[]) pdus[i]);
-//            String address = messages[i].getOriginatingAddress();
-//            if (phoneEnrties.contains(address)) {
-//                Intent newintent = new Intent(context, ChatActivity.class);
-//                newintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                newintent.putExtra("address", address);
-//                newintent.putExtra("message",
-//                        messages[i].getDisplayMessageBody());
-//                context.startActivity(newintent);
-//            }
-//        }
-//    }
-}
+

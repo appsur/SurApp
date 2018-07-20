@@ -73,12 +73,10 @@
         </provider>
 
         <activity android:name=".LoginActivity" />
+        <activity android:name=".ChatActivity"></activity>
         <activity android:name=".ContactActivity" />
-        <receiver
-            android:name=".SmsReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter android:priority="999">
+        <receiver android:name=".MessagesReceiver" >
+            <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
