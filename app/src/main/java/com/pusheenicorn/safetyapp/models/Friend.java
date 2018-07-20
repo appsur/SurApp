@@ -5,21 +5,37 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.List;
+
 @ParseClassName("Friend")
 public class Friend extends ParseObject{
     private final static String KEY_USER = "user";
-    private final static String KEY_TRACK_ME = "trackMe";
+    private final static String KEY_NAME = "name";
+    private final static String KEY_PERMISSIONS = "permissions";
 
-    public ParseUser getUser() {
-        return getParseUser(KEY_USER);
+    public User getUser()
+    {
+        return (User) getParseUser(KEY_USER);
     }
 
-    public boolean getTrackMe() {
-        return getBoolean(KEY_TRACK_ME);
+    public void setUser(User user) {
+        put(KEY_USER, user);
     }
 
-    public void setTrackMe(boolean trackMe) {
-        put(KEY_TRACK_ME, trackMe);
+    public String getName() {
+        return getString(KEY_NAME);
+    }
+
+    public void setName(String name) {
+        put(KEY_NAME, name);
+    }
+
+    public List<Perm> getPermissions() {
+        return getList(KEY_PERMISSIONS);
+    }
+
+    public void addPermission(Perm permission) {
+        add(KEY_PERMISSIONS, permission);
     }
 
     public static class Query extends ParseQuery<Friend> {

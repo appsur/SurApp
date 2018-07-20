@@ -8,7 +8,6 @@ import java.util.List;
 @ParseClassName("Event")
 public class Event extends ParseObject{
     private final static String KEY_NAME = "name";
-    private final static String KEY_FRIENDS = "friendsAttending";
     private final static String KEY_USERS = "usersAttending";
     private final static String KEY_START = "startTime";
     private final static String KEY_END = "endTime";
@@ -46,14 +45,6 @@ public class Event extends ParseObject{
 
     public void addUser(User user) {
         add(KEY_USERS, user);
-    }
-
-    public List<Friend> getFriends() {
-        return getList(KEY_FRIENDS);
-    }
-
-    public void addFriend(Friend friend) {
-        add(KEY_FRIENDS, friend);
     }
 
 }
