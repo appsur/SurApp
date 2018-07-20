@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ChatActivity extends AppCompatActivity {
     Button btnSendText;
@@ -40,7 +41,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = etTextMessage.getText().toString();
-                String number = "6404862146";
+                String number = "6304862146";
                 sendMessage(number, message);
             }
         });
@@ -53,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
             PendingIntent delieveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
             SmsManager sms= SmsManager.getDefault();
             sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
+        Toast.makeText(ChatActivity.this, "YOU SENT A MESSAGE!!", Toast.LENGTH_SHORT).show();
         }
 
         protected void onResume() {

@@ -1,5 +1,7 @@
 package com.pusheenicorn.safetyapp;
 
+import android.*;
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,7 +10,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,8 +25,10 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
@@ -33,6 +42,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
@@ -63,28 +73,27 @@ public class MainActivity extends AppCompatActivity {
     Checkin checkin;
     Context context;
     boolean isCheckedIn;
+    private LocationManager locationMangaer = null;
+    private LocationListener locationListener = null;
+    private static final String TAG = "MainActivity";
+
     boolean isNotification;
 
     private static final String CHANNEL_ID = "checkin";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkPermissionsPlease();
+
 
         // Get current user.
-        currentUser = (User) ParseUser.getCurrentUser();
+        //currentUser = (User) ParseUser.getCurrentUser();
 
         isNotification = getIntent().getBooleanExtra("isNotification", false);
 
-        //check to see if the phone's gps is enabled
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            //Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
-        } else {
-            showGPSDisabledAlertToUser();
-        }
 
         createNotificationChannel();
 
@@ -130,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.action_person);
+
+        // Get current user.
+        currentUser = (User) ParseUser.getCurrentUser();
 
         // Initialize views.
         tvCheckinTime = (TextView) findViewById(R.id.tvCheckinTime);
@@ -179,8 +191,87 @@ public class MainActivity extends AppCompatActivity {
 
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
         // for testing
-        scheduleNotification(getNotification(),  10000);
+        scheduleNotification(getNotification(), 10000);
         // end of testing
+
+//
+//        //check to see if the phone's gps is enabled
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        //retrieve user location
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            //return;
+//
+//
+//        }
+//
+//        // Create a criteria object to retrieve provider
+        Criteria criteria = new Criteria();
+//
+//        // Get the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+//
+//        // Get Current Location
+//        if (ContextCompat.checkSelfPermission(this,
+//                android.Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            // No explanation needed, we can request the permission.
+//
+//            requestPermissions(
+//                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+//                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+//
+//            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//            // app-defined int constant. The callback method gets the
+//            // result of the request.
+//        } else {
+//            //Permission is granted
+//        }
+
+
+
+
+
+        // Location myLocation = locationManager.getLastKnownLocation(provider);
+//
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        } else {
+            showGPSDisabledAlertToUser();
+        }
+//
+////
+
+
+//        @Override
+//        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+////
+//       if (location != null) {
+//            double longitude = location.getLongitude();
+//            double latitude = location.getLatitude();
+//            //store the user's location
+//            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+//            currentUser.setPlace(point);
+//
+//            currentUser.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(com.parse.ParseException e) {
+//
+//                }
+//            });
+//        }
+
+
+
+
+
     }
 
     @Override
@@ -372,6 +463,62 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /*---------- Listener class to get coordinates ------------- */
+    private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            //editLocation.setText("");
+            //pb.setVisibility(View.INVISIBLE);
+            Toast.makeText(
+                    getBaseContext(),
+                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
+                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+            String longitude = "Longitude: " + loc.getLongitude();
+            Log.v(TAG, longitude);
+            String latitude = "Latitude: " + loc.getLatitude();
+            Log.v(TAG, latitude);
+
+        /*------- To get city name from coordinates -------- */
+            String cityName = null;
+            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+            List<Address> addresses;
+            try {
+                addresses = gcd.getFromLocation(loc.getLatitude(),
+                        loc.getLongitude(), 1);
+                if (addresses.size() > 0) {
+                    System.out.println(addresses.get(0).getLocality());
+                    cityName = addresses.get(0).getLocality();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
+                    + cityName;
+            //editLocation.setText(s);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+
+
+
+
+
+
+
+
+
+
 //    public void makeNotification() {
 //        Intent intent = new Intent(this, MainActivity.class);
 //        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -440,4 +587,14 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
+
+    private void checkPermissionsPlease() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+    }
+
+
+
+
 }
