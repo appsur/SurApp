@@ -36,7 +36,8 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomeActivity">
+        <activity android:name=".HomeActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -98,6 +99,7 @@
             android:resource="@color/colorAccent" />
 
         <receiver android:name=".NotificationPublisher" />
+        <receiver android:name=".Receiver" />
 
     </application>
 

@@ -23,6 +23,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     Checkin checkin;
     Context context;
     boolean isCheckedIn;
+    boolean isNotification;
 
     private static final String CHANNEL_ID = "checkin";
 
@@ -69,11 +72,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Get current user.
+        currentUser = (User) ParseUser.getCurrentUser();
+
+        isNotification = getIntent().getBooleanExtra("isNotification", false);
+
         //check to see if the phone's gps is enabled
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
         } else {
             showGPSDisabledAlertToUser();
         }
@@ -123,9 +131,6 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.action_person);
 
-        // Get current user.
-        currentUser = (User) ParseUser.getCurrentUser();
-
         // Initialize views.
         tvCheckinTime = (TextView) findViewById(R.id.tvCheckinTime);
         tvRelativeCheckinTime = (TextView) findViewById(R.id.tvRelativeCheckinTime);
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         ibCheckin.setImageResource(R.drawable.check);
                     } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
-                        Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
                     }
                 } else {
                     e.printStackTrace();
@@ -173,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+
+        scheduleNotification(getNotification(), 5000);
     }
 
     //this will open a prompt to let the user know that gps is not enabled on their phone and will
@@ -241,8 +248,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        locationManager.requestLocationUpdates(
 //                LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-
-        if (!isCheckedIn) {
+        if (!isCheckedIn ){
             ibCheckin.setImageResource(R.drawable.check);
             checkin = new Checkin();
             newCheckinDate = new Date();
@@ -285,12 +291,10 @@ public class MainActivity extends AppCompatActivity {
             }
             int mins = (int) currentUser.getNumber("checkin");
             scheduleNotification(getNotification(), mins * 60000);
-        } else {
-            Toast.makeText(context, "Thanks, but you've already checked in!",
-                    Toast.LENGTH_LONG).show();
         }
-
-
+        else {
+            Toast.makeText(this, "You are already checked in!", Toast.LENGTH_LONG);
+        }
     }
 
     public boolean isCheckedIn(Date prevDate) {
@@ -355,28 +359,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Notification getNotification() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+    public Notification getNotification() {
+        Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(context, Receiver.class);
+        intent.putExtra("actionName", "checkIn");
+        intent.putExtra("user", currentUser);
 
-        Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID);
-        builder.setContentTitle("Sûr");
-        builder.setSmallIcon(R.drawable.check);
-        builder.setContentText("Please remember to check in!");
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setContentIntent(pendingIntent);
-        builder.setAutoCancel(true);
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("Sûr")
+                        .setSmallIcon(R.drawable.check)
+                        .setContentText("Please remember to check in!")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .addAction(R.drawable.check_outline, "Check in now", pendingIntent)
+                        .setOngoing(true);
+                        // builder.setContentIntent(pendingIntent);
+                        // builder.setAutoCancel(true);
         return builder.build();
     }
 
-    private void scheduleNotification(Notification notification, int delay) {
-        Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
-                + " minutes", Toast.LENGTH_LONG).show();
+    public void scheduleNotification(Notification notification, int delay) {
+        //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
+                //+ " minutes", Toast.LENGTH_LONG).show();
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
