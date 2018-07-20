@@ -15,6 +15,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class ContactActivity extends AppCompatActivity{
     EditText etMessage;
     EditText etPhoneNumber;
     String phonenumber;
+    Button btnChat;
     TextView tvFriendsTitle;
     ImageButton btnCall;
     // Define global current user.
@@ -43,6 +45,14 @@ public class ContactActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         checkPermissionsPlease();
+        btnChat = findViewById(R.id.btnChat);
+        btnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goChat = new Intent (ContactActivity.this, ChatActivity.class);
+                startActivity(goChat);
+            }
+        });
         btnSendMessage = findViewById(R.id.btnSendMessage);
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,9 +116,11 @@ public class ContactActivity extends AppCompatActivity{
     private void sendSMS(String phoneNumber, String message) {
             Log.v("phoneNumber", phoneNumber);
             Log.v("Message", message);
+//            short SMS_PORT = 8901;
             PendingIntent pi = PendingIntent.getActivity(this, 0,
                     new Intent(this, ContactActivity.class), 0);
             SmsManager sms = SmsManager.getDefault();
+//            sms.sendDataMessage(phoneNumber, null, SMS_PORT, message.getBytes(), null, null);
             sms.sendTextMessage(phoneNumber, null, message, pi, null);
         int length = message.length();
 

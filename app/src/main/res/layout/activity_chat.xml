@@ -2,18 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ContactActivity">
+    tools:context=".ChatActivity">
 
     <TextView
         android:id="@+id/tvFriendsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rvFriendList"
-        android:layout_marginTop="87dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="74dp"
         android:fontFamily="@font/arimo"
         android:text="FRIENDS"
         android:textColor="#000000"
@@ -23,76 +24,16 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvFriendList"
         android:layout_width="327dp"
-        android:layout_height="227dp"
+        android:layout_height="103dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="122dp"
+        android:layout_marginTop="109dp"
         android:visibility="visible"
         tools:listitem="@layout/item_friend" />
 
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="295dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="146dp"
-        android:layout_marginEnd="19dp"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="textPersonName"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray" />
-
-    <ImageButton
-        android:id="@+id/btnSendMessage"
-        android:layout_width="52dp"
-        android:layout_height="46dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/etMessage"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:elevation="24dp"
-        android:fontFamily="@font/arimo"
-        android:scaleType="fitStart"
-        android:src="@drawable/select_message"
-        android:text="TEXT"
-        android:textColor="@android:color/black"
-        android:tint="@color/teal"
-        android:visibility="visible" />
-
-    <ImageButton
-        android:id="@+id/btnCall"
-        android:layout_width="53dp"
-        android:layout_height="45dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/etPhoneNumber"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@color/coral"
-        android:fontFamily="@font/arimo"
-        android:scaleType="fitStart"
-        android:src="@drawable/phone"
-        android:text="CALL"
-        android:textColor="@android:color/black" />
-
-    <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="297dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/etPhoneNumber"
-        android:layout_marginBottom="81dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Enter message here."
-        android:inputType="textMultiLine"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="270dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:visibility="visible"
@@ -107,7 +48,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@color/lightGray"
-        android:minHeight="?attr/actionBarSize"
         app:titleTextColor="@android:color/black">
 
         <RelativeLayout
@@ -131,7 +71,7 @@
                 android:fontFamily="@font/arimo"
                 android:gravity="center"
                 android:linksClickable="true"
-                android:text="CONTACT"
+                android:text="CHAT"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -168,13 +108,35 @@
         app:itemTextColor="@color/black"/>
 
     <Button
-        android:id="@+id/btnChat"
+        android:id="@+id/btnSendText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginEnd="59dp"
-        android:text="Button" />
+        android:layout_alignEnd="@+id/tvTextMessage"
+        android:layout_below="@+id/tvTextMessage"
+        android:layout_marginTop="-110dp"
+        android:background="@color/teal"
+        android:text="SEND" />
 
+    <EditText
+        android:id="@+id/etTextMessage"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/gray"
+        android:layout_alignStart="@+id/tvTextMessage"
+        android:layout_below="@+id/tvTextMessage"
+        android:layout_marginTop="-110dp"
+        android:ems="10"
+        android:hint="Enter Message Here."
+        android:inputType="textPersonName"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvTextMessage"
+        android:layout_width="328dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="124dp"
+        android:text="TextView" />
 
 </RelativeLayout>
