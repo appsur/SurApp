@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -94,12 +95,16 @@ public class Receiver extends WakefulBroadcastReceiver {
                                 if (e == null) {
                                     final User user = (User) ParseUser.getCurrentUser();
                                     user.setLastCheckin(checkin);
-                                    user.setName("Gracoo");
                                     user.saveInBackground();
-                                    //Toast.makeText(mContext, user.getName(), Toast.LENGTH_LONG).show();
-                                    Toast.makeText(mContext,
-                                            user.getLastCheckin().getObjectId(),
-                                            Toast.LENGTH_LONG).show();
+                                    if (Helper.isAppRunning(mContext,
+                                            "com.pusheenicorn.safetyapp")) {
+                                        Intent i = new Intent();
+                                        i.setClassName("com.pusheenicorn.safetyapp",
+                                                "com.pusheenicorn.safetyapp." +
+                                                        "MainActivity");
+                                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        mContext.startActivity(i);
+                                    }
                                 } else {
                                     e.printStackTrace();
                                 }
@@ -167,7 +172,7 @@ public class Receiver extends WakefulBroadcastReceiver {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
-        builder.addAction(R.drawable.ic_vector_heart, "Check in now", pendingIntent);
+        builder.addAction(R.drawable.check_outline, "Check in now!", pendingIntent);
         builder.setOngoing(true);
         return builder.build();
     }
