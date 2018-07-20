@@ -88,18 +88,24 @@ public class Receiver extends WakefulBroadcastReceiver {
                 public void done(com.parse.ParseException e) {
                     if (e == null) {
                         checkin.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setLastCheckin(checkin);
-                        user.saveInBackground();
+                        currentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(com.parse.ParseException e) {
+                                if (e == null) {
+                                    final User user = (User) ParseUser.getCurrentUser();
+                                    user.setLastCheckin(checkin);
+                                    user.setName("Gracoo");
+                                    user.saveInBackground();
+                                    //Toast.makeText(mContext, user.getName(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(mContext,
+                                            user.getLastCheckin().getObjectId(),
+                                            Toast.LENGTH_LONG).show();
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
                     } else {
                         e.printStackTrace();
                     }

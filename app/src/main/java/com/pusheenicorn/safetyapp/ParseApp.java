@@ -36,12 +36,5 @@ public class ParseApp extends Application{
                 .server("http://sur-app.herokuapp.com/parse")
                 .build();
         Parse.initialize(configuration);
-
-
-
-        // New test creation of object below
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
     }
 }
