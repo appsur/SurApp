@@ -18,14 +18,14 @@ public class ChatActivity extends AppCompatActivity {
     Button btnSendText;
     EditText etTextMessage;
     IntentFilter intentFilter;
-    TextView inTxt;
+    TextView tvTextMessage;
 
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
-            inTxt = (TextView) findViewById(R.id.tvTextMessage);
-            inTxt.setText(intent.getExtras().getString("message"));
+            tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
+            tvTextMessage.setText(intent.getExtras().getString("message"));
         }
     };
 
@@ -41,41 +41,34 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String message = etTextMessage.getText().toString();
+                //TODO - allow clicking on the friend object to take user to chat activity and auto-populate phone number
                 String number = "6304862146";
                 sendMessage(number, message);
+//                tvTextMessage.setText(message);
             }
         });
     }
-    protected void sendMessage (String number, String message) {
-            String SENT = "Message Sent!!";
-            String DELIVERED = "Message Delivered!";
 
-            PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
-            PendingIntent delieveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
-            SmsManager sms= SmsManager.getDefault();
-            sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
+    protected void sendMessage(String number, String message) {
+        String SENT = "Message Sent!!";
+        String DELIVERED = "Message Delivered!";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+        PendingIntent delieveredPI = PendingIntent.getBroadcast(this, 0, new Intent(DELIVERED), 0);
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
         Toast.makeText(ChatActivity.this, "YOU SENT A MESSAGE!!", Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        protected void onResume() {
+    protected void onResume() {
         //register the receiver
-            registerReceiver(intentReceiver, intentFilter);
-            super.onResume();
-        }
+        registerReceiver(intentReceiver, intentFilter);
+        super.onResume();
+    }
 
-        protected void onPause() {
+    protected void onPause() {
         //unregister the receiver
-            unregisterReceiver(intentReceiver);
-            super.onPause();
-        }
-
-//        Bundle extras = getIntent().getExtras();
-//        if (extras != null) {
-//            String address = extras.getString("address");
-//            String message = extras.getString("message");
-//            TextView addressField = (TextView) findViewById(R.id.address);
-//            TextView messageField = (TextView) findViewById(R.id.message);
-//            addressField.setText(address);
-//            messageField.setText(message);
-//        }
+        unregisterReceiver(intentReceiver);
+        super.onPause();
+    }
 }
