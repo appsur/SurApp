@@ -69,6 +69,7 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".ContactActivity" />
+
         <receiver
             android:name=".SmsReceiver"
             android:enabled="true"
@@ -93,6 +94,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>
