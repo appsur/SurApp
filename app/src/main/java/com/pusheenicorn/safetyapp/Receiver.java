@@ -95,11 +95,13 @@ public class Receiver extends WakefulBroadcastReceiver {
                                 if (e == null) {
                                     final User user = (User) ParseUser.getCurrentUser();
                                     user.setLastCheckin(checkin);
-                                    user.setName("Gracoo");
                                     user.saveInBackground();
-                                    if (Helper.isAppRunning(mContext, "com.pusheenicorn.safetyapp")) {
+                                    if (Helper.isAppRunning(mContext,
+                                            "com.pusheenicorn.safetyapp")) {
                                         Intent i = new Intent();
-                                        i.setClassName("com.pusheenicorn.safetyapp","com.pusheenicorn.safetyapp.MainActivity");
+                                        i.setClassName("com.pusheenicorn.safetyapp",
+                                                "com.pusheenicorn.safetyapp." +
+                                                        "MainActivity");
                                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         mContext.startActivity(i);
                                     }

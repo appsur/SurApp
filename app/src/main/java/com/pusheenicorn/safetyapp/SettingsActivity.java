@@ -170,7 +170,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (currentUser.getProfileImage() != null)
         {
-            Glide.with(this).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+            Glide.with(this).load(currentUser.getProfileImage()
+                    .getUrl()).into(ibProfileImage);
         }
     }
 
