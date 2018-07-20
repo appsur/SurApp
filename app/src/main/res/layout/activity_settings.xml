@@ -338,14 +338,14 @@
         tools:layout_editor_absoluteY="426dp" />
 
     <EditText
-        android:id="@+id/tvPhoneNumberSettings"
+        android:id="@+id/etPhoneNumberSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/ibProfileImage"
-        android:layout_toStartOf="@+id/btnWeekly"
+        android:layout_toEndOf="@+id/tvPhoneNumberSettings"
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 </RelativeLayout>
