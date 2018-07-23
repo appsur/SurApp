@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="125dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="0dp"
@@ -23,36 +23,36 @@
         android:fontFamily="@font/arimo"
         android:text="NAME"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvPhoneNumber"
-        android:layout_width="126dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvName"
-        android:layout_marginTop="0dp"
+        android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:fontFamily="@font/arimo"
+        android:paddingRight="30dp"
         android:text="PHONE NUMBER"
         android:textColor="@android:color/black" />
 
     <ProgressBar
         android:id="@+id/pbTime"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="126dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvPhoneNumber"
-        android:layout_marginTop="0dp"
+        android:layout_width="291dp"
+        android:layout_height="10dp"
+        android:layout_alignBottom="@+id/ivProfileImage"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:progressDrawable="@color/teal" />
 
     <TextView
         android:id="@+id/tvTimeElapsed"
-        android:layout_width="138dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="18dp"
         android:fontFamily="@font/arimo"
         android:text="TIME ELAPSED:"
         android:textAlignment="center"
@@ -60,23 +60,26 @@
 
     <TextView
         android:id="@+id/tvTime"
-        android:layout_width="171dp"
-        android:layout_height="33dp"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tvName"
-        android:layout_marginEnd="2dp"
-        android:fontFamily="@font/arimo"
-        android:text="TIME"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
-
-    <ImageView
-        android:id="@+id/ibClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="18dp"
+        android:fontFamily="@font/arimo"
+        android:paddingLeft="20dp"
+        android:text="TIME"
+        android:textAlignment="viewStart"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="383dp"
+        android:layout_height="58dp"
         android:layout_alignParentTop="true"
-        app:srcCompat="@drawable/clock_outline" />
+        android:layout_marginStart="-82dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/rectangle_shape" />
 
 </RelativeLayout>

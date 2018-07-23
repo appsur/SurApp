@@ -98,7 +98,6 @@ public class EventsActivity extends AppCompatActivity {
                 Intent i = new Intent(
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
@@ -125,7 +124,7 @@ public class EventsActivity extends AppCompatActivity {
             //set the banner to the image that is selected by the user
             ibBanner.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             //convert bitmap to a parsefile
-            final ParseFile parseFile =  conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            final ParseFile parseFile = conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
             //save in background so the image updates correctly
             parseFile.saveInBackground(new SaveCallback() {
                 @Override
@@ -150,14 +149,15 @@ public class EventsActivity extends AppCompatActivity {
 
 
     }
+
     //converts bitmap to parse file
-    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        ParseFile parseFile = new ParseFile("image_file.png", imageByte);
         return parseFile;
     }
 
-    }
+}
 
