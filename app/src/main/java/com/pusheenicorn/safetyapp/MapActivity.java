@@ -20,6 +20,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.User;
+
+import org.parceler.Parcels;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
@@ -30,6 +36,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
+    User friendUser;
+    Friend friend;
+    User currentUser;
+    ParseGeoPoint loc;
+    ParseGeoPoint lic;
     Location mCurrentLocation;
     private long Update_interval = 60000;
     private long Fastest_interval = 5000;
@@ -37,6 +48,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final LatLng nick = new LatLng(33.870025, -84.219911);
     private static final LatLng wrc = new LatLng(29.716386, -95.398692);
     private final static String Key_location = "location";
+
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -89,6 +101,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
+        friendUser = (User) friend.getUser();
+        currentUser = (User) ParseUser.getCurrentUser();
+        friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
+
 
 
     }
@@ -110,15 +126,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     protected void loadMap(GoogleMap googleMap) {
+        loc = currentUser.getPlace();
+        LatLng you = new LatLng(loc.getLatitude(), loc.getLongitude());
+        lic = friendUser.getPlace();
+        LatLng them = new LatLng(lic.getLatitude(), lic.getLongitude());
         map = googleMap;
-        LatLngBounds two = new LatLngBounds( nick,home);
+        LatLngBounds two = new LatLngBounds( them,you);
         if (map != null) {
             // Map is ready
-            googleMap.addMarker(new MarkerOptions().position(nick)
+            googleMap.addMarker(new MarkerOptions().position(them)
                     .title("nick's house"));
-            googleMap.addMarker(new MarkerOptions().position(home)
+            googleMap.addMarker(new MarkerOptions().position(you)
                     .title("Not Jared's House"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(home));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
             //Move camera instantly to chosen location
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
             //have the camera zoom in
