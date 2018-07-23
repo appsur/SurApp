@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,7 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,20 +65,24 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-
-
-
-
-
     // Declare views
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
     ImageButton ibProfileImage;
     ImageButton ibCheckin;
+    ImageButton ibAddEvent;
+    ImageButton ibConfirmEvent;
     TextView tvName;
     TextView tvUsername;
     TextView tvCheckinTime;
     TextView tvRelativeCheckinTime;
+    TextView tvUpcomingActivities;
+    EditText etStartTime;
+    EditText etEndTime;
+    EditText etEventName;
+    EditText etEventLocation;
+
+    // Declare fields
     User currentUser;
     Checkin checkin;
     Context context;
@@ -105,13 +111,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         // Check for geotracking permissions.
         checkPermissionsPlease();
 
         // Create notification channel for notifications.
         createNotificationChannel();
+
         // Set default values
         isCheckedIn = false;
         context = this;
@@ -180,11 +185,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         // Initialize views.
         tvCheckinTime = (TextView) findViewById(R.id.tvCheckinTime);
+        tvUpcomingActivities = (TextView) findViewById(R.id.tvUpcomingActivities);
         tvRelativeCheckinTime = (TextView) findViewById(R.id.tvRelativeCheckinTime);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvName = (TextView) findViewById(R.id.tvName);
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
         ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
+        etEndTime = (EditText) findViewById(R.id.etEndTime);
+        etStartTime = (EditText) findViewById(R.id.etStartTime);
+        etEventLocation = (EditText) findViewById(R.id.etEventLocation);
+        etEventName = (EditText) findViewById(R.id.etEventName);
+        ibAddEvent = (ImageButton) findViewById(R.id.ibAddFriend);
+        ibConfirmEvent = (ImageButton) findViewById(R.id.ibConfirmEvent);
 
         // Set values.
         tvUsername.setText(currentUser.getUserName());
@@ -740,4 +752,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         onResume();
     }
 
+    /**
+     * Allow the user to make and add a new event.
+     *
+     * @param view: the add event button
+     */
+    public void onAddEvent(View view) {
+        tvUpcomingActivities.setVisibility(View.INVISIBLE);
+        etEndTime.setVisibility(View.VISIBLE);
+        etStartTime.setVisibility(View.VISIBLE);
+        etEventLocation.setVisibility(View.VISIBLE);
+        etEventName.setVisibility(View.VISIBLE);
+        ibAddEvent.setVisibility(View.INVISIBLE);
+        ibConfirmEvent.setVisibility(View.VISIBLE);
+    }
 }
