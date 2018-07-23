@@ -89,13 +89,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     final Checkin checkin = objects.get(0);
                     Date date = checkin.getCreatedAt();
                     String remaining = timeUntilCheckin(date, friendUser) + "";
-                    holder.tvTime.setText(remaining + "minutes");
+                    holder.tvTime.setText(remaining + " minutes");
                 } else {
                     e.printStackTrace();
                 }
             }
         });
-
     }
 
     //get item count
@@ -103,9 +102,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         return mFriends.size();
     }
 
-
     //create the ViewHolder class
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tvPhoneNumber) TextView tvPhoneNumber;
         @BindView(R.id.tvName) TextView tvName;

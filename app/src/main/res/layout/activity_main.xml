@@ -192,5 +192,15 @@
         app:srcCompat="@drawable/ic_vector_retweet_stroke"
         android:onClick="onRefresh"/>
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvUpcomingActivities"
+        android:layout_marginEnd="40dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/playlist_plus" />
+
 
 </RelativeLayout>

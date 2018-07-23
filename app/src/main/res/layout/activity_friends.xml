@@ -120,4 +120,39 @@
         android:layout_alignStart="@+id/tvMembersTitle"
         android:layout_marginBottom="65dp" />
 
+    <ImageButton
+        android:id="@+id/ibAddFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/tvAlert2"
+        android:layout_marginStart="103dp"
+        android:background="@android:color/transparent"
+        android:onClick="onAddFriend"
+        app:srcCompat="@drawable/account_plus_outline" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginEnd="74dp"
+        android:hint="Lookup by username"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/ibSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tvAlert2"
+        android:layout_marginEnd="41dp"
+        android:background="@android:color/transparent"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/account_search_outline"
+        android:onClick="onSearch"/>
+
 </RelativeLayout>
