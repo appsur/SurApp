@@ -171,6 +171,9 @@ public class FriendsActivity extends AppCompatActivity {
                                 newFriend.saveInBackground();
                                 friends.add(newFriend);
                                 friendAdapter.notifyDataSetChanged();
+                                ibAddFriend.setVisibility(View.VISIBLE);
+                                ibSearch.setVisibility(View.INVISIBLE);
+                                etUsername.setVisibility(View.INVISIBLE);
                             } else {
                                 e.printStackTrace();
                             }

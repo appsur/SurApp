@@ -51,6 +51,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.File;
@@ -132,15 +133,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        ibEvents = (ImageButton) findViewById(R.id.ibEvents);
-        ibEvents.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent goEvents = new Intent(MainActivity.this, EventsActivity.class);
-                startActivity(goEvents);
-            }
-        });
 
      //   getLocation();
 
@@ -195,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         etStartTime = (EditText) findViewById(R.id.etStartTime);
         etEventLocation = (EditText) findViewById(R.id.etEventLocation);
         etEventName = (EditText) findViewById(R.id.etEventName);
-        ibAddEvent = (ImageButton) findViewById(R.id.ibAddFriend);
+        ibAddEvent = (ImageButton) findViewById(R.id.ibAddEvent);
         ibConfirmEvent = (ImageButton) findViewById(R.id.ibConfirmEvent);
 
         // Set values.
@@ -765,5 +757,32 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         etEventName.setVisibility(View.VISIBLE);
         ibAddEvent.setVisibility(View.INVISIBLE);
         ibConfirmEvent.setVisibility(View.VISIBLE);
+    }
+
+    public void onConfirmEvent(View view) {
+        final Event event = new Event();
+        event.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    event.setName(etEventName.getText().toString());
+                    event.setStart(etStartTime.getText().toString());
+                    event.setEnd(etEndTime.getText().toString());
+                    event.setLocation(etEventLocation.getText().toString());
+                    event.saveInBackground();
+                    events.add(event);
+                    eventAdapter.notifyDataSetChanged();
+                    tvUpcomingActivities.setVisibility(View.VISIBLE);
+                    etEndTime.setVisibility(View.INVISIBLE);
+                    etStartTime.setVisibility(View.INVISIBLE);
+                    etEventLocation.setVisibility(View.INVISIBLE);
+                    etEventName.setVisibility(View.INVISIBLE);
+                    ibAddEvent.setVisibility(View.VISIBLE);
+                    ibConfirmEvent.setVisibility(View.INVISIBLE);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
