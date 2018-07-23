@@ -156,6 +156,8 @@ public class SettingsActivity extends AppCompatActivity {
                 + phoneNumber.substring(6, 10);
         tvPhoneValue.setText(phoneNumber);
 
+        // Set the image views to reflect the user's attributes
+
         if (!currentUser.getSafe()) {
             ibAlert.setImageResource(R.drawable.bell);
         }
@@ -168,6 +170,7 @@ public class SettingsActivity extends AppCompatActivity {
             ibLocator.setImageResource(R.drawable.compass);
         }
 
+        // Load the profile image
         if (currentUser.getProfileImage() != null)
         {
             Glide.with(this).load(currentUser.getProfileImage()
@@ -175,6 +178,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is called when the user clicks the clock button. It allows the user
+     * to change the frequency of his/her settings
+     *
+     * @param view: the clock button
+     */
     public void onClock(View view) {
         // UI response
         isClock = !isClock;
@@ -195,6 +204,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is called when the user clicks the trackable button. It marks the user
+     * as trackable or not.
+     *
+     * @param view: the trackable button
+     */
     public void onLocator(View view) {
         if (!currentUser.getTrackable()) {
                 ibLocator.setImageResource(R.drawable.ic_vector_location);
@@ -229,6 +244,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is called when the user clicks the ringable button. It marks the user
+     * as ringable or not.
+     *
+     * @param view: the ringable button
+     */
     public void onCompass(View view) {
         if (!currentUser.getRingable()) {
             ibCompass.setImageResource(R.drawable.compass);
@@ -262,6 +283,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function is called when the user clicks the alert button. It marks the user
+     * as safe/unsafe.
+     *
+     * @param view: the alert button
+     */
     public void onAlert(View view) {
         if (currentUser.getSafe()) {
             ibAlert.setImageResource(R.drawable.bell);
@@ -295,6 +322,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function sets the user's checkin frequency to hourly when he/she clicks th
+     * Hourly button.
+     *
+     * @param view: the hourly button view
+     */
     public void onHourly(View view) {
 
         currentUser.saveInBackground(new SaveCallback() {
@@ -318,6 +351,12 @@ public class SettingsActivity extends AppCompatActivity {
         ibClock.setImageResource(R.drawable.clock_outline);
     }
 
+    /**
+     * This function sets the user's checkin frequency to weekly when he/she clicks th
+     * Weekly button.
+     *
+     * @param view: the weekly button view
+     */
     public void onWeekly(View view) {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
@@ -340,6 +379,12 @@ public class SettingsActivity extends AppCompatActivity {
         ibClock.setImageResource(R.drawable.clock_outline);
     }
 
+    /**
+     * This function sets the user's checkin frequency to daily when he/she clicks th
+     * Daily button.
+     *
+     * @param view: the daily button view
+     */
     public void onDaily(View view) {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
@@ -362,6 +407,11 @@ public class SettingsActivity extends AppCompatActivity {
         ibClock.setImageResource(R.drawable.clock_outline);
     }
 
+    /**
+     * Thsi function is called when the user clicks the edit icon. It makes the
+     * edit views visible.
+     * @param view: the edit button view.
+     */
     public void onEdit(View view) {
 
         // Hide views
@@ -381,6 +431,12 @@ public class SettingsActivity extends AppCompatActivity {
         etPhoneNumber.setText(currentUser.getPhonNumber());
     }
 
+
+    /**
+     * This function is called when the user clicks the "done button." It updates the
+     * user's data, updates the text views, and hides the edit views.
+     * @param view: the done button view
+     */
     public void onDone(View view) {
 
         currentUser.saveInBackground(new SaveCallback() {

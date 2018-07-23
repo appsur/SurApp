@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Check for geotracking permissions.
         checkPermissionsPlease();
 
         // Create notification channel for notifications.
@@ -115,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_message:
                         Intent contactAction = new Intent(MainActivity.this,
                                 ContactActivity.class);
-                        Toast.makeText(MainActivity.this, "Message Page Accessed",
-                                Toast.LENGTH_LONG).show();
+//                        Toast.makeText(MainActivity.this, "Message Page Accessed",
+//                                Toast.LENGTH_LONG).show();
                         startActivity(contactAction);
-                        finish();
+                        // finish();
                         return true;
                     case R.id.action_emergency:
                         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
@@ -127,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_friends:
                         Intent friendsAction = new Intent(MainActivity.this,
                                 FriendsActivity.class);
-                        Toast.makeText(MainActivity.this, "Friends Page Accessed",
-                                Toast.LENGTH_LONG).show();
+//                        Toast.makeText(MainActivity.this, "Friends Page Accessed",
+//                                Toast.LENGTH_LONG).show();
                         startActivity(friendsAction);
-                        finish();
+                        // finish();
                         return true;
                 }
                 return true;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         tvName.setText(currentUser.getName());
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
 
-//
+// JARED-------------------------------------------------------------------------------------------
 //        //check to see if the phone's gps is enabled
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 //        //retrieve user location
@@ -198,11 +199,6 @@ public class MainActivity extends AppCompatActivity {
 //        } else {
 //            //Permission is granted
 //        }
-
-
-
-
-
         // Location myLocation = locationManager.getLastKnownLocation(provider);
 //
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -234,13 +230,11 @@ public class MainActivity extends AppCompatActivity {
 //                }
 //            });
 //        }
-
-
-
-
-
     }
+// JARED -----------------------------------------------------------------------------------------
 
+    // Update the checkin button each time the app is restarted/reopened in case the user made a
+    // checkin through a push notification while the app was closed/in-background.
     @Override
     public void onResume(){
         // Do this after onCreate is executed
@@ -292,8 +286,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //this will open a prompt to let the user know that gps is not enabled on their phone and will
-    //allow the user to turn it on
+    // JARED --------------------------------------------------------------------------------------
+    // this will open a prompt to let the user know that gps is not enabled on their phone and will
+    // allow the user to turn it on
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("GPS is disabled in your device. " +
@@ -316,14 +311,26 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+    // JARED ---------------------------------------------------------------------------------------
 
+    /**
+     * When the user clicks the settings button, this function is called so that the settings
+     * activity will be launched.
+     *
+     * @param view: the settings button
+     */
     public void onSettings(View view) {
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
         // Toast.makeText(MainActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 
-    // Returns the relative time string.
+    /**
+     * This function returns the relative time between the current time and a passed in date
+     *
+     * @param rawDate: a String date formatted as "EEE MMM dd HH:mm:ss ZZZZZ yyyy"
+     * @return relativeDate: the relative time between rawDate and present
+     */
     public String getRelativeTimeAgo(String rawDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
@@ -341,12 +348,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // Performs the checkin procedure.
+    /**
+     * When the user clicks the checkin button, this function is called so that the user's
+     * last checkin information can be updated.
+     *
+     * @param view: the checkin button
+     */
     public void onCheckin(View view) {
 
         // Initialize some checkins for later use.
         final Checkin checkin;
         final Date newCheckinDate;
+
+        // JARED------------------------------------------------------------------------------------
 
 //        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 //        //Location loc;
@@ -366,8 +380,13 @@ public class MainActivity extends AppCompatActivity {
 //        locationManager.requestLocationUpdates(
 //                LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
 
+        // JARED------------------------------------------------------------------------------------
+
+        // If the user is elligible to checkin at this time...
         if (!isCheckedIn ){
+            // Update the view to reflect a checked circle
             ibCheckin.setImageResource(R.drawable.check);
+            // Create a new checkin object and save it in background
             checkin = new Checkin();
             newCheckinDate = new Date();
             checkin.saveInBackground(new SaveCallback() {
@@ -379,8 +398,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void done(com.parse.ParseException e) {
                                 if (e == null) {
+                                    // Set the current user to point to the newly created checkin
+                                    // object as its last checkin.
                                     final User user = (User) ParseUser.getCurrentUser();
                                     user.setLastCheckin(checkin);
+                                    // Save the user and update the textviews in the activity.
                                     user.saveInBackground();
                                     DateFormat dateFormat =
                                             new SimpleDateFormat("EEE MMM dd " +
@@ -399,6 +421,8 @@ public class MainActivity extends AppCompatActivity {
                                     else {
                                         ibCheckin.setImageResource(R.drawable.check_outline);
                                     }
+                                    // Schedule the next notification based on the user's
+                                    // checkin frequency.
                                     int mins = (int) currentUser.getNumber("checkin");
                                     scheduleNotification(getNotification(), mins * 60000);
                                 } else {
@@ -414,12 +438,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        // Otherwise, the user is not eligible to checkin, so toast a message to this effect.
         else {
             Toast.makeText(this, "You are already checked in!",
                     Toast.LENGTH_LONG).show();
         }
     }
 
+    /**
+     * This function takes in a Date and determines whether a checkin made at this dat has
+     * expired or not.
+     *
+     * @param prevDate: the date at which the last checkin was made
+     * @return true if the checkin is not expired, otherwise false
+     */
     public boolean isCheckedIn(Date prevDate) {
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
@@ -448,6 +480,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
+
+
+    // JARED---------------------------------------------------------------------------------------
 
 
     /*---------- Listener class to get coordinates ------------- */
@@ -494,6 +529,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+        // JARED-----------------------------------------------------------------------------------
     }
 
 

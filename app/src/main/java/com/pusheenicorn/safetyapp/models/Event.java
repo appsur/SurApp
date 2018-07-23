@@ -21,6 +21,7 @@ public class Event extends ParseObject{
         put(KEY_NAME, name);
     }
 
+
     public String getStart() {
         return getString(KEY_START);
     }
