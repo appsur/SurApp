@@ -2,7 +2,11 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +46,8 @@ public class SettingsActivity extends AppCompatActivity {
     Button btnHourly;
     Button btnDaily;
     Button btnWeekly;
+
+    private static int RESULT_LOAD_IMAGE = 1;
 
 //    public File photoFile;
 //    Uri photoURI;
@@ -118,6 +124,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Initialize profile image view.
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+        ibProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create a picture chooser from gallery
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
 
         // Initialize buttons for image toggle.
         ibClock = (ImageButton) findViewById(R.id.ibClock);
@@ -507,5 +524,30 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //if request code matches and the data is not null, set the image bitmap to be that of the picture
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            //get file path from the URI
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            //set the banner to the image that is selected by the user
+            ibProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        }
+
+
     }
 }
