@@ -188,11 +188,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         if (currentUser.getTrackable()) {
+            Toast.makeText(this, "here", Toast.LENGTH_LONG);
             ibLocator.setImageResource(R.drawable.ic_vector_location);
         }
 
         if (currentUser.getRingable()) {
-            ibLocator.setImageResource(R.drawable.compass);
+            ibCompass.setImageResource(R.drawable.compass);
         }
 
         // Load the profile image

@@ -92,8 +92,11 @@ public class SignupActivity extends AppCompatActivity {
         // Set core properties
         user.put("username", username);
         user.put("password", password);
+        user.put("name", "NAME");
         user.put("email", email);
         user.put("phonenumber", phoneNumber);
+        user.put("trackable", false);
+        user.put("ringable", false);
 
         //prevent crashing by setting user check in to a default value
         final Checkin checkin = new Checkin();
