@@ -3,6 +3,7 @@ package com.pusheenicorn.safetyapp;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,9 +23,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 import com.pusheenicorn.safetyapp.models.User;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -32,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Define profile image view.
     ImageView ibProfileImage;
+    public File photoFile;
 
     // Define variables for image toggle.
     ImageButton ibClock;
@@ -545,9 +553,37 @@ public class SettingsActivity extends AppCompatActivity {
 
             //set the banner to the image that is selected by the user
             ibProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //convert bitmap to a parsefile
+            final ParseFile parseFile =  conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            currentUser.setProfileImage(parseFile);
+            //save in background so the image updates correctly
+            parseFile.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    currentUser.put("profileimage", parseFile);
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("SettingsActivity", "Successfully updated!");
+                            } else {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
 
         }
 
 
+    }
+    //converts bitmap to parse file
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        return parseFile;
     }
 }
