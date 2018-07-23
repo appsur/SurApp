@@ -101,9 +101,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
-        friendUser = (User) friend.getUser();
-        currentUser = (User) ParseUser.getCurrentUser();
         friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
+        currentUser = (User) ParseUser.getCurrentUser();
+        friendUser = (User) friend.getUser();
 
 
 

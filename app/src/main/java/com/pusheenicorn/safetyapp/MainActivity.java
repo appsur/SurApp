@@ -250,11 +250,12 @@ private LocationListener mLocationListener = new LocationListener() {
         String provider = locationManager.getBestProvider(criteria, true);
 //
         Location myLocation = locationManager.getLastKnownLocation(provider);
-
+        //test
+        //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
 
 //
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            Toast.makeText(this, "GPS is Enabled in your device",
+//           Toast.makeText(this, "GPS is Enabled in your device",
 //                   Toast.LENGTH_SHORT).show();
         } else {
             showGPSDisabledAlertToUser();
@@ -271,7 +272,7 @@ private LocationListener mLocationListener = new LocationListener() {
 
 //        @Override
 //        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
        if (location != null) {
            double longitude = location.getLongitude();
@@ -287,7 +288,22 @@ private LocationListener mLocationListener = new LocationListener() {
 
                 }
             });
-        }
+        }else{
+           //retrieve location from best existing source
+           double longitude = myLocation.getLongitude();
+           double latitude = myLocation.getLatitude();
+           //store the user's location
+           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+           currentUser.setPlace(point);
+
+           currentUser.saveInBackground(new SaveCallback() {
+               @Override
+               public void done(com.parse.ParseException e) {
+
+               }
+           });
+       }
 
 
 
