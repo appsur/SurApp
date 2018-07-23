@@ -20,6 +20,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.User;
+
+import org.parceler.Parcels;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
@@ -30,6 +36,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
+    User friendUser;
+    Friend friend;
+    User currentUser;
+    ParseGeoPoint loc;
+    ParseGeoPoint lic;
     Location mCurrentLocation;
     private long Update_interval = 60000;
     private long Fastest_interval = 5000;
@@ -37,6 +48,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final LatLng nick = new LatLng(33.870025, -84.219911);
     private static final LatLng wrc = new LatLng(29.716386, -95.398692);
     private final static String Key_location = "location";
+
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -89,15 +101,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return true;
             }
         });
+        friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
+        currentUser = (User) ParseUser.getCurrentUser();
+        friendUser = (User) friend.getUser();
+
 
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
+
 
     }
 
@@ -110,27 +124,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     protected void loadMap(GoogleMap googleMap) {
+        loc = currentUser.getPlace();
+        LatLng you = new LatLng(loc.getLatitude(), loc.getLongitude());
+        lic = friendUser.getPlace();
+        LatLng them = new LatLng(lic.getLatitude(), lic.getLongitude());
         map = googleMap;
-        LatLngBounds two = new LatLngBounds( nick,home);
+        if (you.latitude > them.latitude){
+            LatLngBounds two = new LatLngBounds( them,you);
+            map.setLatLngBoundsForCameraTarget(two);
+        }else{
+            LatLngBounds zwei = new LatLngBounds( you , them);
+            map.setLatLngBoundsForCameraTarget(zwei);
+        }
+
         if (map != null) {
+
+
+
             // Map is ready
-            googleMap.addMarker(new MarkerOptions().position(nick)
+            googleMap.addMarker(new MarkerOptions().position(them)
                     .title("nick's house"));
-            googleMap.addMarker(new MarkerOptions().position(home)
+            googleMap.addMarker(new MarkerOptions().position(you)
                     .title("Not Jared's House"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(home));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
             //Move camera instantly to chosen location
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
             //have the camera zoom in
             //map.animateCamera(CameraUpdateFactory.zoomIn());
-            map.setLatLngBoundsForCameraTarget(two);
+
 
             //zoom out to zoom level 10, animating with a duration of 2 seconds
             map.animateCamera(CameraUpdateFactory.zoomTo(10) , 2000 ,null);
 
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(nick)      // Sets the center of the map to Mountain View
+                    .target(them)      // Sets the center of the map to Mountain View
                     .zoom(18)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(30)                   // Sets the tilt of the camera to 30 degrees

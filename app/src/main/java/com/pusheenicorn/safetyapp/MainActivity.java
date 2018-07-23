@@ -64,6 +64,29 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+//test
+private LocationListener mLocationListener = new LocationListener() {
+    @Override
+    public synchronized void onLocationChanged(Location l) {
+        mLocation = l;
+        //stopSelf();
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+};
+
+
+
     // Declare views
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
@@ -80,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationMangaer = null;
     private LocationListener locationListener = null;
     private static final String TAG = "MainActivity";
+    private Location mLocation = null;
 
     // Declare adapter, events list, and events adapter
     EventAdapter eventAdapter;
@@ -89,10 +113,13 @@ public class MainActivity extends AppCompatActivity {
     // Define channel id for checkin notifications
     private static final String CHANNEL_ID = "checkin";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         // Check for geotracking permissions.
         checkPermissionsPlease();
@@ -173,28 +200,48 @@ public class MainActivity extends AppCompatActivity {
         // Set values.
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
+
+        // Find time of last checkin by geting checkin id and making query.
+        final String checkinId;
+        checkinId = currentUser.getLastCheckin().getObjectId();
+        final Checkin.Query checkinQuery = new Checkin.Query();
+        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+        checkinQuery.findInBackground(new FindCallback<Checkin>() {
+            @Override
+            public void done(List<Checkin> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    checkin = objects.get(0);
+                    Date date = checkin.getCreatedAt();
+                    DateFormat dateFormat =
+                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+                    String formatedDate = dateFormat.format(date);
+                    String newString = getRelativeTimeAgo(formatedDate);
+                    String[] formatedDateArr = formatedDate.split(" ");
+                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                            formatedDateArr[2] +
+                            " " + formatedDateArr[3];
+                    tvRelativeCheckinTime.setText(newString);
+                    tvCheckinTime.setText(formatedDate);
+                    isCheckedIn = isCheckedIn(date);
+                    if (isCheckedIn) {
+                        ibCheckin.setImageResource(R.drawable.check);
+                    } else {
+                        ibCheckin.setImageResource(R.drawable.check_outline);
+                        //Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
         populateEvents();
 
 // JARED-------------------------------------------------------------------------------------------
 //        //check to see if the phone's gps is enabled
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        //retrieve user location
-//        if (ActivityCompat.checkSelfPermission(this,
-// android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-// && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-// != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            //return;
-//
-//
-//        }
+        LocationManager locationManager = (LocationManager) getSystemService(context.LOCATION_SERVICE);
+
 //
 //        // Create a criteria object to retrieve provider
         Criteria criteria = new Criteria();
@@ -202,27 +249,14 @@ public class MainActivity extends AppCompatActivity {
 //        // Get the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
 //
-//        // Get Current Location
-//        if (ContextCompat.checkSelfPermission(this,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            // No explanation needed, we can request the permission.
-//
-//            requestPermissions(
-//                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-//
-//            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-//            // app-defined int constant. The callback method gets the
-//            // result of the request.
-//        } else {
-//            //Permission is granted
-//        }
-        // Location myLocation = locationManager.getLastKnownLocation(provider);
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+        //test
+        //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
+
 //
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(this, "GPS is Enabled in your devide",
-                    Toast.LENGTH_SHORT).show();
+//           Toast.makeText(this, "GPS is Enabled in your device",
+//                   Toast.LENGTH_SHORT).show();
         } else {
             showGPSDisabledAlertToUser();
         }
@@ -230,25 +264,54 @@ public class MainActivity extends AppCompatActivity {
 ////
 
 
+
+
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+
+
+
 //        @Override
-//        public void onRequestPermissionsResult(int requestCode, String[] permissions,
-// int[] grantResults)
-//        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-////
-//       if (location != null) {
-//            double longitude = location.getLongitude();
-//            double latitude = location.getLatitude();
-//            //store the user's location
-//            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-//            currentUser.setPlace(point);
-//
-//            currentUser.saveInBackground(new SaveCallback() {
-//                @Override
-//                public void done(com.parse.ParseException e) {
-//
-//                }
-//            });
-//        }
+//        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+       if (location != null) {
+           double longitude = location.getLongitude();
+           double latitude = location.getLatitude();
+            //store the user's location
+            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+            Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+            currentUser.setPlace(point);
+
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(com.parse.ParseException e) {
+
+                }
+            });
+        }else{
+           //retrieve location from best existing source
+           double longitude = myLocation.getLongitude();
+           double latitude = myLocation.getLatitude();
+           //store the user's location
+           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+           currentUser.setPlace(point);
+
+           currentUser.saveInBackground(new SaveCallback() {
+               @Override
+               public void done(com.parse.ParseException e) {
+
+               }
+           });
+       }
+
+
+
+
+
+
+
+
     }
 // JARED -----------------------------------------------------------------------------------------
 
