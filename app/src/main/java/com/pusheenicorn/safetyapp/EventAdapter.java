@@ -46,6 +46,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         Event event = mEvents.get(position);
 
         // populate the views according to this data
+        holder.tvEventName.setText(event.getName());
+        holder.tvEventLocation.setText(event.getLocation());
+        holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
+
     }
 
     @Override
@@ -67,6 +71,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.tvEventName) TextView tvEventName;
+        @BindView(R.id.tvEventLocation) TextView tvEventLocation;
+        @BindView(R.id.tvStartTime) TextView tvTime;
 //
 //        @Nullable
 //        @BindView(R.id.ivImage)
