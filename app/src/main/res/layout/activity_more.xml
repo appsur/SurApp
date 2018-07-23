@@ -76,18 +76,18 @@
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:layout_above="@+id/ibCheckin"
+
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar"
-        map:cameraBearing="112.5"
-
-        />
+        map:cameraBearing="112.5" />
 
     <ImageButton
         android:id="@+id/ibCheckin"
         android:layout_width="140dp"
         android:layout_height="50dp"
+        android:layout_above="@+id/reminder_text"
         android:layout_alignStart="@+id/reminder_text"
-        android:layout_below="@+id/map"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_chick" />
 
@@ -96,10 +96,10 @@
         android:id="@+id/ibAlert"
         android:layout_width="110dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/reminder_text"
+        android:layout_above="@+id/alarm_text"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/map"
-        android:layout_marginEnd="28dp"
+        android:layout_alignTop="@+id/ibCheckin"
+        android:layout_marginEnd="25dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_alert" />
 
@@ -107,8 +107,8 @@
         android:id="@+id/alarm_text"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tvPhone"
         android:layout_alignEnd="@+id/tvPhone"
-        android:layout_below="@+id/ibAlert"
         android:fontFamily="@font/arimo"
         android:gravity="center"
         android:text="ALARM"
@@ -170,7 +170,7 @@
         android:id="@+id/reminder_text"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ibCheckin"
+        android:layout_above="@+id/ibPhone"
         android:layout_toStartOf="@+id/etMessage"
         android:fontFamily="@font/arimo"
         android:gravity="center"

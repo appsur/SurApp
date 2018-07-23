@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationRequest;
@@ -48,6 +49,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final LatLng nick = new LatLng(33.870025, -84.219911);
     private static final LatLng wrc = new LatLng(29.716386, -95.398692);
     private final static String Key_location = "location";
+    TextView tvPhone;
+    TextView toolbar_title;
 
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -104,7 +107,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         currentUser = (User) ParseUser.getCurrentUser();
         friendUser = (User) friend.getUser();
+        tvPhone = (TextView) findViewById(R.id.tvPhone);
 
+        String number = "(" + friendUser.getPhonNumber().substring(0, 3) + ") " +
+                friendUser.getPhonNumber().substring(3, 6) + "-" +
+                friendUser.getPhonNumber().substring(6, 10);
+        tvPhone.setText(number);
+        toolbar_title = (TextView) findViewById(R.id.toolbar_title);
+        toolbar_title.setText(friend.getName());
 
 
     }
