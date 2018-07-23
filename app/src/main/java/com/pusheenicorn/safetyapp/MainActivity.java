@@ -62,28 +62,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LocationListener {
 
-//test
-private LocationListener mLocationListener = new LocationListener() {
-    @Override
-    public synchronized void onLocationChanged(Location l) {
-        mLocation = l;
-        //stopSelf();
-    }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-};
 
 
 
@@ -104,6 +85,11 @@ private LocationListener mLocationListener = new LocationListener() {
     private LocationListener locationListener = null;
     private static final String TAG = "MainActivity";
     private Location mLocation = null;
+    public double latitude;
+    public double longitude;
+    public LocationManager locationManager;
+    public Criteria criteria;
+    public String bestProvider;
 
     // Declare adapter, events list, and events adapter
     EventAdapter eventAdapter;
@@ -150,6 +136,9 @@ private LocationListener mLocationListener = new LocationListener() {
                 startActivity(goEvents);
             }
         });
+
+     //   getLocation();
+
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -248,7 +237,8 @@ private LocationListener mLocationListener = new LocationListener() {
 //
 //        // Get the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
-//
+        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
         Location myLocation = locationManager.getLastKnownLocation(provider);
         //test
         //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
@@ -260,22 +250,17 @@ private LocationListener mLocationListener = new LocationListener() {
         } else {
             showGPSDisabledAlertToUser();
         }
-//
-////
-
-
-
-
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+////        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
 
 
 
 //        @Override
 //        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
+        Toast.makeText(this, location.getLatitude() + "hhh", Toast.LENGTH_LONG).show();
+//
        if (location != null) {
-           double longitude = location.getLongitude();
+          double longitude = location.getLongitude();
            double latitude = location.getLatitude();
             //store the user's location
             final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
@@ -288,6 +273,7 @@ private LocationListener mLocationListener = new LocationListener() {
 
                 }
             });
+           locationManager.requestLocationUpdates(bestProvider, 1000, 0, MainActivity.this);
         }else{
            //retrieve location from best existing source
            double longitude = myLocation.getLongitude();
@@ -304,16 +290,10 @@ private LocationListener mLocationListener = new LocationListener() {
                }
            });
        }
-
-
-
-
-
-
-
-
-    }
+}
 // JARED -----------------------------------------------------------------------------------------
+
+
 
     // Update the checkin button each time the app is restarted/reopened in case the user made a
     // checkin through a push notification while the app was closed/in-background.
@@ -472,23 +452,7 @@ private LocationListener mLocationListener = new LocationListener() {
 
         // JARED------------------------------------------------------------------------------------
 
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//        //Location loc;
-//        //double lat = loc.getLatitude()
-//
-//        LocationListener locationListener = new MyLocationListener();
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-// != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        locationManager.requestLocationUpdates(
-//                LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+
 
         // JARED------------------------------------------------------------------------------------
 
@@ -596,39 +560,61 @@ private LocationListener mLocationListener = new LocationListener() {
 
 
     /*---------- Listener class to get coordinates ------------- */
-    private class MyLocationListener implements LocationListener {
+        protected void getLocation(){
+            if (isLocationEnabled(MainActivity.this)) {
+                locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
+                criteria = new Criteria();
+                //bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+                bestProvider = locationManager.getBestProvider(criteria, true);
+                //You can still do this if you like, you might get lucky:
+                Location location = locationManager.getLastKnownLocation(bestProvider);
+                if (location != null) {
+                    Log.e("TAG", "GPS is on");
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    //This is what you need:
+                    locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+                }
+            }
+            }
+
 
         @Override
         public void onLocationChanged(Location loc) {
-            //editLocation.setText("");
-            //pb.setVisibility(View.INVISIBLE);
-            Toast.makeText(
-                    getBaseContext(),
-                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
-            String longitude = "Longitude: " + loc.getLongitude();
-            Log.v(TAG, longitude);
-            String latitude = "Latitude: " + loc.getLatitude();
-            Log.v(TAG, latitude);
-
-        /*------- To get city name from coordinates -------- */
-            String cityName = null;
-            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-            List<Address> addresses;
-            try {
-                addresses = gcd.getFromLocation(loc.getLatitude(),
-                        loc.getLongitude(), 1);
-                if (addresses.size() > 0) {
-                    System.out.println(addresses.get(0).getLocality());
-                    cityName = addresses.get(0).getLocality();
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-                    + cityName;
-            //editLocation.setText(s);
+//            //editLocation.setText("");
+//            //pb.setVisibility(View.INVISIBLE);
+//            //remove location callback:
+//            locationManager.removeUpdates(this);
+//
+//            //open the map:
+//            latitude = loc.getLatitude();
+//            longitude = loc.getLongitude();
+//            //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+//
+//        /*------- To get city name from coordinates -------- */
+//            String cityName = null;
+//            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+//            List<Address> addresses;
+//            try {
+//                addresses = gcd.getFromLocation(loc.getLatitude(),
+//                        loc.getLongitude(), 1);
+//                if (addresses.size() > 0) {
+//                    System.out.println(addresses.get(0).getLocality());
+//                    cityName = addresses.get(0).getLocality();
+//                }
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
+//                    + cityName;
+//            Toast.makeText(MainActivity.this, s , Toast.LENGTH_SHORT).show();
+//
+//            //editLocation.setText(s);
         }
 
         @Override
@@ -641,8 +627,14 @@ private LocationListener mLocationListener = new LocationListener() {
         public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         // JARED-----------------------------------------------------------------------------------
-    }
 
+
+
+    public static boolean isLocationEnabled(Context context)
+    {
+        //...............
+        return true;
+    }
 
 
 
@@ -686,7 +678,7 @@ private LocationListener mLocationListener = new LocationListener() {
     }
 
     public Notification getNotification() {
-        Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(context, Receiver.class);
         intent.putExtra("actionName", "checkIn");
         intent.putExtra("user", currentUser);

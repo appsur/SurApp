@@ -1,6 +1,7 @@
 package com.pusheenicorn.safetyapp.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -13,6 +14,7 @@ public class Event extends ParseObject{
     private final static String KEY_START = "startTime";
     private final static String KEY_END = "endTime";
     private final static String KEY_LOCATION = "location";
+    private final static String KEY_BANNER_IMAGE = "bannerimage";
 
     public String getLocation() {
         return getString(KEY_LOCATION);
@@ -31,6 +33,13 @@ public class Event extends ParseObject{
         put(KEY_NAME, name);
     }
 
+    public ParseFile getBannerImage() {
+        return getParseFile(KEY_BANNER_IMAGE);
+    }
+
+    public void setBannerImage(ParseFile parseFile) {
+        put(KEY_BANNER_IMAGE, parseFile);
+    }
 
     public String getStart() {
         return getString(KEY_START);
