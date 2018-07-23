@@ -697,7 +697,7 @@ private LocationListener mLocationListener = new LocationListener() {
      * time + delay.
      *
      * @param notification: the notification to be sent
-     * @param delay: the delay at which to send the notification.
+     * @param delay: the delay at which to send the notification
      */
     public void scheduleNotification(Notification notification, int delay) {
         //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)

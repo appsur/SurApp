@@ -21,6 +21,9 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     private List<Friend> mFriends;
     Context context;
@@ -37,8 +40,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View postView = inflater.inflate(R.layout.item_friend, parent, false);
-        ViewHolder viewHolder = new ViewHolder(postView);
+        View friendView = inflater.inflate(R.layout.item_friend, parent, false);
+        ViewHolder viewHolder = new ViewHolder(friendView);
         return viewHolder;
     }
 
@@ -56,15 +59,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull FriendsAdapter.ViewHolder holder, int position) {
         //get the data according to position
-        Friend friends = mFriends.get(position);
-        //TODO - populate the fields in friends adapter
-        holder.tvName.setText(friends.getUser().getUsername());
-        //populate the views according to this data
-//        holder.tvTimeElapsed.setText(friends.getDescription());
-//        holder.tvUsername.setText(post.getUser().getUsername());
-
-        //load image into a viewable
-//        Glide.with(context).load(post.getImage().getUrl()).into(holder.ivImagePost);
+        Friend friend = mFriends.get(position);
+        // Populate the item in the recycler view
+        holder.tvName.setText(friend.getUser().getUsername());
+        holder.tvPhoneNumber.setText(friend.getUser().getPhonNumber());
     }
 
     //get item count
@@ -76,25 +74,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     //create the ViewHolder class
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView tvName;
-        public TextView tvPhoneNumber;
-        public TextView tvTimeElapsed;
-        public TextView tvTime;
+        @BindView(R.id.tvPhoneNumber) TextView tvPhoneNumber;
+        @BindView(R.id.tvName) TextView tvName;
 
         ParseUser user;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-
-            //perform findViewById lookups
-
-            tvName = (TextView) itemView.findViewById(R.id.tvName);
-            tvTimeElapsed = (TextView) itemView.findViewById(R.id.tvTimeElapsed);
-            tvTime = (TextView) itemView.findViewById(R.id.tvTime);
-
+            ButterKnife.bind(this, itemView);
             user = ParseUser.getCurrentUser();
             itemView.setOnClickListener(this);
-
         }
         @Override
         public void onClick(View v){

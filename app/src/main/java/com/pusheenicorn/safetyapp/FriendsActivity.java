@@ -8,15 +8,29 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.pusheenicorn.safetyapp.models.Friend;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FriendsActivity extends AppCompatActivity {
     //declared variables
     BottomNavigationView bottomNavigationView;
+
     ProgressBar progressBar;
+
+    FriendsAdapter friendAdapter;
+    ArrayList<Friend> friends;
+    RecyclerView rvFriendList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +68,37 @@ public class FriendsActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
 
+        rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
+        friends = new ArrayList<Friend>();
+        // construct the adapter from this data source
+        friendAdapter = new FriendsAdapter(friends);
+        // recycler view setup
+        rvFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvFriendList.setAdapter(friendAdapter);
+        populateFriendList();
+    }
+
+    public void populateFriendList() {
+        // Populate the friends list.
+        final Friend.Query postQuery = new Friend.Query();
+        postQuery.getTop().withUser();
+
+        postQuery.findInBackground(new FindCallback<Friend>() {
+            @Override
+            public void done(List<Friend> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = objects.size() - 1; i > -1; i--)
+                    {
+                        // add the friend object
+                        friends.add(objects.get(i));
+                        // notify the adapter
+                        friendAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void onSettings(View view) {
