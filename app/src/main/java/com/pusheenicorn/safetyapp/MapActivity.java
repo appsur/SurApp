@@ -111,9 +111,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
+
 
     }
 
@@ -131,8 +129,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         lic = friendUser.getPlace();
         LatLng them = new LatLng(lic.getLatitude(), lic.getLongitude());
         map = googleMap;
-        LatLngBounds two = new LatLngBounds( them,you);
+        if (you.latitude > them.latitude){
+            LatLngBounds two = new LatLngBounds( them,you);
+            map.setLatLngBoundsForCameraTarget(two);
+        }else{
+            LatLngBounds zwei = new LatLngBounds( you , them);
+            map.setLatLngBoundsForCameraTarget(zwei);
+        }
+
         if (map != null) {
+
+
+
             // Map is ready
             googleMap.addMarker(new MarkerOptions().position(them)
                     .title("nick's house"));
@@ -143,14 +151,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
             //have the camera zoom in
             //map.animateCamera(CameraUpdateFactory.zoomIn());
-            map.setLatLngBoundsForCameraTarget(two);
+
 
             //zoom out to zoom level 10, animating with a duration of 2 seconds
             map.animateCamera(CameraUpdateFactory.zoomTo(10) , 2000 ,null);
 
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(nick)      // Sets the center of the map to Mountain View
+                    .target(them)      // Sets the center of the map to Mountain View
                     .zoom(18)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(30)                   // Sets the tilt of the camera to 30 degrees
