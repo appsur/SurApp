@@ -12,6 +12,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
+    //declare variables
     EditText etUsername;
     EditText etPassword;
     Button btnLogin;
@@ -20,9 +21,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //logs the current user out if the parse user is not null to prevent errors
         if (ParseUser.getCurrentUser() != null) {
             ParseUser.logOut();
         }
+        //initialize variables
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnLogin = (Button) findViewById(R.id.btnLogIn);

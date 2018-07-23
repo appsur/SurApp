@@ -34,7 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SignupActivity extends AppCompatActivity {
-
+    //declare variables
     EditText etUsername;
     EditText etPassword;
     EditText etEmail;
@@ -52,11 +52,13 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         checkPermissionsPlease();
+        //log out the current user if they aren't null
         if (ParseUser.getCurrentUser() != null) {
             ParseUser.logOut();
         }
         // Create the ParseUser
         user = (User) ParseUser.create("_User");
+        //initialize variables
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
         etEmail = (EditText) findViewById(R.id.etEmail);
@@ -71,6 +73,7 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    //check permissions for user to upload an image
     private void checkPermissionsPlease() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
@@ -78,10 +81,12 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void signUpOnClick(View v) {
+        //declare and initialize variable sfor sign up
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
         String email = etEmail.getText().toString();
         String phoneNumber = etPhoneNumber.getText().toString();
+        //create new parsefile with the profile image of the user
         final ParseFile parseFile = new ParseFile(new File(photoFile.getAbsolutePath()));
 
         // Set core properties
@@ -90,6 +95,7 @@ public class SignupActivity extends AppCompatActivity {
         user.put("email", email);
         user.put("phonenumber", phoneNumber);
 
+        //prevent crashing by setting user check in to a default value
         final Checkin checkin = new Checkin();
         checkin.saveInBackground(new SaveCallback() {
             @Override
@@ -130,6 +136,7 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //if the correct request code is used, set the profile image to the compressed bitmap for the image taken
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ByteArrayOutputStream bs = new ByteArrayOutputStream();
             Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -161,16 +168,16 @@ public class SignupActivity extends AppCompatActivity {
 
     public void dispatchTakePictureIntent(View v) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
+        //ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//             Create the File where the photo should go
+            //create the file where the photo should go
             photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
+                //error occurred while creating the File
             }
-            // Continue only if the File was successfully created
+            //continue only if the File was successfully created
             if (photoFile != null) {
                 photoURI = FileProvider.getUriForFile(this,
                         AUTHORITY,
