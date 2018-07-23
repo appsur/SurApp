@@ -53,6 +53,7 @@ public class EventsActivity extends AppCompatActivity {
         currentEvent = (Event) getIntent().getParcelableExtra("event");
         Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
         tvEventTitle = findViewById(R.id.tvEventTitle);
+        //added title to the event page
         tvEventTitle.setText(currentEvent.getName());
         //initialize bottom navigation bar
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
