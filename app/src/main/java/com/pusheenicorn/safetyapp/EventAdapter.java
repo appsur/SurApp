@@ -12,10 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.parse.FindCallback;
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
+import com.pusheenicorn.safetyapp.models.User;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,7 +57,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.tvEventName.setText(event.getName());
         holder.tvEventLocation.setText(event.getLocation());
         holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
-
     }
 
     @Override
@@ -75,14 +82,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         @BindView(R.id.tvEventName) TextView tvEventName;
         @BindView(R.id.tvEventLocation) TextView tvEventLocation;
         @BindView(R.id.tvStartTime) TextView tvTime;
-//
-//        @Nullable
-//        @BindView(R.id.ivImage)
-//        ImageView ivImage;
-//
-//        @BindView(R.id.tvDescription) TextView tvDescription;
-//        @BindView(R.id.tvUser) TextView tvUser;
-//        @BindView(R.id.tvUser2) TextView tvUser2;
 
         public ViewHolder(View itemView) {
 
@@ -114,5 +113,4 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
             }
         }
     }
-
 }
