@@ -276,7 +276,6 @@ public class MainActivity extends AppCompatActivity {
                         // Provide an in-app reminder.
                         Toast.makeText(context, "Click the check button to checkin!",
                                 Toast.LENGTH_LONG).show();
-                        // Immediately issue a notification to the user.
                         scheduleNotification(getNotification(), 0);
                     }
                 } else {
