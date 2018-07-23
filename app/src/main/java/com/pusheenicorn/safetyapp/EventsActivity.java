@@ -2,7 +2,10 @@ package com.pusheenicorn.safetyapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class EventsActivity extends AppCompatActivity {
@@ -19,6 +23,7 @@ public class EventsActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
+    private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +61,44 @@ public class EventsActivity extends AppCompatActivity {
         });
 
         //set banner to allow user to access gallery
-        //TODO - allow user to upload image
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
         ibBanner.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE);
+                //create a picture chooser from gallery
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        try {
-            switch (requestCode) {
 
-                case REQUEST_CODE:
-                    if (resultCode == Activity.RESULT_OK) {
-                        //data gives you the image uri. Try to convert that to bitmap
-                        break;
-                    } else if (resultCode == Activity.RESULT_CANCELED) {
-                        Log.e(TAG, "Selecting picture cancelled");
-                    }
-                    break;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception in onActivityResult : " + e.getMessage());
+        //if request code matches and the data is not null, set the image bitmap to be that of the picture
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            //get file path from the URI
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            //set the banner to the image that is selected by the user
+            ibBanner.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
         }
+
+
     }
 }
