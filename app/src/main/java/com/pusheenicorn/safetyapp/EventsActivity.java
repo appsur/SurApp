@@ -88,9 +88,9 @@ public class EventsActivity extends AppCompatActivity {
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
         ParseFile bannerImage = currentEvent.getParseFile("bannerimage");
         //load image using glide
-        Glide.with(EventsActivity.this).load(bannerImage.getUrl())
-                .into(ibBanner);
-//        Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
+            Glide.with(EventsActivity.this).load(bannerImage.getUrl())
+                    .placeholder(R.drawable.bannerimage2)
+                    .into(ibBanner);
         ibBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
