@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tvEventName"
-        android:layout_width="60dp"
+        android:layout_width="171dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="5dp"
@@ -18,26 +18,26 @@
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/tvPhoneNumberSettings"
+        android:id="@+id/tvEventLocation"
         android:layout_width="166dp"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvEventName"
         android:layout_below="@+id/tvEventName"
+        android:layout_marginBottom="5dp"
         android:fontFamily="@font/arimo"
         android:text="LOCATION"
         android:textAlignment="textStart"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="5dp"/>
+        android:textColor="@android:color/black" />
 
     <TextView
-        android:id="@+id/tvTime"
+        android:id="@+id/tvStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvPhoneNumberSettings"
+        android:layout_below="@id/tvEventLocation"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/arimo"
         android:text="TIME"
-        android:textColor="@color/black"
-        android:layout_marginBottom="10dp"/>
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tvMore"

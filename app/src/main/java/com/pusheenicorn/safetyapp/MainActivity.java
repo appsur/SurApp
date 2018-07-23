@@ -31,6 +31,8 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -46,6 +48,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
+import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.File;
@@ -53,6 +56,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
     private LocationListener locationListener = null;
     private static final String TAG = "MainActivity";
 
+    // Declare adapter, events list, and events adapter
+    EventAdapter eventAdapter;
+    ArrayList<Event> events;
+    RecyclerView rvEvents;
+
     // Define channel id for checkin notifications
     private static final String CHANNEL_ID = "checkin";
 
@@ -93,6 +102,15 @@ public class MainActivity extends AppCompatActivity {
         // Set default values
         isCheckedIn = false;
         context = this;
+
+        // Setup adapter logic
+        rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
+        events = new ArrayList<Event>();
+        // construct the adapter from this data source
+        eventAdapter = new EventAdapter(events);
+        // recycler view setup
+        rvEvents.setLayoutManager(new LinearLayoutManager(this));
+        rvEvents.setAdapter(eventAdapter);
 
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -156,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+        populateEvents();
 
 // JARED-------------------------------------------------------------------------------------------
 //        //check to see if the phone's gps is enabled
@@ -311,6 +330,35 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
     // JARED ---------------------------------------------------------------------------------------
+
+
+    /**
+     * This function populates the events adapter.
+     */
+    public void populateEvents() {
+        // Make a new query.
+        final Event.Query eventQuery = new Event.Query();
+        // Get only the top 20 events in the database.
+        eventQuery.getTop();
+                //.whereEqualTo("usersAttending", currentUser);
+        eventQuery.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    for (int i = objects.size() - 1; i > -1; i--)
+                    {
+                        events.add(objects.get(i));
+                        // notify the adapter
+                        eventAdapter.notifyDataSetChanged();
+                    }
+
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
     /**
      * When the user clicks the settings button, this function is called so that the settings
@@ -597,6 +645,13 @@ public class MainActivity extends AppCompatActivity {
         return builder.build();
     }
 
+    /**
+     * This function takes a notification and delay and schedules the notification at current
+     * time + delay.
+     *
+     * @param notification: the notification to be sent
+     * @param delay: the delay at which to send the notification.
+     */
     public void scheduleNotification(Notification notification, int delay) {
         //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
                 //+ " minutes", Toast.LENGTH_LONG).show();
@@ -619,6 +674,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * If the user tries to manually refresh the screen (this should really never be necessary)
+     * then the onResume called is called.
+     *
+     * @param v: the parent view
+     */
     public void onRefresh(View v)
     {
         onResume();

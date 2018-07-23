@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rvActivities"
+        android:layout_alignStart="@+id/rvEvents"
         android:layout_marginTop="242dp"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/check_outline"
@@ -152,7 +152,7 @@
         android:layout_marginBottom="5dp"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvActivities"
+        android:id="@+id/rvEvents"
         android:layout_width="334dp"
         android:layout_height="157dp"
         android:layout_above="@+id/bottom_navigation"
@@ -186,7 +186,7 @@
         android:id="@+id/ibRefresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rvActivities"
+        android:layout_alignEnd="@+id/rvEvents"
         android:layout_alignTop="@+id/ibProfileImage"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/ic_vector_retweet_stroke"
