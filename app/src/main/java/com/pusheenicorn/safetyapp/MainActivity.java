@@ -293,12 +293,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 }
 // JARED -----------------------------------------------------------------------------------------
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        locationManager.removeUpdates(this);
 
-    }
 
     // Update the checkin button each time the app is restarted/reopened in case the user made a
     // checkin through a push notification while the app was closed/in-background.
