@@ -64,26 +64,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-//test
-private LocationListener mLocationListener = new LocationListener() {
-    @Override
-    public synchronized void onLocationChanged(Location l) {
-        mLocation = l;
-        //stopSelf();
-    }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-};
 
 
 
@@ -104,6 +85,8 @@ private LocationListener mLocationListener = new LocationListener() {
     private LocationListener locationListener = null;
     private static final String TAG = "MainActivity";
     private Location mLocation = null;
+    public double Latitude;
+    public double Longitude;
 
     // Declare adapter, events list, and events adapter
     EventAdapter eventAdapter;
@@ -248,7 +231,8 @@ private LocationListener mLocationListener = new LocationListener() {
 //
 //        // Get the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
-//
+        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
         Location myLocation = locationManager.getLastKnownLocation(provider);
         //test
         //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
@@ -260,13 +244,7 @@ private LocationListener mLocationListener = new LocationListener() {
         } else {
             showGPSDisabledAlertToUser();
         }
-//
-////
-
-
-
-
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+////        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
 
 
 
@@ -274,45 +252,38 @@ private LocationListener mLocationListener = new LocationListener() {
 //        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-       if (location != null) {
-           double longitude = location.getLongitude();
-           double latitude = location.getLatitude();
-            //store the user's location
-            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-            Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
-            currentUser.setPlace(point);
-
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-
-                }
-            });
-        }else{
-           //retrieve location from best existing source
-           double longitude = myLocation.getLongitude();
-           double latitude = myLocation.getLatitude();
-           //store the user's location
-           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
-           currentUser.setPlace(point);
-
-           currentUser.saveInBackground(new SaveCallback() {
-               @Override
-               public void done(com.parse.ParseException e) {
-
-               }
-           });
-       }
-
-
-
-
-
-
-
-
-    }
+//       if (location != null) {
+//          double longitude = location.getLongitude();
+//           double latitude = location.getLatitude();
+//            //store the user's location
+//            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+//            Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+//            currentUser.setPlace(point);
+//
+//            currentUser.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(com.parse.ParseException e) {
+//
+//                }
+//            });
+//           locationManager.requestLocationUpdates(bestProvider, 1000, 0, MainActivity.this);
+//        }else{
+//           //retrieve location from best existing source
+//           double longitude = myLocation.getLongitude();
+//           double latitude = myLocation.getLatitude();
+//           //store the user's location
+//           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+//           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+//           currentUser.setPlace(point);
+//
+//           currentUser.saveInBackground(new SaveCallback() {
+//               @Override
+//               public void done(com.parse.ParseException e) {
+//
+//               }
+//           });
+//       }
+}
 // JARED -----------------------------------------------------------------------------------------
 
     // Update the checkin button each time the app is restarted/reopened in case the user made a
@@ -600,35 +571,34 @@ private LocationListener mLocationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location loc) {
-            //editLocation.setText("");
-            //pb.setVisibility(View.INVISIBLE);
-            Toast.makeText(
-                    getBaseContext(),
-                    "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                            + loc.getLongitude(), Toast.LENGTH_SHORT).show();
-            String longitude = "Longitude: " + loc.getLongitude();
-            Log.v(TAG, longitude);
-            String latitude = "Latitude: " + loc.getLatitude();
-            Log.v(TAG, latitude);
-
-        /*------- To get city name from coordinates -------- */
-            String cityName = null;
-            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-            List<Address> addresses;
-            try {
-                addresses = gcd.getFromLocation(loc.getLatitude(),
-                        loc.getLongitude(), 1);
-                if (addresses.size() > 0) {
-                    System.out.println(addresses.get(0).getLocality());
-                    cityName = addresses.get(0).getLocality();
-                }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-                    + cityName;
-            //editLocation.setText(s);
+//            //editLocation.setText("");
+//            //pb.setVisibility(View.INVISIBLE);
+//            //remove location callback:
+//            locationManager.removeUpdates(this);
+//
+//            //open the map:
+//            latitude = loc.getLatitude();
+//            longitude = loc.getLongitude();
+//            Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+//
+//        /*------- To get city name from coordinates -------- */
+//            String cityName = null;
+//            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+//            List<Address> addresses;
+//            try {
+//                addresses = gcd.getFromLocation(loc.getLatitude(),
+//                        loc.getLongitude(), 1);
+//                if (addresses.size() > 0) {
+//                    System.out.println(addresses.get(0).getLocality());
+//                    cityName = addresses.get(0).getLocality();
+//                }
+//            }
+//            catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
+//                    + cityName;
+//            //editLocation.setText(s);
         }
 
         @Override
@@ -643,6 +613,12 @@ private LocationListener mLocationListener = new LocationListener() {
         // JARED-----------------------------------------------------------------------------------
     }
 
+
+    public static boolean isLocationEnabled(Context context)
+    {
+        //...............
+        return true;
+    }
 
 
 
