@@ -95,6 +95,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 }
             }
         });
+        Glide.with(context).load(friendUser.getProfileImage().getUrl()).into(holder.ivProfile);
     }
 
     //get item count
@@ -107,7 +108,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         @BindView(R.id.tvPhoneNumber) TextView tvPhoneNumber;
         @BindView(R.id.tvName) TextView tvName;
         @BindView(R.id.tvTime) TextView tvTime;
-
+        @BindView(R.id.ivProfileImage) ImageView ivProfile;
         ParseUser user;
 
         public ViewHolder(final View itemView) {
