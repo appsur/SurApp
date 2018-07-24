@@ -5,6 +5,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ParseClassName("Event")
@@ -63,6 +64,16 @@ public class Event extends ParseObject{
         return getList(KEY_USERS);
     }
 
+    public ArrayList<String> getUsersIds() {
+        List<User> myUsers = getUsers();
+        ArrayList<String> myUsersIds = new ArrayList<String>();
+        for (int i = 0; i < myUsers.size(); i++)
+        {
+            myUsersIds.add(myUsers.get(i).getObjectId());
+        }
+        return myUsersIds;
+    }
+
     public void addUser(User user) {
         add(KEY_USERS, user);
     }
@@ -78,6 +89,11 @@ public class Event extends ParseObject{
          */
         public Event.Query getTop() {
             setLimit(20);
+            return this;
+        }
+
+        public Query withUser() {
+            include("user");
             return this;
         }
     }

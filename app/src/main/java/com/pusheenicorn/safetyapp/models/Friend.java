@@ -15,7 +15,9 @@ public class Friend extends ParseObject{
 
     public User getUser()
     {
-        return (User) getParseUser(KEY_USER);
+        User user;
+        user = (User) getParseUser(KEY_USER);
+        return user;
     }
 
     public void setUser(User user) {

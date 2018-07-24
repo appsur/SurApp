@@ -81,8 +81,8 @@
         android:id="@+id/tvMembersTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rvSafe"
-        android:layout_alignStart="@+id/rvFriendList"
+        android:layout_above="@+id/rvUsers"
+        android:layout_alignStart="@+id/rvFriends"
         android:fontFamily="@font/arimo"
         android:text="MEMBERS"
         android:textColor="#000000"
@@ -93,7 +93,7 @@
         android:id="@+id/tvFriendsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rvFriendList"
+        android:layout_above="@+id/rvFriends"
         android:layout_alignStart="@+id/tvMembersTitle"
         android:layout_marginBottom="-189dp"
         android:fontFamily="@font/arimo"
@@ -103,7 +103,7 @@
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriendList"
+        android:id="@+id/rvFriends"
         android:layout_width="327dp"
         android:layout_height="172dp"
         android:layout_alignParentTop="true"
@@ -113,7 +113,7 @@
         tools:listitem="@layout/item_friend" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvSafe"
+        android:id="@+id/rvUsers"
         android:layout_width="319dp"
         android:layout_height="116dp"
         android:layout_alignParentBottom="true"

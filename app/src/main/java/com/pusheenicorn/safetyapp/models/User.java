@@ -1,12 +1,16 @@
 package com.pusheenicorn.safetyapp.models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ParseClassName("_User")
@@ -140,8 +144,44 @@ public class User extends ParseUser {
         add(KEY_EVENTS, event);
     }
 
+    public ArrayList<String> getEventIds() {
+        List<Event> myEvents = getEvents();
+        ArrayList<String> eventsIds = new ArrayList<String>();
+        for (int i = 0; i < myEvents.size(); i++)
+        {
+            eventsIds.add(myEvents.get(i).getObjectId());
+        }
+        return eventsIds;
+    }
+
     public List<Friend> getFriends() {
         return getList(KEY_FRIENDS);
+    }
+
+    public ArrayList<String> getFriendIds() {
+        List<Friend> myFriends = getFriends();
+        ArrayList<String> friendsIds = new ArrayList<String>();
+        for (int i = 0; i < myFriends.size(); i++)
+        {
+            friendsIds.add(myFriends.get(i).getObjectId());
+        }
+        return friendsIds;
+    }
+
+    public ArrayList<String> getFriendUsers() {
+        List<Friend> myFriends = getFriends();
+        ArrayList<String> myFriendsUserIds = new ArrayList<String>();
+        for (int i = 0; i < myFriends.size(); i++) {
+            Friend friend = myFriends.get(i);
+            try {
+                User user = (User) friend.fetchIfNeeded().getParseUser("user");
+                myFriendsUserIds.add(user.getObjectId());
+            }
+            catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return myFriendsUserIds;
     }
 
     public void addFriend(Friend friend) {

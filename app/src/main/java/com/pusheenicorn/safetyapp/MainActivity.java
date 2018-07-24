@@ -394,9 +394,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 if (e == null) {
                     for (int i = objects.size() - 1; i > -1; i--)
                     {
-                        events.add(objects.get(i));
-                        // notify the adapter
-                        eventAdapter.notifyDataSetChanged();
+                        if (currentUser.getEvents() != null &&
+                                currentUser.getEventIds().contains(objects.get(i).getObjectId()))
+                        {
+                            events.add(objects.get(i));
+                            // notify the adapter
+                            eventAdapter.notifyDataSetChanged();
+                        }
                     }
 
                 } else {
