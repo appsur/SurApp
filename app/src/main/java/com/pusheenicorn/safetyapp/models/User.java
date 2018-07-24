@@ -7,6 +7,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.List;
+
 @ParseClassName("_User")
 public class User extends ParseUser {
 
@@ -22,6 +24,8 @@ public class User extends ParseUser {
     private final static String KEY_LAST_CHECKIN = "lastCheckin";
     //private final static ParseGeoPoint point = new ParseGeoPoint(0,0);
     private final static String GEO_LOCATION = "place";
+    private final static String KEY_FRIENDS = "friends";
+    private final static String KEY_EVENTS = "events";
 
     public ParseObject getLastCheckin() {
         return getParseObject(KEY_LAST_CHECKIN);
@@ -128,6 +132,22 @@ public class User extends ParseUser {
         }
     }
 
+    public List<Event> getEvents() {
+        return getList(KEY_EVENTS);
+    }
+
+    public void addEvent(Event event) {
+        add(KEY_EVENTS, event);
+    }
+
+    public List<Friend> getFriends() {
+        return getList(KEY_FRIENDS);
+    }
+
+    public void addFriend(Friend friend) {
+        add(KEY_FRIENDS, friend);
+    }
+
     public static class Query extends ParseQuery<User> {
         public Query() {
             super(User.class);
@@ -143,6 +163,4 @@ public class User extends ParseUser {
 ////            return this;
 ////        }
     }
-
-
 }

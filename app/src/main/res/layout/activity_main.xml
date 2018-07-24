@@ -11,24 +11,25 @@
         android:id="@+id/etStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rvEvents"
         android:layout_alignStart="@+id/ibCheckin"
+        android:layout_alignTop="@+id/etEndTime"
         android:hint="Start time"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="invisible" />
 
     <EditText
         android:id="@+id/etEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_alignTop="@+id/etStartTime"
+        android:layout_marginBottom="58dp"
         android:hint="End time"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="invisible" />
 
     <android.support.v7.widget.Toolbar
@@ -126,7 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/tvLastCheckin"
-        android:layout_marginBottom="239dp"
+        android:layout_marginBottom="243dp"
         android:text="UPCOMING ACTIVITIES: "
         android:textColor="@color/black"
         android:textSize="18sp" />
@@ -136,7 +137,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/tvName"
-        android:layout_alignTop="@+id/ibCheckin"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="234dp"
         android:text="LAST CHECK IN: "
         android:textColor="@color/black"
         android:textSize="18sp" />
@@ -145,12 +147,11 @@
         android:id="@+id/ibCheckin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/rvEvents"
-        android:layout_marginTop="242dp"
+        android:layout_alignTop="@+id/tvLastCheckin"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/check_outline"
-        android:onClick="onCheckin"/>
+        android:onClick="onCheckin"
+        app:srcCompat="@drawable/check_outline" />
 
     <TextView
         android:id="@+id/tvRelativeCheckinTime"
@@ -209,9 +210,8 @@
         android:id="@+id/ibAddEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/ibCheckin"
-        android:layout_marginBottom="230dp"
+        android:layout_alignStart="@+id/etStartTime"
+        android:layout_alignTop="@+id/tvUpcomingActivities"
         android:background="@android:color/transparent"
         android:onClick="onAddEvent"
         app:srcCompat="@drawable/playlist_plus" />
@@ -220,8 +220,8 @@
         android:id="@+id/ibConfirmEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/etStartTime"
         android:layout_alignTop="@+id/tvUpcomingActivities"
-        android:layout_toEndOf="@+id/ibProfileImage"
         android:background="@android:color/transparent"
         android:onClick="onConfirmEvent"
         android:visibility="invisible"
@@ -231,24 +231,25 @@
         android:id="@+id/etEventLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvUpcomingActivities"
-        android:layout_alignStart="@+id/etEndTime"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/etStartTime"
+        android:layout_marginBottom="116dp"
         android:hint="Location"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="invisible" />
 
     <EditText
         android:id="@+id/etEventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvUpcomingActivities"
-        android:layout_alignStart="@+id/ibCheckin"
+        android:layout_alignStart="@+id/etStartTime"
+        android:layout_alignTop="@+id/rvEvents"
         android:hint="Event name"
         android:textColor="@color/black"
         android:textColorHint="@color/gray"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:visibility="invisible" />
 
 

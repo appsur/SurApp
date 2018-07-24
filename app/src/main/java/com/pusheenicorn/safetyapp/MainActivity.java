@@ -750,13 +750,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
      * @param view: the add event button
      */
     public void onAddEvent(View view) {
-        tvUpcomingActivities.setVisibility(View.INVISIBLE);
+        tvUpcomingActivities.setText("NEW EVENT");
         etEndTime.setVisibility(View.VISIBLE);
         etStartTime.setVisibility(View.VISIBLE);
         etEventLocation.setVisibility(View.VISIBLE);
         etEventName.setVisibility(View.VISIBLE);
         ibAddEvent.setVisibility(View.INVISIBLE);
         ibConfirmEvent.setVisibility(View.VISIBLE);
+        rvEvents.setVisibility(View.INVISIBLE);
     }
 
     public void onConfirmEvent(View view) {
@@ -765,20 +766,33 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void done(com.parse.ParseException e) {
                 if (e == null) {
+                    // Set the event attributes and save in background
                     event.setName(etEventName.getText().toString());
                     event.setStart(etStartTime.getText().toString());
                     event.setEnd(etEndTime.getText().toString());
                     event.setLocation(etEventLocation.getText().toString());
+                    event.addUser(currentUser);
                     event.saveInBackground();
+                    // Add the event to the events list, notify the adapter, and update views
                     events.add(event);
                     eventAdapter.notifyDataSetChanged();
-                    tvUpcomingActivities.setVisibility(View.VISIBLE);
+                    tvUpcomingActivities.setText("UPCOMING EVENTS");
                     etEndTime.setVisibility(View.INVISIBLE);
                     etStartTime.setVisibility(View.INVISIBLE);
                     etEventLocation.setVisibility(View.INVISIBLE);
                     etEventName.setVisibility(View.INVISIBLE);
                     ibAddEvent.setVisibility(View.VISIBLE);
                     ibConfirmEvent.setVisibility(View.INVISIBLE);
+                    rvEvents.setVisibility(View.VISIBLE);
+                    // Add to the user's events
+                    final User thisUser = (User) ParseUser.getCurrentUser();
+                    thisUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(com.parse.ParseException e) {
+                            thisUser.addEvent(event);
+                            thisUser.saveInBackground();
+                        }
+                    });
                 } else {
                     e.printStackTrace();
                 }
