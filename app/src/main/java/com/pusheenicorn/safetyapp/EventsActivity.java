@@ -63,13 +63,14 @@ public class EventsActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_person:
                         //create intent to take user to home page
-                        Intent goHome = new Intent(EventsActivity.this, MainActivity.class);
-                        Toast.makeText(EventsActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                        Intent goHome = new Intent(EventsActivity.this,
+                                MainActivity.class);
                         startActivity(goHome);
                         return true;
                     case R.id.action_message:
                         //create intent to take user to contacts page
-                        Intent goMessage = new Intent(EventsActivity.this, ContactActivity.class);
+                        Intent goMessage = new Intent(EventsActivity.this,
+                                ContactActivity.class);
                         startActivity(goMessage);
                         return true;
                     case R.id.action_emergency:
@@ -79,7 +80,9 @@ public class EventsActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_friends:
                         //create intent to take user to the friends page
-                        Toast.makeText(EventsActivity.this, "Already on Friends Page!", Toast.LENGTH_SHORT).show();
+                        Intent goFriends = new Intent(EventsActivity.this,
+                                FriendsActivity.class);
+                        startActivity(goFriends);
                         return true;
                 }
                 return true;

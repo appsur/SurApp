@@ -47,6 +47,7 @@ public class FriendsActivity extends AppCompatActivity {
     ImageButton ibSearch;
     Context context;
     User user;
+    // User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class FriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends);
         // Set the context.
         context = this;
+        // Get the current user.
+        // currentUser = (User) ParseUser.getCurrentUser();
         //setting the bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -161,19 +164,34 @@ public class FriendsActivity extends AppCompatActivity {
                         return;
                     }
 
+                    // Create a new friend
                     final Friend newFriend = new Friend();
                     newFriend.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(com.parse.ParseException e) {
                             if (e == null) {
+                                // Set the name and user according to the User's input and
+                                // save in background.
                                 newFriend.setUser(user);
                                 newFriend.setName(user.getName());
                                 newFriend.saveInBackground();
+                                // Add to the friends list and notify the adapter.
                                 friends.add(newFriend);
                                 friendAdapter.notifyDataSetChanged();
+                                // Hide/show views
                                 ibAddFriend.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);
                                 etUsername.setVisibility(View.INVISIBLE);
+                                // Update the current user's friends list
+                                final User currentUser = (User) ParseUser.getCurrentUser();
+                                currentUser.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        // Add the new friend to the user's list of friends on Parse
+                                        currentUser.addFriend(newFriend);
+                                        currentUser.saveInBackground();
+                                    }
+                                });
                             } else {
                                 e.printStackTrace();
                             }

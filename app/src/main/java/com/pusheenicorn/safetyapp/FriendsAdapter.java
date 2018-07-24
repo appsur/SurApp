@@ -148,10 +148,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             prevDateInts[i] = Integer.parseInt(prevDateArr[i]);
         }
 
+        // true curr - truePrev is the number of minutes ago that the user checked in
         int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
                 + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
         int truePrev = (prevDateInts[0] * 43800) + (prevDateInts[1] * 1440)
                 + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
+        // threshold is the length of a user's checkin cycle
         int threshold = (int) user.getNumber("checkin");
 
         if (trueCurr - truePrev > threshold) {
