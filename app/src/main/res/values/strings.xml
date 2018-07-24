@@ -6,4 +6,6 @@
     <string name="channel_name">NotificationChannel</string>
     <string name="channel_description">A channel to send Sur App notifications.</string>
     <string name="vertical_ellipsis">&#8942;</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
