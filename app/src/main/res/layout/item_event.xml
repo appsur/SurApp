@@ -47,7 +47,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="18dp"
         android:text="View Details"
-        android:textColor="@color/gray"
+        android:textColor="@color/coral"
         android:textSize="12sp" />
 
 </RelativeLayout>

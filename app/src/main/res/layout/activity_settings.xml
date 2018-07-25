@@ -93,51 +93,52 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginTop="224dp"
+        android:layout_marginTop="264dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/bell_outline"
+        android:onClick="onAlert"
         android:tint="@color/coral"
-        android:onClick="onAlert"/>
+        app:srcCompat="@drawable/bell_outline" />
 
     <TextView
         android:id="@+id/tvOnAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/ibProfileImage"
+        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/ibAlert"
-        android:text="ON ALERT"
+        android:layout_marginStart="63dp"
+        android:text="I'M SAFE"
         android:textColor="@color/black" />
 
     <ImageButton
         android:id="@+id/ibCompass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginBottom="225dp"
+        android:layout_centerVertical="true"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/compass_outline"
+        android:onClick="onCompass"
         android:tint="@color/coral"
-        android:onClick="onCompass"/>
+        app:srcCompat="@drawable/compass_outline" />
 
     <ImageButton
         android:id="@+id/ibLocator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="311dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_vector_location_stroke"
+        android:onClick="onLocator"
         android:tint="@color/coral"
-        android:onClick="onLocator"/>
+        app:srcCompat="@drawable/ic_vector_location_stroke" />
 
     <TextView
         android:id="@+id/tvPhoneNumberSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvOnAlert"
-        android:layout_centerVertical="true"
-        android:text="TRACK ME"
+        android:layout_alignTop="@+id/ibLocator"
+        android:text="ALLOW GPS TRACKING"
         android:textColor="@color/black" />
 
     <TextView
@@ -146,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvOnAlert"
         android:layout_alignTop="@+id/ibCompass"
-        android:text="SOUND ALARM"
+        android:text="ALLOW ACCESS TO MICROPHONE"
         android:textColor="@color/black" />
 
     <TextView
@@ -155,7 +156,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvOnAlert"
         android:layout_alignTop="@+id/ibClock"
-        android:text="CHECK IN FREQUENCY: "
+        android:text="UPDATE CHECK IN FREQUENCY"
         android:textColor="@color/black" />
 
     <Button
@@ -191,13 +192,13 @@
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginBottom="135dp"
+        android:layout_marginBottom="242dp"
         android:background="@color/lightGray"
+        android:onClick="onHourly"
         android:text="HOURLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"
-        android:onClick="onHourly"/>
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tvCheckinFrequency"
@@ -214,23 +215,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginBottom="179dp"
+        android:layout_marginBottom="313dp"
         android:background="@android:color/transparent"
-        app:srcCompat="@drawable/clock_outline"
+        android:onClick="onClock"
         android:tint="@color/coral"
-        android:onClick="onClock"/>
+        app:srcCompat="@drawable/clock_outline" />
 
     <ImageButton
         android:id="@+id/ibEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvName"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp"
+        android:layout_alignEnd="@+id/btnWeekly"
+        android:layout_alignTop="@+id/ibProfileImage"
         android:background="@android:color/transparent"
+        android:onClick="onEdit"
         android:tint="@color/coral"
-        app:srcCompat="@drawable/account_edit"
-        android:onClick="onEdit"/>
+        app:srcCompat="@drawable/account_edit" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -331,7 +331,7 @@
         android:layout_alignEnd="@+id/ibEdit"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="73dp"
-        android:background="@color/lightGray"
+        android:background="@color/teal"
         android:text="Log Out"
         android:textColor="@android:color/black"
         tools:layout_editor_absoluteX="266dp"

@@ -1,6 +1,7 @@
 package com.pusheenicorn.safetyapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +30,18 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventsActivity extends AppCompatActivity {
@@ -44,11 +53,24 @@ public class EventsActivity extends AppCompatActivity {
     static final String TAG = "Success";
     private static int RESULT_LOAD_IMAGE = 1;
     Event currentEvent;
+    Context context;
+
+    EventUsersAdapter eventUsersAdapter;
+    ArrayList<User> users;
+    RecyclerView rvUsers;
+
+    EventFriendsAdapter eventFriendsAdapter;
+    ArrayList<Friend> friends;
+    RecyclerView rvFriends;
+
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
+        // Set the context
+        context = this;
         // Get the current event and cast appropriately.
         currentEvent = (Event) getIntent().getParcelableExtra("event");
         Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
@@ -110,6 +132,64 @@ public class EventsActivity extends AppCompatActivity {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
+
+        // Get the current user
+        currentUser = (User) ParseUser.getCurrentUser();
+
+        // Find recycler views and hook up adapter
+        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
+        users = new ArrayList<User>();
+        // construct the adapter from this data source
+        eventUsersAdapter = new EventUsersAdapter(users);
+        // recycler view setup
+        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        rvUsers.setAdapter(eventUsersAdapter);
+
+        // Find recycler views and hook up adapter
+        rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
+        friends = new ArrayList<Friend>();
+        // construct the adapter from this data source
+        eventFriendsAdapter = new EventFriendsAdapter(friends);
+        // recycler view setup
+        rvFriends.setLayoutManager(new LinearLayoutManager(this));
+        rvFriends.setAdapter(eventFriendsAdapter);
+
+        // Populate the recycler views appropriate
+        loadEventUsers();
+    }
+
+    public void loadEventUsers() {
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop();
+
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = objects.size() - 1; i > -1; i--) {
+                        // If this user belongs to the event
+                        if (currentEvent.getUsersIds().contains(objects.get(i).getObjectId())) {
+                            // If this user is a friend, then...
+                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId()))
+                            {
+                                int index = currentUser.getFriendUsers()
+                                        .indexOf(objects.get(i).getObjectId());
+                                Friend newFriend = currentUser.getFriends().get(index);
+                                friends.add(newFriend);
+                                eventFriendsAdapter.notifyDataSetChanged();
+                            }
+                            else {
+                                users.add(objects.get(i));
+                                // notify the adapter
+                                eventUsersAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -153,10 +233,7 @@ public class EventsActivity extends AppCompatActivity {
                     });
                 }
             });
-
         }
-
-
     }
 
     //converts bitmap to parse file
@@ -168,5 +245,26 @@ public class EventsActivity extends AppCompatActivity {
         return parseFile;
     }
 
+    public void onAddUser(View view) {
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop().whereEqualTo("objectId", "5gDeswJDpG");
+
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if (e == null) {
+                    if (objects != null)
+                    {
+                        currentEvent.addUser(objects.get(0));
+                        eventFriendsAdapter.clear();
+                        loadEventUsers();
+                        currentEvent.saveInBackground();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
 

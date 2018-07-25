@@ -75,6 +75,8 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         holder.tvPhoneNumber.setText(number);
 
         // Get the friend's last checkin id
+        Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
+
         final User friendUser = friend.getUser();
         String checkinId = friendUser.getLastCheckin().getObjectId();
 

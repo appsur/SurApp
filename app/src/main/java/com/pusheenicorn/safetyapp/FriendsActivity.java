@@ -47,7 +47,7 @@ public class FriendsActivity extends AppCompatActivity {
     ImageButton ibSearch;
     Context context;
     User user;
-    // User currentUser;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,8 @@ public class FriendsActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         ibAddFriend = (ImageButton) findViewById(R.id.ibAddFriend);
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
+
+        currentUser = (User) ParseUser.getCurrentUser();
     }
 
     public void populateFriendList() {
@@ -115,10 +117,13 @@ public class FriendsActivity extends AppCompatActivity {
                 if (e == null) {
                     for (int i = objects.size() - 1; i > -1; i--)
                     {
-                        // add the friend object
-                        friends.add(objects.get(i));
-                        // notify the adapter
-                        friendAdapter.notifyDataSetChanged();
+                        if (currentUser.getFriends() != null && currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
+                        {
+                            // add the friend object
+                            friends.add(objects.get(i));
+                            // notify the adapter
+                            friendAdapter.notifyDataSetChanged();
+                        }
                     }
                 } else {
                     e.printStackTrace();
@@ -129,7 +134,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     public void onSettings(View view) {
         //create intent to access the map activity and then toast the information
-        Intent intent = new Intent(FriendsActivity.this, MapActivity.class);
+        Intent intent = new Intent(FriendsActivity.this, SettingsActivity.class);
         Toast.makeText(FriendsActivity.this, "Settings Page Accessed", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
