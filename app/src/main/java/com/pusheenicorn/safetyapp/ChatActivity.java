@@ -27,9 +27,11 @@ public class ChatActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
-            //set text view with the message and phone number from the reply
-            //TODO - create adapter to hold more than one message
-            tvTextMessage.setText(intent.getExtras().getString("message"));
+            if (intent.equals("SMS_RECEIVED_ACTION")) {
+                //set text view with the message and phone number from the reply
+                //TODO - create adapter to hold more than one message
+                tvTextMessage.setText(intent.getExtras().getString("message"));
+            }
         }
     };
 
