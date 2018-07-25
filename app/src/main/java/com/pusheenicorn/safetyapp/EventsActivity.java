@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,7 +48,10 @@ import java.util.List;
 public class EventsActivity extends AppCompatActivity {
     //declared variables
     ImageButton ibBanner;
+    ImageButton ibAddMembers;
+    ImageButton ibSearch;
     TextView tvEventTitle;
+    EditText etUsername;
     BottomNavigationView bottomNavigationView;
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
@@ -64,6 +68,7 @@ public class EventsActivity extends AppCompatActivity {
     RecyclerView rvFriends;
 
     User currentUser;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,9 @@ public class EventsActivity extends AppCompatActivity {
         currentEvent = (Event) getIntent().getParcelableExtra("event");
         Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
         tvEventTitle = findViewById(R.id.tvEventTitle);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
+        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
         //added title to the event page
         tvEventTitle.setText(currentEvent.getName());
         //initialize bottom navigation bar
@@ -246,19 +254,53 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     public void onAddUser(View view) {
-        final User.Query userQuery = new User.Query();
-        userQuery.getTop().whereEqualTo("objectId", "5gDeswJDpG");
+        etUsername.setVisibility(View.VISIBLE);
+        ibAddMembers.setVisibility(View.INVISIBLE);
+        ibSearch.setVisibility(View.VISIBLE);
+    }
 
+
+    public void onSearchUser(View view) {
+        String username = etUsername.getText().toString();
+
+        // Do not allow user to add themselves to an event that they are already part of!
+        if (username == currentUser.getUsername()) {
+            Toast.makeText(this, "Sorry, you are already part of this event!",
+                    Toast.LENGTH_LONG).show();
+            etUsername.setVisibility(View.INVISIBLE);
+            ibAddMembers.setVisibility(View.VISIBLE);
+            ibSearch.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        // Allow them to enter other users as long as they can provide a valid username.
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop().whereEqualTo("username", username);
         userQuery.findInBackground(new FindCallback<User>() {
             @Override
             public void done(List<User> objects, ParseException e) {
                 if (e == null) {
-                    if (objects != null)
-                    {
+                    if (objects != null) {
                         currentEvent.addUser(objects.get(0));
-                        eventFriendsAdapter.clear();
-                        loadEventUsers();
-                        currentEvent.saveInBackground();
+                        currentEvent.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                eventFriendsAdapter.clear();
+                                eventUsersAdapter.clear();
+                                loadEventUsers();
+                                etUsername.setVisibility(View.INVISIBLE);
+                                ibAddMembers.setVisibility(View.VISIBLE);
+                                ibSearch.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    }
+                    // If the username is invalid, toast a message to this effect.
+                    else {
+                        Toast.makeText(context, "Sorry, you entered an invalid username.",
+                                Toast.LENGTH_LONG).show();
+                        etUsername.setVisibility(View.INVISIBLE);
+                        ibAddMembers.setVisibility(View.VISIBLE);
+                        ibSearch.setVisibility(View.INVISIBLE);
                     }
                 } else {
                     e.printStackTrace();
