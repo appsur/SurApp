@@ -151,6 +151,7 @@
         android:layout_toEndOf="@+id/tvEventTitle"
         android:background="@android:color/transparent"
         android:tint="@android:color/white"
-        app:srcCompat="@drawable/account_multiple_plus_outline" />
+        app:srcCompat="@drawable/account_multiple_plus_outline"
+        android:onClick="onAddUser"/>
 
 </RelativeLayout>

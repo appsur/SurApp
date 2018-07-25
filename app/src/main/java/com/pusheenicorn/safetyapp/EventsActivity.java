@@ -245,5 +245,26 @@ public class EventsActivity extends AppCompatActivity {
         return parseFile;
     }
 
+    public void onAddUser(View view) {
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop().whereEqualTo("objectId", "5gDeswJDpG");
+
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if (e == null) {
+                    if (objects != null)
+                    {
+                        currentEvent.addUser(objects.get(0));
+                        eventFriendsAdapter.clear();
+                        loadEventUsers();
+                        currentEvent.saveInBackground();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
 

@@ -47,7 +47,11 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
         // populate the views according to this data
         // populate the views according to this data
         holder.tvName.setText(user.getName());
-        holder.tvPhoneNumber.setText(user.getPhonNumber());
+        String phoneNumber = user.getPhonNumber();
+        phoneNumber = "( " + phoneNumber.substring(0, 3) + ") "
+                + phoneNumber.substring(3, 6)
+                + " - " + phoneNumber.substring(6, 10);
+        holder.tvPhoneNumber.setText(phoneNumber);
 
         if (user.getProfileImage() != null)
         {
