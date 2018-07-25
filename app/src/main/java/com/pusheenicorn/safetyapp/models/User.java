@@ -28,6 +28,7 @@ public class User extends ParseUser {
     private final static String KEY_LAST_CHECKIN = "lastCheckin";
     //private final static ParseGeoPoint point = new ParseGeoPoint(0,0);
     private final static String GEO_LOCATION = "place";
+    private final static String KEY_CONTACT = "primaryContact";
     private final static String KEY_FRIENDS = "friends";
     private final static String KEY_EVENTS = "events";
 
@@ -106,6 +107,15 @@ public class User extends ParseUser {
     public void setPlace(ParseGeoPoint point) { put(GEO_LOCATION, point); }
 
     public ParseGeoPoint getPlace(){return getParseGeoPoint(GEO_LOCATION);}
+
+    public User getPrimary()
+    {
+        return (User) getParseUser(KEY_CONTACT);
+    }
+
+    public void setPrimary(User user) {
+        put(KEY_CONTACT, user);
+    }
 
 
     public String getFrequency() {
@@ -203,4 +213,6 @@ public class User extends ParseUser {
 ////            return this;
 ////        }
     }
+
+
 }

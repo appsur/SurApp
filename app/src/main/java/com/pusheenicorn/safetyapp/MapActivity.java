@@ -139,6 +139,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         lic = friendUser.getPlace();
         LatLng them = new LatLng(lic.getLatitude(), lic.getLongitude());
         map = googleMap;
+        //for now this probably isn't necessary
+        /*
         if (you.latitude > them.latitude){
             LatLngBounds two = new LatLngBounds( them,you);
             map.setLatLngBoundsForCameraTarget(two);
@@ -146,16 +148,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             LatLngBounds zwei = new LatLngBounds( you , them);
             map.setLatLngBoundsForCameraTarget(zwei);
         }
-
+        */
         if (map != null) {
 
 
 
             // Map is ready
             googleMap.addMarker(new MarkerOptions().position(them)
-                    .title("nick's house"));
+                    .title(friendUser.getName()));
             googleMap.addMarker(new MarkerOptions().position(you)
-                    .title("Not Jared's House"));
+                    .title(currentUser.getName()));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
             //Move camera instantly to chosen location
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));

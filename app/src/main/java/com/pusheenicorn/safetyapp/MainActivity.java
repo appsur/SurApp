@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // Logic for bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
-     //   getLocation();
+  //      getLocation();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -251,7 +251,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         populateEvents();
 
 // JARED-------------------------------------------------------------------------------------------
-//        //check to see if the phone's gps is enabled
+//
+
+
         LocationManager locationManager = (LocationManager) getSystemService(context.LOCATION_SERVICE);
 
 //
@@ -267,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
 
 //
+//check to see if the phone's gps is enabled
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 //           Toast.makeText(this, "GPS is Enabled in your device",
 //                   Toast.LENGTH_SHORT).show();
@@ -280,14 +283,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //        @Override
 //        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        Toast.makeText(this, location.getLatitude() + "hhh", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, location.getLatitude() + "hhh", Toast.LENGTH_LONG).show();
 //
        if (location != null) {
           double longitude = location.getLongitude();
            double latitude = location.getLatitude();
             //store the user's location
             final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-            Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, latitude + "and" + longitude, Toast.LENGTH_LONG).show();
             currentUser.setPlace(point);
 
             currentUser.saveInBackground(new SaveCallback() {
@@ -589,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // JARED---------------------------------------------------------------------------------------
 
 
-    /*---------- Listener class to get coordinates ------------- */
+    /*---------- Listener class to get coordinates -------------
         protected void getLocation(){
             if (isLocationEnabled(MainActivity.this)) {
                 locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
@@ -612,15 +615,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
             }
 
+*/
 
         @Override
         public void onLocationChanged(Location loc) {
-//            //editLocation.setText("");
-//            //pb.setVisibility(View.INVISIBLE);
+
+
 //            //remove location callback:
 //            locationManager.removeUpdates(this);
 //
-//            //open the map:
+//
 //            latitude = loc.getLatitude();
 //            longitude = loc.getLongitude();
 //            //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
