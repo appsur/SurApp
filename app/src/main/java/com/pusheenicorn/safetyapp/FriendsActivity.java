@@ -53,6 +53,7 @@ public class FriendsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+        Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
         // Set the context.
         context = this;
         // Get the current user.
@@ -80,7 +81,7 @@ public class FriendsActivity extends AppCompatActivity {
                         return true;
                     case R.id.action_friends:
                         //create toast to show user that they are already on the correct page
-                        Toast.makeText(FriendsActivity.this, "You are already on the Friends page!", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(FriendsActivity.this, "You are already on the Friends page!", Toast.LENGTH_SHORT).show();
                         return true;
                 }
                 return true;
@@ -96,7 +97,6 @@ public class FriendsActivity extends AppCompatActivity {
         // recycler view setup
         rvFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvFriendList.setAdapter(friendAdapter);
-        populateFriendList();
 
         // declare username
         etUsername = (EditText) findViewById(R.id.etUsername);
@@ -104,20 +104,22 @@ public class FriendsActivity extends AppCompatActivity {
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
 
         currentUser = (User) ParseUser.getCurrentUser();
+        populateFriendList();
     }
 
     public void populateFriendList() {
         // Populate the friends list.
-        final Friend.Query postQuery = new Friend.Query();
-        postQuery.getTop().withUser();
+        final Friend.Query friendQuery = new Friend.Query();
+        friendQuery.getTop().withUser();
 
-        postQuery.findInBackground(new FindCallback<Friend>() {
+        friendQuery.findInBackground(new FindCallback<Friend>() {
             @Override
             public void done(List<Friend> objects, ParseException e) {
                 if (e == null) {
                     for (int i = objects.size() - 1; i > -1; i--)
                     {
-                        if (currentUser.getFriends() != null && currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
+                        if (currentUser.getFriends() != null &&
+                                currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
                         {
                             // add the friend object
                             friends.add(objects.get(i));
@@ -148,6 +150,17 @@ public class FriendsActivity extends AppCompatActivity {
     public void onSearch(View view) {
         String username = etUsername.getText().toString();
 
+        // Do not allow the user to add themselves as a friend!
+        if (username == currentUser.getUsername())
+        {
+            Toast.makeText(this, "Sorry, you cannot add yourself as a friend!",
+                    Toast.LENGTH_LONG).show();
+            ibAddFriend.setVisibility(View.VISIBLE);
+            ibSearch.setVisibility(View.INVISIBLE);
+            etUsername.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         // Get the actual checkin object by making a query.
         final User.Query userQuery = new User.Query();
         userQuery.getTop().whereEqualTo("username", username);
@@ -156,7 +169,7 @@ public class FriendsActivity extends AppCompatActivity {
             public void done(List<User> objects, com.parse.ParseException e) {
                 if (e == null) {
                     // Get the user that matches this name, if one exists.
-                    if (objects.size() > 0)
+                    if (objects != null && objects.size() > 0)
                     {
                         user = objects.get(0);
                     }
@@ -180,9 +193,9 @@ public class FriendsActivity extends AppCompatActivity {
                                 newFriend.setUser(user);
                                 newFriend.setName(user.getName());
                                 newFriend.saveInBackground();
-                                // Add to the friends list and notify the adapter.
-                                friends.add(newFriend);
-                                friendAdapter.notifyDataSetChanged();
+                                // Repopulate the friends list.
+                                friendAdapter.clear();
+                                populateFriendList();
                                 // Hide/show views
                                 ibAddFriend.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);

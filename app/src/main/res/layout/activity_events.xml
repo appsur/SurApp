@@ -81,8 +81,9 @@
         android:id="@+id/tvMembersTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rvUsers"
+        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/rvFriends"
+        android:layout_marginBottom="212dp"
         android:fontFamily="@font/arimo"
         android:text="MEMBERS"
         android:textColor="#000000"
@@ -93,9 +94,9 @@
         android:id="@+id/tvFriendsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rvFriends"
+        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvMembersTitle"
-        android:layout_marginBottom="-189dp"
+        android:layout_marginTop="212dp"
         android:fontFamily="@font/arimo"
         android:text="FRIENDS"
         android:textColor="#000000"
@@ -108,7 +109,7 @@
         android:layout_height="172dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="189dp"
+        android:layout_marginTop="243dp"
         android:visibility="visible"
         tools:listitem="@layout/item_friend" />
 
@@ -118,7 +119,7 @@
         android:layout_height="116dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="88dp"
         tools:listitem="@layout/item_event_user" />
 
     <ImageButton
@@ -159,10 +160,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvMembersTitle"
-        android:layout_below="@+id/tvFriendsTitle"
-        android:layout_marginTop="189dp"
-        android:text="TextView"
-        android:textColorHint="@color/black"
+        android:layout_below="@+id/ibBanner"
+        android:hint="lookup by username..."
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
         android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/ibSearch"
+        android:layout_width="37dp"
+        android:layout_height="42dp"
+        android:layout_alignEnd="@+id/tvEventTitle"
+        android:layout_below="@+id/ibBanner"
+        android:background="@android:color/transparent"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/account_search_outline"
+        android:onClick="onSearch"/>
 
 </RelativeLayout>
