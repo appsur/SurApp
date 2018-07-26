@@ -52,10 +52,13 @@ public class SettingsActivity extends AppCompatActivity {
     ToggleButton tbLocation;
     ToggleButton tbRing;
     ToggleButton tbCheckin;
+    EditText etNum;
+    TextView tvNum;
 
     // ImageButton ibAlert;
     ImageButton ibEdit;
     Button btnDone;
+    Button btnEditFrequency;
     boolean isClock = false;
 
     // Define variables for making frequency buttons appear.
@@ -171,6 +174,9 @@ public class SettingsActivity extends AppCompatActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         etName = (EditText) findViewById(R.id.etName);
         etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumberSettings);
+        etNum = (EditText) findViewById(R.id.etNum);
+        tvNum = (TextView) findViewById(R.id.tvNum);
+        btnEditFrequency = (Button) findViewById(R.id.btnEditFrequency);
 
         // Get the current user and cast appropriately.
 
@@ -178,6 +184,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvUsernameValue.setText(currentUser.getUserName());
         tvNameValue.setText(currentUser.getName());
         tvCheckinFrequency.setText(currentUser.getFrequency());
+        tvNum.setText(currentUser.getNotificationThreshold().toString());
 
         // Format the phone number and set the text view.
         String phoneNumber = currentUser.getPhonNumber();
@@ -346,95 +353,26 @@ public class SettingsActivity extends AppCompatActivity {
         isClock = !isClock;
         if (isClock)
         {
-            // Functionality
+            btnEditFrequency.setText("DONE");
             btnHourly.setVisibility(View.VISIBLE);
             btnDaily.setVisibility(View.VISIBLE);
             btnWeekly.setVisibility(View.VISIBLE);
+            etNum.setText(tvNum.getText().toString());
+            etNum.setVisibility(View.VISIBLE);
+            tvNum.setVisibility(View.INVISIBLE);
         }
         else {
             // Functionality
+            btnEditFrequency.setText("EDIT");
             btnHourly.setVisibility(View.INVISIBLE);
             btnDaily.setVisibility(View.INVISIBLE);
             btnWeekly.setVisibility(View.INVISIBLE);
-        }
-    }
 
-    /**
-     * This function is called when the user clicks the trackable button. It marks the user
-     * as trackable or not.
-     *
-     * @param view: the trackable button
-     */
-    public void onLocator(View view) {
-        if (!currentUser.getTrackable()) {
-                ibLocator.setImageResource(R.drawable.ic_vector_location);
-                currentUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null){
-                            final User user = (User) ParseUser.getCurrentUser();
-                            user.setTrackable(true);
-                            user.saveInBackground();
-                        } else {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-        }
-        else
-        {
-            ibLocator.setImageResource(R.drawable.ic_vector_location_stroke);
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setTrackable(false);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
+            String newFrequency = etNum.getText().toString();
+            tvNum.setText(newFrequency);
 
-    /**
-     * This function is called when the user clicks the ringable button. It marks the user
-     * as ringable or not.
-     *
-     * @param view: the ringable button
-     */
-    public void onCompass(View view) {
-        if (!currentUser.getRingable()) {
-            ibCompass.setImageResource(R.drawable.compass);
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setRingable(true);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        else {
-            ibCompass.setImageResource(R.drawable.compass_outline);
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setRingable(false);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            etNum.setVisibility(View.INVISIBLE);
+            tvNum.setVisibility(View.VISIBLE);
         }
     }
 
@@ -460,10 +398,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btnHourly.setVisibility(View.INVISIBLE);
-        btnDaily.setVisibility(View.INVISIBLE);
-        btnWeekly.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -487,10 +421,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btnHourly.setVisibility(View.INVISIBLE);
-        btnDaily.setVisibility(View.INVISIBLE);
-        btnWeekly.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -514,10 +444,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
-        btnHourly.setVisibility(View.INVISIBLE);
-        btnDaily.setVisibility(View.INVISIBLE);
-        btnWeekly.setVisibility(View.INVISIBLE);
     }
 
     /**

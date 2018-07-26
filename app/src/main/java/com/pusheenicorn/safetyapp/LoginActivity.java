@@ -18,7 +18,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
     Button btnLogin;
 
-    boolean ishaniIsTesting = false;
+    boolean ishaniIsTesting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
