@@ -8,15 +8,20 @@ import android.media.Image;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -33,9 +38,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity {
+public class FriendsActivity extends BaseActivity {
     //declared variables
     BottomNavigationView bottomNavigationView;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
     ProgressBar progressBar;
 
@@ -56,39 +69,29 @@ public class FriendsActivity extends AppCompatActivity {
         Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
         // Set the context.
         context = this;
-        // Get the current user.
-        // currentUser = (User) ParseUser.getCurrentUser();
         //setting the bottom navigation view
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        //set and populated the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation_friends);
+        setNavigationDestinations(FriendsActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        //create intent to take user to the home page
-                        Intent returnHome = new Intent(FriendsActivity.this, MainActivity.class);
-                        startActivity(returnHome);
-                        return true;
-                    case R.id.action_message:
-                        //create intent to take user to the chat activity
-                        Intent goMessages = new Intent(FriendsActivity.this, ContactActivity.class);
-                        startActivity(goMessages);
-                        return true;
-                    case R.id.action_emergency:
-                        //dial the number of a preset number
-                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                "6304862146", null)));
-                        return true;
-                    case R.id.action_friends:
-                        //create toast to show user that they are already on the correct page
-                        // Toast.makeText(FriendsActivity.this, "You are already on the Friends page!", Toast.LENGTH_SHORT).show();
-                        return true;
-                }
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        FriendsActivity.this, mNavItems);
             }
         });
-
-        bottomNavigationView.setSelectedItemId(R.id.action_friends);
 
         rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
         friends = new ArrayList<Friend>();
