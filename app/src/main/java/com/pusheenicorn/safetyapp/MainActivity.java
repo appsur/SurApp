@@ -256,71 +256,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         populateEvents();
 
 // JARED-------------------------------------------------------------------------------------------
-//
+        getLocation();
 
-
-        LocationManager locationManager = (LocationManager) getSystemService(context.LOCATION_SERVICE);
-
-//
-//        // Create a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
-//
-//        // Get the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        //test
-        //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
-
-//
-//check to see if the phone's gps is enabled
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//           Toast.makeText(this, "GPS is Enabled in your device",
-//                   Toast.LENGTH_SHORT).show();
-        } else {
-            showGPSDisabledAlertToUser();
-        }
-////        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-
-
-
-//        @Override
-//        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //Toast.makeText(this, location.getLatitude() + "hhh", Toast.LENGTH_LONG).show();
-//
-       if (location != null) {
-          double longitude = location.getLongitude();
-           double latitude = location.getLatitude();
-            //store the user's location
-            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-            Toast.makeText(MainActivity.this, latitude + "and" + longitude, Toast.LENGTH_LONG).show();
-            currentUser.setPlace(point);
-
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-
-                }
-            });
-           locationManager.requestLocationUpdates(bestProvider, 1000, 0, MainActivity.this);
-        }else{
-           //retrieve location from best existing source
-           double longitude = myLocation.getLongitude();
-           double latitude = myLocation.getLatitude();
-           //store the user's location
-           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
-           currentUser.setPlace(point);
-
-           currentUser.saveInBackground(new SaveCallback() {
-               @Override
-               public void done(com.parse.ParseException e) {
-
-               }
-           });
-       }
 
         mNavItems.add(new NavItem("Home", "Main Screen", R.drawable.ic_vector_home));
         mNavItems.add(new NavItem("Messages", "Contact your friends", R.drawable.ic_vector_messages));
@@ -349,6 +286,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 // JARED -----------------------------------------------------------------------------------------
 
 
+
+    public void saveLocation(Location loc){
+        //retrieve location from best existing source
+        double longitude = loc.getLongitude();
+        double latitude = loc.getLatitude();
+        //store the user's location
+        final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
+        Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+        currentUser.setPlace(point);
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+
+            }
+        });
+    }
 
     // Update the checkin button each time the app is restarted/reopened in case the user made a
     // checkin through a push notification while the app was closed/in-background.
@@ -618,30 +572,40 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // JARED---------------------------------------------------------------------------------------
 
 
-    /*---------- Listener class to get coordinates -------------
+    /*---------- Listener class to get coordinates -------------*/
         protected void getLocation(){
+            locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
             if (isLocationEnabled(MainActivity.this)) {
-                locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
+                //retrieve criteria from device
                 criteria = new Criteria();
-                //bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
                 bestProvider = locationManager.getBestProvider(criteria, true);
                 //You can still do this if you like, you might get lucky:
                 Location location = locationManager.getLastKnownLocation(bestProvider);
-                if (location != null) {
+                Location gps_location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location net_location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (gps_location != null) {
                     Log.e("TAG", "GPS is on");
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                    //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
-
-                }
-                else{
+                    saveLocation(gps_location);
+                }else if(net_location != null) {
+                    saveLocation(net_location);
+                }else if(location != null){
+                    saveLocation(location);
+                }else{
                     //This is what you need:
                     locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
                 }
             }
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//           this is good
+            } else {
+                showGPSDisabledAlertToUser();
             }
 
-*/
+
+            }
+
+
 
         @Override
         public void onLocationChanged(Location loc) {
