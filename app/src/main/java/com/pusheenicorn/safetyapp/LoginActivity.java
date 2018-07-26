@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText etUsername;
     EditText etPassword;
     Button btnLogin;
+
+    boolean ishaniIsTesting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +51,16 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, com.parse.ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity","Login Successful");
-                    Intent intent = new Intent(LoginActivity.this,
-                            MainActivity.class);
+                    Intent intent;
+                    if (ishaniIsTesting)
+                    {
+                        intent = new Intent(LoginActivity.this,
+                                SettingsActivity.class);
+                    }
+                    else {
+                        intent = new Intent(LoginActivity.this,
+                                MainActivity.class);
+                    }
                     startActivity(intent);
                     finish();
                 } else {
