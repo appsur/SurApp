@@ -208,11 +208,10 @@ public class User extends ParseUser {
             return this;
         }
 
-//        public Query withUser() {
-////            include("user");
-////            return this;
-////        }
+        public Query withUser() {
+            include("user");
+            return this;
+        }
     }
-
 
 }

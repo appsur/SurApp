@@ -176,6 +176,6 @@
         android:background="@android:color/transparent"
         android:visibility="invisible"
         app:srcCompat="@drawable/account_search_outline"
-        android:onClick="onSearch"/>
+        android:onClick="onSearchUser"/>
 
 </RelativeLayout>

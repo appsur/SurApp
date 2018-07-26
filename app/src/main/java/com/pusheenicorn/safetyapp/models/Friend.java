@@ -45,11 +45,6 @@ public class Friend extends ParseObject{
             super(Friend.class);
         }
 
-        public Friend.Query getTop() {
-            setLimit(20);
-            return this;
-        }
-
         public Query withUser() {
             include("user");
             return this;
