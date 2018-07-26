@@ -506,14 +506,12 @@ public class SettingsActivity extends BaseActivity {
                     }
 
                     if (phoneNumber != "" && phoneNumber.length() >= 10) {
-                        Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG);
                         user.setPhoneNumber(phoneNumber);
                         String num = "(" + phoneNumber.substring(0, 3) + ") "
                                 + phoneNumber.substring(3, 6) + "-"
                                 + phoneNumber.substring(6, 10);
                         tvPhoneValue.setText(num);
                     } else {
-                        Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG);
                         user.setPhoneNumber(oldPhoneNumber);
                     }
 

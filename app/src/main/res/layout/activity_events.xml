@@ -14,199 +14,227 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/lightGray"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/black">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ProgressBar
-                android:id="@+id/pbLoading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="99dp"
-                android:visibility="invisible" />
+                android:background="@color/lightGray"
+                android:minHeight="?attr/actionBarSize"
+                app:titleTextColor="@android:color/black">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <ProgressBar
+                        android:id="@+id/pbLoading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="99dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/arimo"
+                        android:gravity="center"
+                        android:linksClickable="true"
+                        android:text="SETTINGS"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/ibMenu"
+                        android:layout_width="46dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/menu_icon" />
+
+                    <ImageView
+                        android:id="@+id/ibSettings"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/dots_vertical" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/bottom_navigation_events"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/lightGray"
+                app:itemIconTint="@color/black"
+                app:itemTextColor="@color/black"
+                app:menu="@menu/menu" />
 
             <TextView
-                android:id="@+id/toolbar_title"
+                android:id="@+id/tvMembersTitle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/rvFriends"
+                android:layout_marginBottom="216dp"
+                android:fontFamily="@font/arimo"
+                android:text="MEMBERS"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvFriendsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/tvMembersTitle"
+                android:layout_marginTop="298dp"
+                android:fontFamily="@font/arimo"
+                android:text="FRIENDS"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFriends"
+                android:layout_width="327dp"
+                android:layout_height="172dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="245dp"
+                android:visibility="visible"
+                tools:listitem="@layout/item_friend" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvUsers"
+                android:layout_width="319dp"
+                android:layout_height="145dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="59dp"
+                tools:listitem="@layout/item_event_user" />
+
+            <ImageButton
+                android:id="@+id/ibBanner"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="76dp"
+                android:src="@drawable/bannerimage2" />
+
+            <TextView
+                android:id="@+id/tvEventTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="108dp"
                 android:fontFamily="@font/arimo"
-                android:gravity="center"
-                android:linksClickable="true"
-                android:text="SETTINGS"
-                android:textAlignment="center"
-                android:textColor="@color/black"
+                android:text="EVENT NAME"
+                android:textColor="@android:color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <ImageButton
-                android:id="@+id/ibMenu"
-                android:layout_width="46dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:id="@+id/ibAddMembers"
+                android:layout_width="69dp"
+                android:layout_height="72dp"
+                android:layout_alignBottom="@+id/ibBanner"
+                android:layout_toEndOf="@+id/tvEventTitle"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/menu_icon" />
+                android:onClick="onAddUser"
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/account_multiple_plus_outline" />
 
-            <ImageView
-                android:id="@+id/ibSettings"
-                android:layout_width="36dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="15dp"
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/tvMembersTitle"
+                android:layout_below="@+id/ibBanner"
+                android:hint="lookup by username..."
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray"
+                android:visibility="invisible" />
+
+            <ImageButton
+                android:id="@+id/ibSearch"
+                android:layout_width="37dp"
+                android:layout_height="42dp"
+                android:layout_alignEnd="@+id/tvEventTitle"
+                android:layout_below="@+id/ibBanner"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/dots_vertical" />
+                android:onClick="onSearchUser"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/account_search_outline" />
 
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+            <Button
+                android:id="@+id/btnSendAlert"
+                android:layout_width="351dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etUsername"
+                android:layout_centerHorizontal="true"
+                android:background="@color/coral"
+                android:onClick="onSendAlert"
+                android:text="Send an event alert " />
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation_events"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/lightGray"
-        app:menu="@menu/menu"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"/>
+            <EditText
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/btnSendAlert"
+                android:layout_below="@+id/btnSendAlert"
+                android:hint="Enter your message here"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray" />
 
-    <TextView
-        android:id="@+id/tvMembersTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/rvFriends"
-        android:layout_marginBottom="212dp"
-        android:fontFamily="@font/arimo"
-        android:text="MEMBERS"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvFriendsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvMembersTitle"
-        android:layout_marginTop="212dp"
-        android:fontFamily="@font/arimo"
-        android:text="FRIENDS"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriends"
-        android:layout_width="327dp"
-        android:layout_height="172dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="243dp"
-        android:visibility="visible"
-        tools:listitem="@layout/item_friend" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvUsers"
-        android:layout_width="319dp"
-        android:layout_height="116dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="88dp"
-        tools:listitem="@layout/item_event_user" />
-
-    <ImageButton
-        android:id="@+id/ibBanner"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="76dp"
-        android:src="@drawable/bannerimage2" />
-
-    <TextView
-        android:id="@+id/tvEventTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="108dp"
-        android:fontFamily="@font/arimo"
-        android:text="EVENT NAME"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/ibAddMembers"
-        android:layout_width="69dp"
-        android:layout_height="72dp"
-        android:layout_alignBottom="@+id/ibBanner"
-        android:layout_toEndOf="@+id/tvEventTitle"
-        android:background="@android:color/transparent"
-        android:tint="@android:color/white"
-        app:srcCompat="@drawable/account_multiple_plus_outline"
-        android:onClick="onAddUser"/>
-
-    <EditText
-        android:id="@+id/etUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvMembersTitle"
-        android:layout_below="@+id/ibBanner"
-        android:hint="lookup by username..."
-        android:textAllCaps="true"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray"
-        android:visibility="invisible" />
-
-    <ImageButton
-        android:id="@+id/ibSearch"
-        android:layout_width="37dp"
-        android:layout_height="42dp"
-        android:layout_alignEnd="@+id/tvEventTitle"
-        android:layout_below="@+id/ibBanner"
-        android:background="@android:color/transparent"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/account_search_outline"
-        android:onClick="onSearchUser"/>
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/btnSendAlert"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="257dp"
+                android:text="Button" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
+            android:id="@+id/drawerPane"
             android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:id="@+id/drawerPane"
-            android:background="@color/coral"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            android:background="@color/coral">
             <!-- List of Actions (pages) -->
             <ListView
                 android:id="@+id/navList"
                 android:layout_width="280dp"
-                android:layout_height="match_parent"
-                android:choiceMode="singleChoice"
-                android:background="@color/coral" />
+                android:layout_height="wrap_content"
+                android:background="@color/coral"
+                android:choiceMode="singleChoice" />
         </RelativeLayout>
-
-
 
 
     </android.support.v4.widget.DrawerLayout>
