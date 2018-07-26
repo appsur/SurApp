@@ -7,12 +7,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     //declare necessary variables for fields on the screen
@@ -21,15 +32,24 @@ public class ChatActivity extends AppCompatActivity {
     IntentFilter intentFilter;
     TextView tvTextMessage;
 
+    //initializing variables to populate the friend recycler view
+    FriendsAdapter friendAdapter;
+    ArrayList<Friend> friends;
+    RecyclerView rvFriendList;
+
+    //initializing the current user
+    User currentUser;
+
     //created a broadcast receiver to receive sms messages by responding to system-wide broadcast announcements
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
-            //set text view with the message and phone number from the reply
-            //TODO - create adapter to hold more than one message
-            tvTextMessage.setText(intent.getExtras().getString("message"));
+            if (intent.equals("SMS_RECEIVED_ACTION")) {
+                //set text view with the message and phone number from the reply
+                tvTextMessage.setText(intent.getExtras().getString("message"));
+            }
         }
     };
 
@@ -49,8 +69,49 @@ public class ChatActivity extends AppCompatActivity {
                 //code for sending the message
                 String message = etTextMessage.getText().toString();
                 //TODO - allow clicking on the friend object to take user to chat activity and auto-populate phone number
-                String number = "6304862146";
+                String number = currentUser.getPhonNumber().toString();
                 sendMessage(number, message);
+            }
+        });
+
+        rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
+        friends = new ArrayList<Friend>();
+        // construct the adapter from this data source
+        friendAdapter = new FriendsAdapter(friends);
+        // recycler view setup
+        rvFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvFriendList.setAdapter(friendAdapter);
+
+        //initialize current user
+        currentUser = (User) ParseUser.getCurrentUser();
+        //populate the friends list
+        populateFriendList();
+
+    }
+
+    public void populateFriendList() {
+        // Populate the friends list.
+        final Friend.Query friendQuery = new Friend.Query();
+        friendQuery.getTop().withUser();
+
+        friendQuery.findInBackground(new FindCallback<Friend>() {
+            @Override
+            public void done(List<Friend> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = objects.size() - 1; i > -1; i--)
+                    {
+                        if (currentUser.getFriends() != null &&
+                                currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
+                        {
+                            // add the friend object
+                            friends.add(objects.get(i));
+                            // notify the adapter
+                            friendAdapter.notifyDataSetChanged();
+                        }
+                    }
+                } else {
+                    e.printStackTrace();
+                }
             }
         });
     }

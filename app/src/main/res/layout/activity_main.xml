@@ -89,9 +89,9 @@
                         android:id="@+id/ibSettings"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/pbLoading"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="13dp"
                         android:background="@android:color/transparent"
                         android:onClick="onSettings"
                         app:srcCompat="@drawable/dots_vertical" />
@@ -272,14 +272,24 @@
 
         </RelativeLayout>
 
-        <!-- Side navigation drawer UI -->
+        <!-- The navigation drawer -->
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:id="@+id/drawerPane"
+            android:background="@color/coral"
+            android:layout_gravity="start">
+        <!-- List of Actions (pages) -->
         <ListView
             android:id="@+id/navList"
-            android:layout_width="200dp"
+            android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:layout_gravity="left|start"
-            android:background="#ffeeeeee"
-            android:backgroundTint="@color/coral" />
+            android:choiceMode="singleChoice"
+            android:background="@color/coral" />
+        </RelativeLayout>
+
+
+
 
     </android.support.v4.widget.DrawerLayout>
 

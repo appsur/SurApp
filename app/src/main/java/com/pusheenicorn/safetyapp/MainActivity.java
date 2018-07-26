@@ -3,6 +3,7 @@ package com.pusheenicorn.safetyapp;
 import android.*;
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -40,14 +41,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,11 +97,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     EditText etEndTime;
     EditText etEventName;
     EditText etEventLocation;
-    private ListView mDrawerList;
-    private ArrayAdapter<String> mAdapter;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    private String mActivityTitle;
+
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     // Declare fields
     User currentUser;
@@ -132,10 +141,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // Create notification channel for notifications.
         createNotificationChannel();
 
-        //Setting drawer variables
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mActivityTitle = getTitle().toString();
 
         // Set default values
         isCheckedIn = false;
@@ -316,9 +321,30 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                }
            });
        }
-       addDrawerItems();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(true);
+
+        mNavItems.add(new NavItem("Home", "Main Screen", R.drawable.ic_vector_home));
+        mNavItems.add(new NavItem("Messages", "Contact your friends", R.drawable.ic_vector_messages));
+        mNavItems.add(new NavItem("Chat", "Chat with your friends here", R.drawable.ic_vector_compose));
+        mNavItems.add(new NavItem("Friends", "See your friends", R.drawable.ic_vector_person));
+        mNavItems.add(new NavItem("Log out", "Log out", R.drawable.logout));
+
+
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position);
+            }
+        });
 }
 // JARED -----------------------------------------------------------------------------------------
 
@@ -829,39 +855,94 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
     }
-    private void addDrawerItems() {
-        String[] osArray = { "Main", "Settings", "Chat", "Friends", "Events", "More", "Log Out" };
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
 
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this, "Woot", Toast.LENGTH_SHORT).show();
-            }
-        });
+    class NavItem {
+        String mTitle;
+        String mSubtitle;
+        int mIcon;
+
+        public NavItem(String title, String subtitle, int icon) {
+            mTitle = title;
+            mSubtitle = subtitle;
+            mIcon = icon;
+        }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+    class DrawerListAdapter extends BaseAdapter {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Context mContext;
+        ArrayList<NavItem> mNavItems;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.ibSettings) {
-            return true;
+        public DrawerListAdapter(Context context, ArrayList<NavItem> navItems) {
+            mContext = context;
+            mNavItems = navItems;
         }
 
-        return super.onOptionsItemSelected(item);
+        @Override
+        public int getCount() {
+            return mNavItems.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mNavItems.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.drawer_item, null);
+            }
+            else {
+                view = convertView;
+            }
+
+            TextView titleView = (TextView) view.findViewById(R.id.title);
+            TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
+            ImageView iconView = (ImageView) view.findViewById(R.id.icon);
+
+            titleView.setText( mNavItems.get(position).mTitle );
+            subtitleView.setText( mNavItems.get(position).mSubtitle );
+            iconView.setImageResource(mNavItems.get(position).mIcon);
+
+            return view;
+        }
+    }
+
+    private void selectItemFromDrawer(int position) {
+        // Locate Position
+        switch (position) {
+            case 0:
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(this, ContactActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(this, ChatActivity.class));
+                break;
+            case 3:
+                startActivity(new Intent(this, FriendsActivity.class));
+                break;
+            case 4:
+                Intent logOut = new Intent(MainActivity.this, HomeActivity.class);
+                ParseUser.logOut();
+                startActivity(logOut);
+        }
+
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mNavItems.get(position).mTitle);
+
+        // Close the drawer
+        mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
 }
