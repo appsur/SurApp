@@ -241,7 +241,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position);
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout, MainActivity.this);
             }
         });
 }
@@ -841,34 +841,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
             return view;
         }
-    }
-
-    private void selectItemFromDrawer(int position) {
-        // Locate Position
-        switch (position) {
-            case 0:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, ContactActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, ChatActivity.class));
-                break;
-            case 3:
-                startActivity(new Intent(this, FriendsActivity.class));
-                break;
-            case 4:
-                Intent logOut = new Intent(MainActivity.this, HomeActivity.class);
-                ParseUser.logOut();
-                startActivity(logOut);
-        }
-
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).mTitle);
-
-        // Close the drawer
-        mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
 }

@@ -6,20 +6,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
 
 public class BaseActivity extends AppCompatActivity {
-//    BottomNavigationView bottomNavigationView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-//        bottomNavigationView = findViewById(R.id.bottom_navigation);
-//        public void setNavigationDestinations(final Activity activity, final Context mContext) {
-//        }
     }
     public void setNavigationDestinations (final Activity activity, BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -28,40 +30,19 @@ public class BaseActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_person:
-//                                Intent i = new Intent();
-//                                i.setClassName("com.pusheenicorn.safetyapp",
-//                                        "com.pusheenicorn.safetyapp." +
-//                                                "MainActivity");
-//                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(i);
                                 Intent goHome = new Intent(activity, MainActivity.class);
                                 startActivity(goHome);
                                 return true;
                             case R.id.action_message:
-//                                Intent j = new Intent();
-//                                j.setClassName("com.pusheenicorn.safetyapp",
-//                                        "com.pusheenicorn.safetyapp." +
-//                                                "ContactActivity");
-//                                j.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(j);
                                 Intent contactAction = new Intent(activity,
                                         ContactActivity.class);
                                 startActivity(contactAction);
                                 return true;
                             case R.id.action_emergency:
-//                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-//                                        "6304862146", null)));
-
                                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
                                         "6304862146", null)));
                                 return true;
                             case R.id.action_friends:
-//                                Intent l = new Intent();
-//                                l.setClassName("com.pusheenicorn.safetyapp",
-//                                        "com.pusheenicorn.safetyapp." +
-//                                                "FriendsActivity");
-//                                l.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(l);
                                 Intent friendsAction = new Intent(activity,
                                         FriendsActivity.class);
                                 startActivity(friendsAction);
@@ -70,6 +51,34 @@ public class BaseActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    public void selectItemFromDrawer(int position, ListView mDrawerList, RelativeLayout mDrawerPane,
+                                     DrawerLayout mDrawerLayout, Activity activity) {
+        // Locate Position
+        switch (position) {
+            case 0:
+                startActivity(new Intent(activity, MainActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(activity, ContactActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(activity, ChatActivity.class));
+                break;
+            case 3:
+                startActivity(new Intent(activity, FriendsActivity.class));
+                break;
+            case 4:
+                Intent logOut = new Intent(activity, HomeActivity.class);
+                ParseUser.logOut();
+                startActivity(logOut);
+        }
+
+        mDrawerList.setItemChecked(position, true);
+
+        // Close the drawer
+        mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
 }
