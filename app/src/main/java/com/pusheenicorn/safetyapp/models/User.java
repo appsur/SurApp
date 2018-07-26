@@ -31,6 +31,7 @@ public class User extends ParseUser {
     private final static String KEY_CONTACT = "primaryContact";
     private final static String KEY_FRIENDS = "friends";
     private final static String KEY_EVENTS = "events";
+    private final static String KEY_CHECKME = "checkMe";
 
     public ParseObject getLastCheckin() {
         return getParseObject(KEY_LAST_CHECKIN);
@@ -168,6 +169,13 @@ public class User extends ParseUser {
         return getList(KEY_FRIENDS);
     }
 
+    public boolean getCheckMe() {
+        return getBoolean(KEY_CHECKME);
+    }
+
+    public void setCheckme(boolean checkme) {
+        put(KEY_CHECKME, checkme);
+    }
     public ArrayList<String> getFriendIds() {
         List<Friend> myFriends = getFriends();
         ArrayList<String> friendsIds = new ArrayList<String>();

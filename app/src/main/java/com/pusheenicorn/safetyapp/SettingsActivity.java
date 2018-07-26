@@ -15,11 +15,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseException;
@@ -45,7 +48,12 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton ibClock;
     ImageButton ibLocator;
     ImageButton ibCompass;
-    ImageButton ibAlert;
+    ToggleButton tbSafe;
+    ToggleButton tbLocation;
+    ToggleButton tbRing;
+    ToggleButton tbCheckin;
+
+    // ImageButton ibAlert;
     ImageButton ibEdit;
     Button btnDone;
     boolean isClock = false;
@@ -98,6 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(logOut);
             }
         });
+        currentUser = (User) ParseUser.getCurrentUser();
 
         // Implementation of bottom navigation view.
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -144,11 +153,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize buttons for image toggle.
-        ibClock = (ImageButton) findViewById(R.id.ibClock);
-        ibLocator = (ImageButton) findViewById(R.id.ibLocator);
-        ibCompass = (ImageButton) findViewById(R.id.ibCompass);
-        ibAlert = (ImageButton) findViewById(R.id.ibAlert);
+
+        // ibAlert = (ImageButton) findViewById(R.id.ibAlert);
         ibEdit = (ImageButton) findViewById(R.id.ibEdit);
         btnDone = (Button) findViewById(R.id.btnDone);
 
@@ -167,7 +173,6 @@ public class SettingsActivity extends AppCompatActivity {
         etPhoneNumber = (EditText) findViewById(R.id.etPhoneNumberSettings);
 
         // Get the current user and cast appropriately.
-        currentUser = (User) ParseUser.getCurrentUser();
 
         // Set initial values for text views.
         tvUsernameValue.setText(currentUser.getUserName());
@@ -181,26 +186,152 @@ public class SettingsActivity extends AppCompatActivity {
                 + phoneNumber.substring(6, 10);
         tvPhoneValue.setText(phoneNumber);
 
-        // Set the image views to reflect the user's attributes
-
-        if (!currentUser.getSafe()) {
-            ibAlert.setImageResource(R.drawable.bell);
-        }
-
-        if (currentUser.getTrackable()) {
-            Toast.makeText(this, "here", Toast.LENGTH_LONG);
-            ibLocator.setImageResource(R.drawable.ic_vector_location);
-        }
-
-        if (currentUser.getRingable()) {
-            ibCompass.setImageResource(R.drawable.compass);
-        }
-
         // Load the profile image
         if (currentUser.getProfileImage() != null)
         {
             Glide.with(this).load(currentUser.getProfileImage()
                     .getUrl()).into(ibProfileImage);
+        }
+
+        setSafetyToggle();
+        setLocationToggle();
+        setRingToggle();
+        setCheckinToggle();
+    }
+
+    // Set safety toggle
+    public void setSafetyToggle()
+    {
+        // Set safety toggle
+        tbSafe = (ToggleButton) findViewById(R.id.tbSafe);
+        tbSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentUser.setSafe(true);
+                    currentUser.saveInBackground();
+                } else {
+                    currentUser.setSafe(false);
+                    currentUser.saveInBackground();
+                }
+            }
+        });
+
+        try {
+            currentUser.fetch();
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (currentUser.getSafe())
+        {
+            tbSafe.setChecked(true);
+        }
+        else
+        {
+            tbSafe.setChecked(false);
+        }
+    }
+
+    // Set location toggle
+    public void setLocationToggle()
+    {
+        // Set safety toggle
+        tbLocation = (ToggleButton) findViewById(R.id.tbLocation);
+        tbLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentUser.setTrackable(true);
+                    currentUser.saveInBackground();
+                } else {
+                    currentUser.setTrackable(false);
+                    currentUser.saveInBackground();
+                }
+            }
+        });
+
+        try {
+            currentUser.fetch();
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (currentUser.getTrackable())
+        {
+            tbLocation.setChecked(true);
+        }
+        else
+        {
+            tbLocation.setChecked(false);
+        }
+    }
+
+    // Set ring toggle
+    public void setRingToggle()
+    {
+        // Set safety toggle
+        tbRing = (ToggleButton) findViewById(R.id.tbRing);
+        tbRing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentUser.setRingable(true);
+                    currentUser.saveInBackground();
+                } else {
+                    currentUser.setRingable(false);
+                    currentUser.saveInBackground();
+                }
+            }
+        });
+
+        try {
+            currentUser.fetch();
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (currentUser.getRingable())
+        {
+            tbRing.setChecked(true);
+        }
+        else
+        {
+            tbRing.setChecked(false);
+        }
+    }
+
+    // Set checkin toggle
+    public void setCheckinToggle()
+    {
+        // Set safety toggle
+        tbCheckin = (ToggleButton) findViewById(R.id.tbCheckin);
+        tbCheckin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentUser.setCheckme(true);
+                    currentUser.saveInBackground();
+                } else {
+                    currentUser.setCheckme(false);
+                    currentUser.saveInBackground();
+                }
+            }
+        });
+
+        try {
+            currentUser.fetch();
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        if (currentUser.getCheckMe())
+        {
+            tbCheckin.setChecked(true);
+        }
+        else
+        {
+            tbCheckin.setChecked(false);
         }
     }
 
@@ -215,14 +346,12 @@ public class SettingsActivity extends AppCompatActivity {
         isClock = !isClock;
         if (isClock)
         {
-            ibClock.setImageResource(R.drawable.clock);
             // Functionality
             btnHourly.setVisibility(View.VISIBLE);
             btnDaily.setVisibility(View.VISIBLE);
             btnWeekly.setVisibility(View.VISIBLE);
         }
         else {
-            ibClock.setImageResource(R.drawable.clock_outline);
             // Functionality
             btnHourly.setVisibility(View.INVISIBLE);
             btnDaily.setVisibility(View.INVISIBLE);
@@ -310,45 +439,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * This function is called when the user clicks the alert button. It marks the user
-     * as safe/unsafe.
-     *
-     * @param view: the alert button
-     */
-    public void onAlert(View view) {
-        if (currentUser.getSafe()) {
-            ibAlert.setImageResource(R.drawable.bell);
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setSafe(false);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        else {
-            ibAlert.setImageResource(R.drawable.bell_outline);
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
-                        final User user = (User) ParseUser.getCurrentUser();
-                        user.setSafe(true);
-                        user.saveInBackground();
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
-
-    /**
      * This function sets the user's checkin frequency to hourly when he/she clicks th
      * Hourly button.
      *
@@ -363,7 +453,7 @@ public class SettingsActivity extends AppCompatActivity {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Hourly");
                     user.saveInBackground();
-                    tvCheckinFrequency.setText(user.getFrequency());
+                    tvCheckinFrequency.setText("Every hour");
                     isClock = !isClock;
                 } else {
                     e.printStackTrace();
@@ -374,7 +464,6 @@ public class SettingsActivity extends AppCompatActivity {
         btnHourly.setVisibility(View.INVISIBLE);
         btnDaily.setVisibility(View.INVISIBLE);
         btnWeekly.setVisibility(View.INVISIBLE);
-        ibClock.setImageResource(R.drawable.clock_outline);
     }
 
     /**
@@ -402,7 +491,6 @@ public class SettingsActivity extends AppCompatActivity {
         btnHourly.setVisibility(View.INVISIBLE);
         btnDaily.setVisibility(View.INVISIBLE);
         btnWeekly.setVisibility(View.INVISIBLE);
-        ibClock.setImageResource(R.drawable.clock_outline);
     }
 
     /**
@@ -430,7 +518,6 @@ public class SettingsActivity extends AppCompatActivity {
         btnHourly.setVisibility(View.INVISIBLE);
         btnDaily.setVisibility(View.INVISIBLE);
         btnWeekly.setVisibility(View.INVISIBLE);
-        ibClock.setImageResource(R.drawable.clock_outline);
     }
 
     /**

@@ -16,6 +16,8 @@ public class Event extends ParseObject{
     private final static String KEY_END = "endTime";
     private final static String KEY_LOCATION = "location";
     private final static String KEY_BANNER_IMAGE = "bannerimage";
+    private  final static String KEY_ALERT = "alert";
+    private final static String KEY_ALERT_MESSAGE = "alertMessage";
 
     public String getLocation() {
         return getString(KEY_LOCATION);
@@ -62,6 +64,23 @@ public class Event extends ParseObject{
 
     public List<User> getUsers() {
         return getList(KEY_USERS);
+    }
+
+    public boolean getAlert()
+    {
+        return getBoolean(KEY_ALERT);
+    }
+
+    public void setAlert(boolean alert) {
+        put(KEY_ALERT, alert);
+    }
+
+    public String getAlertMessage() {
+        return getString(KEY_ALERT_MESSAGE);
+    }
+
+    public void setAlertMessage(String message) {
+        put(KEY_ALERT, message);
     }
 
     public ArrayList<String> getUsersIds() {

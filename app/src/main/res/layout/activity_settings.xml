@@ -87,57 +87,21 @@
         android:textColor="@color/black"
         android:layout_marginLeft="5dp"/>
 
-    <ImageButton
-        android:id="@+id/ibAlert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginTop="264dp"
-        android:background="@android:color/transparent"
-        android:onClick="onAlert"
-        android:tint="@color/coral"
-        app:srcCompat="@drawable/bell_outline" />
-
     <TextView
         android:id="@+id/tvOnAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/ibAlert"
-        android:layout_marginStart="63dp"
+        android:layout_alignBaseline="@+id/tbSafe"
+        android:layout_toStartOf="@+id/tvName"
         android:text="I'M SAFE"
         android:textColor="@color/black" />
 
-    <ImageButton
-        android:id="@+id/ibCompass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_centerVertical="true"
-        android:background="@android:color/transparent"
-        android:onClick="onCompass"
-        android:tint="@color/coral"
-        app:srcCompat="@drawable/compass_outline" />
-
-    <ImageButton
-        android:id="@+id/ibLocator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginTop="311dp"
-        android:background="@android:color/transparent"
-        android:onClick="onLocator"
-        android:tint="@color/coral"
-        app:srcCompat="@drawable/ic_vector_location_stroke" />
-
     <TextView
-        android:id="@+id/tvPhoneNumberSettings"
+        android:id="@+id/tvTracking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tbLocation"
         android:layout_alignStart="@+id/tvOnAlert"
-        android:layout_alignTop="@+id/ibLocator"
         android:text="ALLOW GPS TRACKING"
         android:textColor="@color/black" />
 
@@ -145,8 +109,10 @@
         android:id="@+id/tvFindMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvOnAlert"
-        android:layout_alignTop="@+id/ibCompass"
+        android:layout_alignBaseline="@+id/tbRing"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@id/tvOnAlert"
+        android:layout_marginEnd="87dp"
         android:text="ALLOW ACCESS TO MICROPHONE"
         android:textColor="@color/black" />
 
@@ -154,45 +120,44 @@
         android:id="@+id/tvFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnEditFrequency"
         android:layout_alignStart="@+id/tvOnAlert"
-        android:layout_alignTop="@+id/ibClock"
-        android:text="UPDATE CHECK IN FREQUENCY"
+        android:text="CHECK IN FREQUENCY"
         android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btnDaily"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignTop="@+id/btnWeekly"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="148dp"
         android:background="@color/lightGray"
+        android:onClick="onDaily"
         android:text="DAILY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"
-        android:onClick="onDaily"/>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnWeekly"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/btnHourly"
-        android:layout_marginEnd="30dp"
+        android:layout_alignEnd="@+id/tvCheckinFrequency"
+        android:layout_alignTop="@+id/btnDaily"
         android:background="@color/lightGray"
+        android:onClick="onWeekly"
         android:text="WEEKLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"
-        android:onClick="onWeekly"/>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btnHourly"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginBottom="242dp"
+        android:layout_alignTop="@+id/btnDaily"
         android:background="@color/lightGray"
         android:onClick="onHourly"
         android:text="HOURLY"
@@ -204,22 +169,10 @@
         android:id="@+id/tvCheckinFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/btnWeekly"
         android:layout_alignTop="@+id/tvFrequency"
+        android:layout_toEndOf="@+id/tvUsernameValue"
         android:text="Every Hour"
         android:textColor="@color/black" />
-
-    <ImageButton
-        android:id="@+id/ibClock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/ibProfileImage"
-        android:layout_marginBottom="313dp"
-        android:background="@android:color/transparent"
-        android:onClick="onClock"
-        android:tint="@color/coral"
-        app:srcCompat="@drawable/clock_outline" />
 
     <ImageButton
         android:id="@+id/ibEdit"
@@ -331,9 +284,11 @@
         android:layout_alignEnd="@+id/ibEdit"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="73dp"
-        android:background="@color/teal"
+        android:background="@color/lightGray"
+        android:fontFamily="@font/arimo"
         android:text="Log Out"
         android:textColor="@android:color/black"
+        android:textStyle="bold"
         tools:layout_editor_absoluteX="266dp"
         tools:layout_editor_absoluteY="426dp" />
 
@@ -347,5 +302,77 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:visibility="invisible" />
+
+    <ToggleButton
+        android:id="@+id/tbSafe"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_marginTop="236dp"
+        android:background="@drawable/toggle_switch"
+        android:textOff="      Off"
+        android:textOn="On     "
+        android:textSize="12dp"
+        android:textStyle="normal" />
+
+    <ToggleButton
+        android:id="@+id/tbLocation"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_below="@+id/tbSafe"
+        android:background="@drawable/toggle_switch"
+        android:textOff="      Off"
+        android:textOn="On     "
+        android:textSize="12dp"
+        android:textStyle="normal" />
+
+    <ToggleButton
+        android:id="@+id/tbRing"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_below="@+id/tbLocation"
+        android:background="@drawable/toggle_switch"
+        android:textOff="      Off"
+        android:textOn="On     "
+        android:textSize="12dp"
+        android:textStyle="normal" />
+
+    <ToggleButton
+        android:id="@+id/tbCheckin"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_below="@+id/tbRing"
+        android:background="@drawable/toggle_switch"
+        android:textOff="      Off"
+        android:textOn="On     "
+        android:textSize="12dp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/tvAllowCheckins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tbCheckin"
+        android:layout_alignStart="@+id/tvOnAlert"
+        android:text="TURN ON CHECK INS"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnEditFrequency"
+        android:layout_width="60dp"
+        android:layout_height="64dp"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_below="@+id/tbCheckin"
+        android:backgroundTint="@color/lightGray"
+        android:fontFamily="@font/arimo"
+        android:onClick="onClock"
+        android:text="Edit"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
