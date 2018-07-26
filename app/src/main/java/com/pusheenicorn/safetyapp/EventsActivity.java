@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,9 +20,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,14 +50,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends BaseActivity {
     //declared variables
     ImageButton ibBanner;
     ImageButton ibAddMembers;
     ImageButton ibSearch;
     TextView tvEventTitle;
     EditText etUsername;
+    //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
     private static int RESULT_LOAD_IMAGE = 1;
@@ -86,36 +101,25 @@ public class EventsActivity extends AppCompatActivity {
         //added title to the event page
         tvEventTitle.setText(currentEvent.getName());
         //initialize bottom navigation bar
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView = findViewById(R.id.bottom_navigation_events);
+        setNavigationDestinations(EventsActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        //create intent to take user to home page
-                        Intent goHome = new Intent(EventsActivity.this,
-                                MainActivity.class);
-                        startActivity(goHome);
-                        return true;
-                    case R.id.action_message:
-                        //create intent to take user to contacts page
-                        Intent goMessage = new Intent(EventsActivity.this,
-                                ContactActivity.class);
-                        startActivity(goMessage);
-                        return true;
-                    case R.id.action_emergency:
-                        //dial the number of a preset number
-                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                "6304862146", null)));
-                        return true;
-                    case R.id.action_friends:
-                        //create intent to take user to the friends page
-                        Intent goFriends = new Intent(EventsActivity.this,
-                                FriendsActivity.class);
-                        startActivity(goFriends);
-                        return true;
-                }
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        EventsActivity.this, mNavItems);
             }
         });
 
