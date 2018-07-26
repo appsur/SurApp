@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -54,8 +55,10 @@ public class EventsActivity extends BaseActivity {
     //declared variables
     ImageButton ibBanner;
     ImageButton ibAddMembers;
+    Button btnSendAlert;
     ImageButton ibSearch;
     TextView tvEventTitle;
+    TextView tvEmergencyAlert;
     EditText etUsername;
     //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
@@ -98,6 +101,7 @@ public class EventsActivity extends BaseActivity {
         etUsername = (EditText) findViewById(R.id.etUsername);
         ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
+        btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
         //added title to the event page
         tvEventTitle.setText(currentEvent.getName());
         //initialize bottom navigation bar
@@ -168,6 +172,11 @@ public class EventsActivity extends BaseActivity {
 
         // Populate the recycler views appropriate
         loadEventUsers();
+        getEmergencyNotifications();
+    }
+
+    public void getEmergencyNotifications() {
+        // TODO -- implement notifications!
     }
 
     public void loadEventUsers() {
@@ -314,6 +323,9 @@ public class EventsActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    public void onSendAlert(View view) {
     }
 }
 
