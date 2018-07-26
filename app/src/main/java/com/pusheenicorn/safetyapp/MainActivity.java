@@ -80,7 +80,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends BaseActivity implements LocationListener {
     // Declare views
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
@@ -155,46 +155,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setAdapter(eventAdapter);
 
-        // Logic for bottom navigation view
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-
-  //      getLocation();
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_message:
-                        Intent contactAction = new Intent(MainActivity.this,
-                                ContactActivity.class);
-//                        Toast.makeText(MainActivity.this, "Message Page Accessed",
-//                                Toast.LENGTH_LONG).show();
-                        startActivity(contactAction);
-                        // finish();
-                        return true;
-                    case R.id.action_emergency:
-                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                "6304862146", null)));
-                        return true;
-                    case R.id.action_friends:
-                        Intent friendsAction = new Intent(MainActivity.this,
-                                FriendsActivity.class);
-//                        Toast.makeText(MainActivity.this, "Friends Page Accessed",
-//                                Toast.LENGTH_LONG).show();
-                        startActivity(friendsAction);
-                        // finish();
-                        return true;
-                }
-                return true;
-            }
-        });
-
-        // Indicate the current activity
-        bottomNavigationView.setSelectedItemId(R.id.action_person);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        setNavigationDestinations(MainActivity.this, bottomNavigationView);
 
         // Get the current user.
         currentUser = (User) ParseUser.getCurrentUser();
@@ -256,77 +218,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         populateEvents();
 
 // JARED-------------------------------------------------------------------------------------------
-//
+        getLocation();
 
-
-        LocationManager locationManager = (LocationManager) getSystemService(context.LOCATION_SERVICE);
-
-//
-//        // Create a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
-//
-//        // Get the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-        String bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-        //test
-        //Toast.makeText(this, myLocation.getLatitude() + "hhh", Toast.LENGTH_SHORT).show();
-
-//
-//check to see if the phone's gps is enabled
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//           Toast.makeText(this, "GPS is Enabled in your device",
-//                   Toast.LENGTH_SHORT).show();
-        } else {
-            showGPSDisabledAlertToUser();
-        }
-////        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
-
-
-
-//        @Override
-//        public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //Toast.makeText(this, location.getLatitude() + "hhh", Toast.LENGTH_LONG).show();
-//
-       if (location != null) {
-          double longitude = location.getLongitude();
-           double latitude = location.getLatitude();
-            //store the user's location
-            final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-            Toast.makeText(MainActivity.this, latitude + "and" + longitude, Toast.LENGTH_LONG).show();
-            currentUser.setPlace(point);
-
-            currentUser.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-
-                }
-            });
-           locationManager.requestLocationUpdates(bestProvider, 1000, 0, MainActivity.this);
-        }else{
-           //retrieve location from best existing source
-           double longitude = myLocation.getLongitude();
-           double latitude = myLocation.getLatitude();
-           //store the user's location
-           final ParseGeoPoint point = new ParseGeoPoint(latitude , longitude);
-           Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
-           currentUser.setPlace(point);
-
-           currentUser.saveInBackground(new SaveCallback() {
-               @Override
-               public void done(com.parse.ParseException e) {
-
-               }
-           });
-       }
-
-        mNavItems.add(new NavItem("Home", "Main Screen", R.drawable.ic_vector_home));
-        mNavItems.add(new NavItem("Messages", "Contact your friends", R.drawable.ic_vector_messages));
-        mNavItems.add(new NavItem("Chat", "Chat with your friends here", R.drawable.ic_vector_compose));
-        mNavItems.add(new NavItem("Friends", "See your friends", R.drawable.ic_vector_person));
-        mNavItems.add(new NavItem("Log out", "Log out", R.drawable.logout));
+        initializeNavItems(mNavItems);
 
 
         // DrawerLayout
@@ -342,18 +236,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position);
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        MainActivity.this, mNavItems);
             }
         });
-}
+    }
 // JARED -----------------------------------------------------------------------------------------
 
 
+    public void saveLocation(Location loc) {
+        //retrieve location from best existing source
+        double longitude = loc.getLongitude();
+        double latitude = loc.getLatitude();
+        //store the user's location
+        final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
+        Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+        currentUser.setPlace(point);
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+
+            }
+        });
+    }
 
     // Update the checkin button each time the app is restarted/reopened in case the user made a
     // checkin through a push notification while the app was closed/in-background.
     @Override
-    public void onResume(){
+    public void onResume() {
         // Do this after onCreate is executed
         super.onResume();
 
@@ -438,16 +349,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final Event.Query eventQuery = new Event.Query();
         // Get only the top 20 events in the database.
         eventQuery.getTop();
-                //.whereEqualTo("usersAttending", currentUser);
+        //.whereEqualTo("usersAttending", currentUser);
         eventQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    for (int i = objects.size() - 1; i > -1; i--)
-                    {
+                    for (int i = objects.size() - 1; i > -1; i--) {
                         if (currentUser.getEvents() != null &&
-                                currentUser.getEventIds().contains(objects.get(i).getObjectId()))
-                        {
+                                currentUser.getEventIds().contains(objects.get(i).getObjectId())) {
                             events.add(objects.get(i));
                             // notify the adapter
                             eventAdapter.notifyDataSetChanged();
@@ -512,11 +421,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // JARED------------------------------------------------------------------------------------
 
 
-
         // JARED------------------------------------------------------------------------------------
 
         // If the user is elligible to checkin at this time...
-        if (!isCheckedIn ){
+        if (!isCheckedIn) {
             // Update the view to reflect a checked circle
             ibCheckin.setImageResource(R.drawable.check);
             // Create a new checkin object and save it in background
@@ -550,8 +458,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                     isCheckedIn = isCheckedIn(newCheckinDate);
                                     if (isCheckedIn) {
                                         ibCheckin.setImageResource(R.drawable.check);
-                                    }
-                                    else {
+                                    } else {
                                         ibCheckin.setImageResource(R.drawable.check_outline);
                                     }
                                     // Schedule the next notification based on the user's
@@ -564,8 +471,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             }
                         });
 
-                    }
-                    else {
+                    } else {
                         e.printStackTrace();
                     }
                 }
@@ -618,33 +524,42 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // JARED---------------------------------------------------------------------------------------
 
 
-    /*---------- Listener class to get coordinates -------------
-        protected void getLocation(){
-            if (isLocationEnabled(MainActivity.this)) {
-                locationManager = (LocationManager)  this.getSystemService(Context.LOCATION_SERVICE);
-                criteria = new Criteria();
-                //bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
-                bestProvider = locationManager.getBestProvider(criteria, true);
-                //You can still do this if you like, you might get lucky:
-                Location location = locationManager.getLastKnownLocation(bestProvider);
-                if (location != null) {
-                    Log.e("TAG", "GPS is on");
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                    //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+    /*---------- Listener class to get coordinates -------------*/
+    protected void getLocation() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (isLocationEnabled(MainActivity.this)) {
+            //retrieve criteria from device
+            criteria = new Criteria();
 
-                }
-                else{
-                    //This is what you need:
-                    locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
-                }
+            bestProvider = locationManager.getBestProvider(criteria, true);
+            //You can still do this if you like, you might get lucky:
+            Location location = locationManager.getLastKnownLocation(bestProvider);
+            Location gps_location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location net_location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (gps_location != null) {
+                Log.e("TAG", "GPS is on");
+                saveLocation(gps_location);
+            } else if (net_location != null) {
+                saveLocation(net_location);
+            } else if (location != null) {
+                saveLocation(location);
+            } else {
+                //This is what you need:
+                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
             }
-            }
+        }
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//           this is good
+        } else {
+            showGPSDisabledAlertToUser();
+        }
 
-*/
 
-        @Override
-        public void onLocationChanged(Location loc) {
+    }
+
+
+    @Override
+    public void onLocationChanged(Location loc) {
 
 
 //            //remove location callback:
@@ -675,26 +590,28 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //            Toast.makeText(MainActivity.this, s , Toast.LENGTH_SHORT).show();
 //
 //            //editLocation.setText(s);
-        }
+    }
 
-        @Override
-        public void onProviderDisabled(String provider) {}
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
 
-        @Override
-        public void onProviderEnabled(String provider) {}
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
-        // JARED-----------------------------------------------------------------------------------
+    // JARED-----------------------------------------------------------------------------------
 
 
-
-    public static boolean isLocationEnabled(Context context)
-    {
+    public static boolean isLocationEnabled(Context context) {
         //...............
         return true;
     }
+
 
 //    public void makeNotification() {
 //        Intent intent = new Intent(this, MainActivity.class);
@@ -747,8 +664,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .addAction(R.drawable.check_outline, "Check in now", pendingIntent)
                         .setOngoing(true);
-                        // builder.setContentIntent(pendingIntent);
-                        // builder.setAutoCancel(true);
+        // builder.setContentIntent(pendingIntent);
+        // builder.setAutoCancel(true);
         return builder.build();
     }
 
@@ -757,11 +674,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
      * time + delay.
      *
      * @param notification: the notification to be sent
-     * @param delay: the delay at which to send the notification
+     * @param delay:        the delay at which to send the notification
      */
     public void scheduleNotification(Notification notification, int delay) {
         //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
-                //+ " minutes", Toast.LENGTH_LONG).show();
+        //+ " minutes", Toast.LENGTH_LONG).show();
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
@@ -769,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
@@ -787,8 +704,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
      *
      * @param v: the parent view
      */
-    public void onRefresh(View v)
-    {
+    public void onRefresh(View v) {
         onResume();
     }
 
@@ -846,95 +762,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             }
         });
-    }
-
-    class NavItem {
-        String mTitle;
-        String mSubtitle;
-        int mIcon;
-
-        public NavItem(String title, String subtitle, int icon) {
-            mTitle = title;
-            mSubtitle = subtitle;
-            mIcon = icon;
-        }
-    }
-
-    class DrawerListAdapter extends BaseAdapter {
-
-        Context mContext;
-        ArrayList<NavItem> mNavItems;
-
-        public DrawerListAdapter(Context context, ArrayList<NavItem> navItems) {
-            mContext = context;
-            mNavItems = navItems;
-        }
-
-        @Override
-        public int getCount() {
-            return mNavItems.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mNavItems.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view;
-
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.drawer_item, null);
-            }
-            else {
-                view = convertView;
-            }
-
-            TextView titleView = (TextView) view.findViewById(R.id.title);
-            TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
-            ImageView iconView = (ImageView) view.findViewById(R.id.icon);
-
-            titleView.setText( mNavItems.get(position).mTitle );
-            subtitleView.setText( mNavItems.get(position).mSubtitle );
-            iconView.setImageResource(mNavItems.get(position).mIcon);
-
-            return view;
-        }
-    }
-
-    private void selectItemFromDrawer(int position) {
-        // Locate Position
-        switch (position) {
-            case 0:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-            case 1:
-                startActivity(new Intent(this, ContactActivity.class));
-                break;
-            case 2:
-                startActivity(new Intent(this, ChatActivity.class));
-                break;
-            case 3:
-                startActivity(new Intent(this, FriendsActivity.class));
-                break;
-            case 4:
-                Intent logOut = new Intent(MainActivity.this, HomeActivity.class);
-                ParseUser.logOut();
-                startActivity(logOut);
-        }
-
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mNavItems.get(position).mTitle);
-
-        // Close the drawer
-        mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
 }

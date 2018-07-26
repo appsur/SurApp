@@ -9,15 +9,20 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +31,7 @@ import com.pusheenicorn.safetyapp.models.User;
 
 import java.util.ArrayList;
 
-public class ContactActivity extends AppCompatActivity {
+public class ContactActivity extends BaseActivity {
     //declared variables
     BottomNavigationView bottomNavigationView; //bottom navigation view that allows user to toggle between screens
     ImageButton btnSendMessage; //button that sends the sms message
@@ -39,6 +44,14 @@ public class ContactActivity extends AppCompatActivity {
     // Define global current user.
     User currentUser;
     static final int MAX_SMS_MESSAGE_LENGTH = 160; //max length for a message before it is split
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
 
     @Override
@@ -82,40 +95,27 @@ public class ContactActivity extends AppCompatActivity {
         etMessage = findViewById(R.id.etMessage);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         //initialize the bottom navigation view
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        //create an intent to go to the home page
-                        Intent goHome = new Intent(ContactActivity.this, MainActivity.class);
-                        Toast.makeText(ContactActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                        startActivity(goHome);
-                        finish();
-                        return true;
-                    case R.id.action_message:
-                        //notify the user that they are already on the correct page
-                        Toast.makeText(ContactActivity.this, "Already on Messages Page!", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.action_emergency:
-                        //dial the number of a preset number
-                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                "6304862146", null)));
-                        return true;
-                    case R.id.action_friends:
-                        //create an intent to go to the friends page
-                        Intent goFriends = new Intent(ContactActivity.this, FriendsActivity.class);
-                        Toast.makeText(ContactActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                        startActivity(goFriends);
-                        finish();
-                        return true;
-                }
-                return true;
-            }
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_contact);
+        setNavigationDestinations(ContactActivity.this, bottomNavigationView);
 
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        ContactActivity.this, mNavItems);
+            }
         });
-        bottomNavigationView.setSelectedItemId(R.id.action_message);
 
     }
 

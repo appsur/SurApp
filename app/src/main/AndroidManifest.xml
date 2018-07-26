@@ -95,6 +95,7 @@
         <receiver android:name=".NotificationPublisher" />
         <receiver android:name=".Receiver" />
 
+        <activity android:name=".BaseActivity"></activity>
     </application>
 
 </manifest>
