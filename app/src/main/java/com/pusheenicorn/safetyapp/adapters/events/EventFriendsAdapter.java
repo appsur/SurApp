@@ -1,7 +1,6 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.adapters.events;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.pusheenicorn.safetyapp.models.Event;
+import com.parse.ParseException;
+import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.util.List;
@@ -20,59 +21,69 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.ViewHolder> {
-    List<User> mUsers;
+public class EventFriendsAdapter extends RecyclerView.Adapter<EventFriendsAdapter.ViewHolder> {
+    List<Friend> mFriends;
     Context context;
 
     // constructor
-    public EventUsersAdapter(List<User> users) {
-        mUsers = users;
+    public EventFriendsAdapter(List<Friend> friends) {
+        mFriends = friends;
     }
 
     @NonNull
     @Override
-    public EventUsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EventFriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View userView = inflater.inflate(R.layout.item_event_user, parent, false);
-        ViewHolder viewHolder = new ViewHolder(userView);
+        View friendView = inflater.inflate(R.layout.item_friend, parent, false);
+        ViewHolder viewHolder = new ViewHolder(friendView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventUsersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventFriendsAdapter.ViewHolder holder, int position) {
         // get the data according to position
-        User user = mUsers.get(position);
+        Friend friend = mFriends.get(position);
 
         // populate the views according to this data
-        // populate the views according to this data
-        holder.tvName.setText(user.getName());
-        String phoneNumber = user.getPhonNumber();
-        phoneNumber = "( " + phoneNumber.substring(0, 3) + ") "
-                + phoneNumber.substring(3, 6)
-                + " - " + phoneNumber.substring(6, 10);
-        holder.tvPhoneNumber.setText(phoneNumber);
+        holder.tvName.setText(friend.getName());
 
-        if (user.getProfileImage() != null)
+        try {
+            User friendUser = (User) friend.fetchIfNeeded().getParseUser("user");
+            String phoneNumber = friendUser.fetchIfNeeded().getString("phonenumber");
+            phoneNumber = "(" + phoneNumber.substring(0, 3) + ") "
+                    + phoneNumber.substring(3, 6) + " - "
+                    + phoneNumber.substring(6, 10);
+            holder.tvPhoneNumber.setText(phoneNumber);
+
+            if (friendUser.fetchIfNeeded().getParseFile("profileimage") != null)
+            {
+                Glide.with(context)
+                        .load(friendUser.fetchIfNeeded().getParseFile("profileimage")
+                                .getUrl())
+                        .into(holder.ivProfileImage);
+            }
+        }
+        catch (ParseException e)
         {
-            Glide.with(context).load(user.getProfileImage().getUrl()).into(holder.ivProfileImage);
+            e.printStackTrace();
         }
     }
 
     @Override
     public int getItemCount() {
-        return mUsers.size();
+        return mFriends.size();
     }
 
     // Clean all elements of the recycler
     public void clear() {
-        mUsers.clear();
+        mFriends.clear();
         notifyDataSetChanged();
     }
 
     // Add a list of items -- change to type used
-    public void addAll(List<User> list) {
-        mUsers.addAll(list);
+    public void addAll(List<Friend> list) {
+        mFriends.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -96,7 +107,7 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
                 // get the tweet at the position, this won't work if the class is static
-                User user = mUsers.get(position);
+                Friend friend = mFriends.get(position);
             }
 
             itemView.setOnClickListener(this);
@@ -109,10 +120,9 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
                 // get the tweet at the position, this won't work if the class is static
-                User user = mUsers.get(position);
+                Friend friend = mFriends.get(position);
                 // TODO -- Add as friend??
             }
         }
     }
 }
-
