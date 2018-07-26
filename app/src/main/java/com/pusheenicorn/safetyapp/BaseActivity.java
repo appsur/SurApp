@@ -30,7 +30,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
     }
-    public void setNavigationDestinations (final Activity activity, BottomNavigationView bottomNavigationView) {
+    public void setNavigationDestinations (final Activity activity, final BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
