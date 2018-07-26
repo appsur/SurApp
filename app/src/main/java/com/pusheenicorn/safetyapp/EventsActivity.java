@@ -261,6 +261,9 @@ public class EventsActivity extends AppCompatActivity {
 
 
     public void onSearchUser(View view) {
+
+        Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
+
         String username = etUsername.getText().toString();
 
         // Do not allow user to add themselves to an event that they are already part of!

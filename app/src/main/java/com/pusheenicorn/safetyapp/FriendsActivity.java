@@ -108,30 +108,7 @@ public class FriendsActivity extends AppCompatActivity {
     }
 
     public void populateFriendList() {
-        // Populate the friends list.
-        final Friend.Query friendQuery = new Friend.Query();
-        friendQuery.getTop().withUser();
-
-        friendQuery.findInBackground(new FindCallback<Friend>() {
-            @Override
-            public void done(List<Friend> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = objects.size() - 1; i > -1; i--)
-                    {
-                        if (currentUser.getFriends() != null &&
-                                currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
-                        {
-                            // add the friend object
-                            friends.add(objects.get(i));
-                            // notify the adapter
-                            friendAdapter.notifyDataSetChanged();
-                        }
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+        // Populate the friends list, separating onAlert from not onAlert.
     }
 
     public void onSettings(View view) {

@@ -89,9 +89,9 @@
                         android:id="@+id/ibSettings"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/pbLoading"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="13dp"
                         android:background="@android:color/transparent"
                         android:onClick="onSettings"
                         app:srcCompat="@drawable/dots_vertical" />
