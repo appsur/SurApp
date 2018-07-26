@@ -97,6 +97,9 @@ public class SignupActivity extends AppCompatActivity {
         user.put("phonenumber", phoneNumber);
         user.put("trackable", false);
         user.put("ringable", false);
+        int three = 3;
+        Number num = (Number) three;
+        user.put("notify", num);
 
         //prevent crashing by setting user check in to a default value
         final Checkin checkin = new Checkin();

@@ -122,16 +122,15 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnEditFrequency"
         android:layout_alignStart="@+id/tvOnAlert"
-        android:text="CHECK IN FREQUENCY"
+        android:text="CHECK IN SETTINGS"
         android:textColor="@color/black" />
 
     <Button
         android:id="@+id/btnDaily"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/btnHourly"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="148dp"
         android:background="@color/lightGray"
         android:onClick="onDaily"
         android:text="DAILY"
@@ -157,22 +156,23 @@
         android:id="@+id/btnHourly"
         android:layout_width="99dp"
         android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btnDaily"
+        android:layout_marginBottom="111dp"
+        android:layout_marginStart="12dp"
         android:background="@color/lightGray"
         android:onClick="onHourly"
         android:text="HOURLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible"
-        android:layout_marginLeft="10dp"/>
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/tvCheckinFrequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tvFrequency"
-        android:layout_toEndOf="@+id/tvUsernameValue"
+        android:layout_alignEnd="@+id/tvName"
+        android:layout_alignTop="@+id/tvSendCheckins"
         android:text="Every Hour"
         android:textColor="@color/black" />
 
@@ -282,10 +282,10 @@
     <Button
         android:id="@+id/btnLogOut"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="27dp"
+        android:layout_alignEnd="@+id/btnWeekly"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvCheckinFrequency"
-        android:layout_marginBottom="73dp"
+        android:layout_marginBottom="57dp"
         android:background="@color/lightGray"
         android:fontFamily="@font/arimo"
         android:text="Log Out"
@@ -366,7 +366,7 @@
     <Button
         android:id="@+id/btnEditFrequency"
         android:layout_width="60dp"
-        android:layout_height="64dp"
+        android:layout_height="40dp"
         android:layout_alignStart="@+id/ibProfileImage"
         android:layout_below="@+id/tbCheckin"
         android:backgroundTint="@color/lightGray"
@@ -376,5 +376,57 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSendCheckins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_marginBottom="150dp"
+        android:text="Send checkins: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_marginBottom="181dp"
+        android:text="Notify friends after: "
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvName"
+        android:layout_alignTop="@+id/tvNotify"
+        android:text="Num"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/etNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="525dp"
+        android:hint="Enter a number"
+        android:text="3"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="14sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tvMissed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvNotify"
+        android:layout_toEndOf="@id/etNum"
+        android:layout_toStartOf="@+id/ibEdit"
+        android:text="missed check ins "
+        android:textColor="@color/black" />
 
 </RelativeLayout>

@@ -13,7 +13,7 @@ public class HomeActivity extends AppCompatActivity {
     //declared variables for the buttons available on the page
     Button logInButton;
     Button signUpButton;
-    boolean isIshaniTesting = false;
+    boolean isIshaniTesting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -32,6 +32,15 @@ public class User extends ParseUser {
     private final static String KEY_FRIENDS = "friends";
     private final static String KEY_EVENTS = "events";
     private final static String KEY_CHECKME = "checkMe";
+    private final static String KEY_NOTIFY = "notify";
+
+    public Number getNotificationThreshold() {
+        return getNumber(KEY_NOTIFY);
+    }
+
+    public void setNotificationThreshold(int notifyThreshold) {
+        put(KEY_NOTIFY, (Number) notifyThreshold);
+    }
 
     public ParseObject getLastCheckin() {
         return getParseObject(KEY_LAST_CHECKIN);
