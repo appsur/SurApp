@@ -10,15 +10,20 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,11 +39,21 @@ import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Set;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     // Define bottom navigation view.
     BottomNavigationView bottomNavigationView;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
     // Define profile image view.
     ImageView ibProfileImage;
@@ -111,34 +126,26 @@ public class SettingsActivity extends AppCompatActivity {
         });
         currentUser = (User) ParseUser.getCurrentUser();
 
-        // Implementation of bottom navigation view.
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        //set and populated the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation_settings);
+        setNavigationDestinations(SettingsActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        Intent personAction = new Intent(SettingsActivity.this,
-                                MainActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Main Page Accessed",
-                                Toast.LENGTH_LONG ).show();
-                        startActivity(personAction);
-                        return true;
-                    case R.id.action_message:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_emergency:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_friends:
-                        Intent friendsAction = new Intent(SettingsActivity.this,
-                                FriendsActivity.class);
-                        Toast.makeText(SettingsActivity.this, "Friends Page Accessed",
-                                Toast.LENGTH_LONG ).show();
-                        startActivity(friendsAction);
-                        return true;
-                }
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        SettingsActivity.this, mNavItems);
             }
         });
 
