@@ -143,27 +143,29 @@
         android:id="@+id/btnWeekly"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignEnd="@+id/tvCheckinFrequency"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/btnDaily"
         android:background="@color/lightGray"
         android:onClick="onWeekly"
         android:text="WEEKLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_marginRight="10dp"/>
 
     <Button
         android:id="@+id/btnHourly"
         android:layout_width="99dp"
         android:layout_height="30dp"
-        android:layout_alignStart="@+id/ibProfileImage"
+        android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/btnDaily"
         android:background="@color/lightGray"
         android:onClick="onHourly"
         android:text="HOURLY"
         android:textColor="@color/black"
         android:textSize="12sp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/tvCheckinFrequency"
@@ -281,8 +283,8 @@
         android:id="@+id/btnLogOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/ibEdit"
         android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tvCheckinFrequency"
         android:layout_marginBottom="73dp"
         android:background="@color/lightGray"
         android:fontFamily="@font/arimo"
