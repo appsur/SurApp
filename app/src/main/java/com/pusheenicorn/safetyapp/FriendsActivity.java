@@ -2,19 +2,12 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -28,14 +21,10 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class FriendsActivity extends BaseActivity {
@@ -52,7 +41,7 @@ public class FriendsActivity extends BaseActivity {
 
     ProgressBar progressBar;
 
-    FriendsAdapter friendAdapter;
+    SafeFriendsAdapter safeFriendsAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvFriendList;
     EditText etUsername;
@@ -96,10 +85,10 @@ public class FriendsActivity extends BaseActivity {
         rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
         friends = new ArrayList<Friend>();
         // construct the adapter from this data source
-        friendAdapter = new FriendsAdapter(friends);
+        safeFriendsAdapter = new SafeFriendsAdapter(friends);
         // recycler view setup
         rvFriendList.setLayoutManager(new LinearLayoutManager(this));
-        rvFriendList.setAdapter(friendAdapter);
+        rvFriendList.setAdapter(safeFriendsAdapter);
 
         // declare username
         etUsername = (EditText) findViewById(R.id.etUsername);
@@ -107,10 +96,38 @@ public class FriendsActivity extends BaseActivity {
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
 
         currentUser = (User) ParseUser.getCurrentUser();
-        populateFriendList();
+        populateSafeList();
     }
 
-    public void populateFriendList() {
+    public void populateSafeList() {
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop();
+
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = objects.size() - 1; i > -1; i--) {
+                        // If this user belongs to the event
+                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId()))
+                            {
+                                int index = currentUser.getFriendUsers()
+                                        .indexOf(objects.get(i).getObjectId());
+                                Friend newFriend = currentUser.getFriends().get(index);
+                                friends.add(newFriend);
+                                safeFriendsAdapter.notifyDataSetChanged();
+                            }
+                            else {
+//                                users.add(objects.get(i));
+//                                // notify the adapter
+//                                eventUsersAdapter.notifyDataSetChanged();
+                            }
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
         // Populate the friends list, separating onAlert from not onAlert.
     }
 
@@ -174,8 +191,8 @@ public class FriendsActivity extends BaseActivity {
                                 newFriend.setName(user.getName());
                                 newFriend.saveInBackground();
                                 // Repopulate the friends list.
-                                friendAdapter.clear();
-                                populateFriendList();
+                                safeFriendsAdapter.clear();
+                                populateSafeList();
                                 // Hide/show views
                                 ibAddFriend.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);
