@@ -68,6 +68,7 @@ import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.navigationfeatures.CustomBottomNavigationView;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +83,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     // Declare views
-    BottomNavigationView bottomNavigationView;
+    CustomBottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
     ImageButton ibProfileImage;
     ImageButton ibCheckin;
@@ -156,42 +157,44 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         rvEvents.setAdapter(eventAdapter);
 
         // Logic for bottom navigation view
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = new CustomBottomNavigationView(MainActivity.this);
+        bottomNavigationView = (CustomBottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setNavigationDestinations(MainActivity.this, context);
 
   //      getLocation();
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_message:
-                        Intent contactAction = new Intent(MainActivity.this,
-                                ContactActivity.class);
-//                        Toast.makeText(MainActivity.this, "Message Page Accessed",
-//                                Toast.LENGTH_LONG).show();
-                        startActivity(contactAction);
-                        // finish();
-                        return true;
-                    case R.id.action_emergency:
-                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                "6304862146", null)));
-                        return true;
-                    case R.id.action_friends:
-                        Intent friendsAction = new Intent(MainActivity.this,
-                                FriendsActivity.class);
-//                        Toast.makeText(MainActivity.this, "Friends Page Accessed",
-//                                Toast.LENGTH_LONG).show();
-                        startActivity(friendsAction);
-                        // finish();
-                        return true;
-                }
-                return true;
-            }
-        });
+//        bottomNavigationView.setOnNavigationItemSelectedListener(
+//                new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//                switch (item.getItemId()) {
+//                    case R.id.action_person:
+//                        // TODO -- link activities
+//                        return true;
+//                    case R.id.action_message:
+//                        Intent contactAction = new Intent(MainActivity.this,
+//                                ContactActivity.class);
+////                        Toast.makeText(MainActivity.this, "Message Page Accessed",
+////                                Toast.LENGTH_LONG).show();
+//                        startActivity(contactAction);
+//                        // finish();
+//                        return true;
+//                    case R.id.action_emergency:
+//                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
+//                                "6304862146", null)));
+//                        return true;
+//                    case R.id.action_friends:
+//                        Intent friendsAction = new Intent(MainActivity.this,
+//                                FriendsActivity.class);
+////                        Toast.makeText(MainActivity.this, "Friends Page Accessed",
+////                                Toast.LENGTH_LONG).show();
+//                        startActivity(friendsAction);
+//                        // finish();
+//                        return true;
+//                }
+//                return true;
+//            }
+//        });
 
         // Indicate the current activity
         bottomNavigationView.setSelectedItemId(R.id.action_person);
