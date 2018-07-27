@@ -112,6 +112,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         // Create a notification util instance to send all notifications through
         notificationUtil = new NotificationUtil(context, currentUser);
+        notificationUtil.createNotificationChannel();
+
         // Create a checkin util instance to do some checkin work externally
         checkinUtil = new CheckinUtil(context, currentUser);
 
