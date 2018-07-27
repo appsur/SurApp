@@ -213,11 +213,13 @@
             <Button
                 android:id="@+id/button2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_alignEnd="@+id/btnSendAlert"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="257dp"
-                android:text="Button" />
+                android:background="@color/lightGray"
+                android:text="Send"
+                android:textColor="@color/black" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->

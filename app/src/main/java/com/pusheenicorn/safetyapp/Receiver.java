@@ -28,6 +28,7 @@ public class Receiver extends WakefulBroadcastReceiver {
     User currentUser;
     Checkin checkin;
     Context mContext;
+    public static final int SERVICE_ID = 10;
     private static final String CHANNEL_ID = "checkin";
 
     // Called automatically when the Broadcast Receiver is triggered.
