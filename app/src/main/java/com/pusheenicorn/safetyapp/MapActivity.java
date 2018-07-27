@@ -4,11 +4,16 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +33,24 @@ import com.pusheenicorn.safetyapp.models.User;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
 
+    // Declare views
     BottomNavigationView bottomNavigationView;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
@@ -77,33 +94,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         // Logic for bottom navigation view
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_more);
+        setNavigationDestinations(MapActivity.this, bottomNavigationView);
 
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_person:
-                        Intent returnHome = new Intent(MapActivity.this, MainActivity.class);
-                        startActivity(returnHome);
-                        return true;
-
-                    case R.id.action_message:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_emergency:
-                        // TODO -- link activities
-                        return true;
-                    case R.id.action_friends:
-                        Intent friendsAction = new Intent(MapActivity.this, FriendsActivity.class);
-                        Toast.makeText(MapActivity.this, "Friends Page Accessed", Toast.LENGTH_LONG ).show();
-                        startActivity(friendsAction);
-                        return true;
-                }
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        MapActivity.this, mNavItems);
             }
         });
+
         friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         currentUser = (User) ParseUser.getCurrentUser();
         friendUser = (User) friend.getUser();
