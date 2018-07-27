@@ -1,81 +1,49 @@
 package com.pusheenicorn.safetyapp;
 
-import android.*;
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.FragmentManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.mindorks.placeholderview.PlaceHolderView;
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
-import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.utils.CheckinUtil;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -98,14 +66,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
     EditText etEndTime;
     EditText etEventName;
     EditText etEventLocation;
-
     //variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
-
     // Declare fields
     User currentUser;
     Checkin checkin;
@@ -120,18 +86,20 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public LocationManager locationManager;
     public Criteria criteria;
     public String bestProvider;
-
-    // Declare adapter, events list, and events adapter
+    // Declare adapter, events list, and events adapter.
     private EventAdapter eventAdapter;
     private ArrayList<Event> events;
     private RecyclerView rvEvents;
-
-    // Define channel id for checkin notifications
-    private static final String CHANNEL_ID = "checkin";
-
+    // Define channel id for checkin notifications.
+    public static final String CHANNEL_ID = "checkin";
+    // Define some simple date formats.
     public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
     public static final DateFormat DATE_FORMAT =
             new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+    // Notification channel for this class
+    NotificationUtil notificationUtil;
+    CheckinUtil checkinUtil;
+
 
 
     @Override
@@ -139,14 +107,19 @@ public class MainActivity extends BaseActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermissionsPlease();                           // Check for geotracking permissions.
-        createNotificationChannel();                        // Create notification channel.
+        context = this;                                     // Store the context for ease of access.
+        currentUser = (User) ParseUser.getCurrentUser();    // Get the current user.
+
+        // Create a notification util instance to send all notifications through
+        notificationUtil = new NotificationUtil(context, currentUser);
+        // Create a checkin util instance to do some checkin work externally
+        checkinUtil = new CheckinUtil(context, currentUser);
+
         isCheckedIn = false;                                // Set default values
-        context = this;                                     // Set default values
         setEventsAdapter();                                 // Set up the events adapter.
         // Set up the BNV.
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);
-        currentUser = (User) ParseUser.getCurrentUser();    // Get the current user.
         initializeViews();                                  // Initialize the views.
         populateEvents();                                   // Populate the events recycler view.
         getLocation();                                      // Get the user's location.
@@ -197,7 +170,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         double latitude = loc.getLatitude();
         //store the user's location
         final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
-        Toast.makeText(MainActivity.this, latitude + ":" + longitude, Toast.LENGTH_LONG).show();
+        Toast.makeText(MainActivity.this, latitude + ":"
+                + longitude, Toast.LENGTH_LONG).show();
         currentUser.setPlace(point);
 
         currentUser.saveInBackground(new SaveCallback() {
@@ -235,13 +209,14 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     tvCheckinTime.setText(formatedDate);
                     // If the last checkin is not expired, set the green check. Otherwise, prompt
                     // the user to check in.
-                    isCheckedIn = isCheckedIn(date);
+                    isCheckedIn = checkinUtil.isChecked(date);
                     if (isCheckedIn) {
                         ibCheckin.setImageResource(R.drawable.check);
                     } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
                         // Send an immediate notification.
-                        scheduleNotification(getNotification(), 0);
+                        notificationUtil.scheduleNotification(
+                                notificationUtil.getNotification(), 0);
                     }
                 } else {
                     e.printStackTrace();
@@ -403,20 +378,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * @param view: the checkin button
      */
     public void onCheckin(View view) {
-
         if (isCheckedIn)
         {
             // If the user is checking in again when they are already checked in, we need to
             // cancel the scheduled notification.
-            Context context = getApplicationContext();
-            AlarmManager alarmManager =
-                    (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            Intent cancelServiceIntent = new Intent(context, Receiver.class);
-            PendingIntent cancelServicePendingIntent = PendingIntent.getBroadcast(context,
-                    Receiver.SERVICE_ID, cancelServiceIntent,0);
-            alarmManager.cancel(cancelServicePendingIntent);
+            notificationUtil.cancelCheckinNotification();
         }
-
         // Update the view to reflect a checked circle (if needed)
         ibCheckin.setImageResource(R.drawable.check);
         checkInUser();
@@ -447,10 +414,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
                                 // Update the TV's
                                 tvRelativeCheckinTime.setText(newString);
                                 tvCheckinTime.setText(formatedDate);
-                                isCheckedIn = isCheckedIn(newCheckinDate);
+                                isCheckedIn = checkinUtil.isChecked(newCheckinDate);
                                 // Schedule the next notification.
                                 int mins = (int) currentUser.getNumber("checkin");
-                                scheduleNotification(getNotification(), mins * 60000);
+                                notificationUtil.scheduleNotification(
+                                        notificationUtil.getNotification(), mins *
+                                        CheckinReceiver.SECOND_TO_MILLIS);
                             } else {
                                 e.printStackTrace();
                             }
@@ -464,42 +433,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
-    /**
-     * This function takes in a Date and determines whether a checkin made at this dat has
-     * expired or not.
-     *
-     * @param prevDate: the date at which the last checkin was made
-     * @return true if the checkin is not expired, otherwise false
-     */
-    public boolean isCheckedIn(Date prevDate) {
-        // Define format type.
-        DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
-
-        // Get current Date.
-        Date currDate = new Date();
-
-        // Split by regex "/" convert to int array and find time difference.
-        String[] currDateArr = df.format(currDate).split("/");
-        String[] prevDateArr = df.format(prevDate).split("/");
-        int[] currDateInts = new int[5];
-        int[] prevDateInts = new int[5];
-        for (int i = 0; i < 5; i++) {
-            currDateInts[i] = Integer.parseInt(currDateArr[i]);
-            prevDateInts[i] = Integer.parseInt(prevDateArr[i]);
-        }
-        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
-                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
-        int truPrev = (prevDateInts[0] * 43800) + (prevDateInts[1] * 1440)
-                + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
-        int threshold = (int) currentUser.getNumber("checkin");
-
-        if (trueCurr - truPrev > threshold) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     /*---------- Listener class to get coordinates -------------*/
     protected void getLocation() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -510,8 +443,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
             bestProvider = locationManager.getBestProvider(criteria, true);
             //You can still do this if you like, you might get lucky:
             Location location = locationManager.getLastKnownLocation(bestProvider);
-            Location gps_location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Location net_location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location gps_location =
+                    locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location net_location =
+                    locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (gps_location != null) {
                 Log.e("TAG", "GPS is on");
                 saveLocation(gps_location);
@@ -521,7 +456,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 saveLocation(location);
             } else {
                 //This is what you need:
-                locationManager.requestLocationUpdates(bestProvider, 1000, 0, this);
+                locationManager.requestLocationUpdates(bestProvider,
+                        1000, 0, this);
             }
         }
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -540,7 +476,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
 //
 //            latitude = loc.getLatitude();
 //            longitude = loc.getLongitude();
-//            //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+//            //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:"
+// + longitude, Toast.LENGTH_SHORT).show();
 //
 //        /*------- To get city name from coordinates -------- */
 //            String cityName = null;
@@ -580,73 +517,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public static boolean isLocationEnabled(Context context) {
         //...............
         return true;
-    }
-
-    /**
-     * This function creates a notification channel if necessary.
-     */
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    /**
-     * Create a notification to go to Receiver class.
-     * @return: the generated notification.
-     */
-    public Notification getNotification() {
-        //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(context, Receiver.class);
-        intent.putExtra("actionName", "checkIn");
-        intent.putExtra("user", currentUser);
-
-        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Receiver.SERVICE_ID,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setContentTitle("Sûr")
-                        .setSmallIcon(R.drawable.check)
-                        .setContentText("Please remember to check in!")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .addAction(R.drawable.check_outline, "Check in now", pendingIntent)
-                        .setOngoing(true);
-        // builder.setContentIntent(pendingIntent);
-        // builder.setAutoCancel(true);
-        return builder.build();
-    }
-
-    /**
-     * This function takes a notification and delay and schedules the notification at current
-     * time + delay.
-     *
-     * @param notification: the notification to be sent
-     * @param delay:        the delay at which to send the notification
-     */
-    public void scheduleNotification(Notification notification, int delay) {
-        //Toast.makeText(this, "Scheduled notification in " + (delay / 60000)
-        //+ " minutes", Toast.LENGTH_LONG).show();
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        long futureInMillis = SystemClock.elapsedRealtime() + delay;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     /**

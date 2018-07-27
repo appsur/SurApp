@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -82,6 +81,7 @@ public class SettingsActivity extends BaseActivity {
     Button btnWeekly;
 
     private static int RESULT_LOAD_IMAGE = 1;
+    public static final String PROFILE_KEY = "profileimage";
 
 //    public File photoFile;
 //    Uri photoURI;
@@ -579,7 +579,7 @@ public class SettingsActivity extends BaseActivity {
             parseFile.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    currentUser.put("profileimage", parseFile);
+                    currentUser.put(PROFILE_KEY, parseFile);
                     currentUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
