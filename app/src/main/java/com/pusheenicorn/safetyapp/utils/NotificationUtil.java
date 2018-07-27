@@ -21,6 +21,9 @@ public class NotificationUtil {
 
     Context mContext;
     User mCurrentUser;
+    public static String KEY_CHECKIN = "checkIn";
+    public static String KEY_ALERT = "alert";
+    public static String KEY_USER = "user";
 
     public NotificationUtil(Context context, User currentUser) {
         mContext = context;
@@ -73,8 +76,8 @@ public class NotificationUtil {
      */
     public Notification getNotification() {
         Intent intent = new Intent(mContext, CheckinReceiver.class);
-        intent.putExtra("actionName", "checkIn");
-        intent.putExtra("user", mCurrentUser);
+        intent.putExtra("actionName", KEY_CHECKIN);
+        intent.putExtra(KEY_USER, mCurrentUser);
 
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, CheckinReceiver.SERVICE_ID,
@@ -91,6 +94,30 @@ public class NotificationUtil {
                         .setOngoing(true);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
+        return builder.build();
+    }
+
+    /**
+     * Create a notification to go to CheckinReceiver class.
+     * @return: the generated notification.
+     */
+    public Notification getAlertNotification(String message) {
+//        Intent intent = new Intent(mContext, CheckinReceiver.class);
+//        intent.putExtra("actionName", KEY_ALERT);
+//        intent.putExtra(KEY_USER, mCurrentUser);
+//
+//        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, CheckinReceiver.SERVICE_ID,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(mContext,
+                        MainActivity.CHANNEL_ID)
+                        .setContentTitle(CheckinReceiver.APP_NAME)
+                        .setSmallIcon(R.drawable.bell)
+                        .setContentText(message)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setOngoing(true);
         return builder.build();
     }
 

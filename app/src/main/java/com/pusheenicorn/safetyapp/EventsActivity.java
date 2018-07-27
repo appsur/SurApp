@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -32,9 +33,11 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.adapters.events.EventFriendsAdapter;
 import com.pusheenicorn.safetyapp.adapters.events.EventUsersAdapter;
+import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -47,10 +50,13 @@ public class EventsActivity extends BaseActivity {
     Button btnSendAlert;
     ImageButton ibSearch;
     TextView tvEventTitle;
+    EditText tvMessage;
     TextView tvEmergencyAlert;
     EditText etUsername;
     //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
+    Button btnSend;
+    NotificationUtil notificationUtil;
 
     //variables for the draw out menu
     ListView mDrawerList;
@@ -76,6 +82,11 @@ public class EventsActivity extends BaseActivity {
 
     User currentUser;
     User user;
+    List<Alert> alerts;
+
+    private static String KEY_USERNAME = "username";
+    private static String KEY_BANNER = "bannerimage";
+    private static String KEY_EVENT = "event";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +95,7 @@ public class EventsActivity extends BaseActivity {
         // Set the context
         context = this;
         // Get the current event and cast appropriately.
-        currentEvent = (Event) getIntent().getParcelableExtra("event");
-        Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
+        currentEvent = (Event) getIntent().getParcelableExtra(KEY_EVENT);
         tvEventTitle = findViewById(R.id.tvEventTitle);
         etUsername = (EditText) findViewById(R.id.etUsername);
         ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
@@ -93,9 +103,12 @@ public class EventsActivity extends BaseActivity {
         btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
         //added title to the event page
         tvEventTitle.setText(currentEvent.getName());
+        tvMessage = (EditText) findViewById(R.id.tvMessage);
         //initialize bottom navigation bar
         bottomNavigationView = findViewById(R.id.bottom_navigation_events);
         setNavigationDestinations(EventsActivity.this, bottomNavigationView);
+        btnSend = (Button) findViewById(R.id.btnSend);
+        notificationUtil = new NotificationUtil(context, currentUser);
 
         initializeNavItems(mNavItems);
         // DrawerLayout
@@ -118,7 +131,7 @@ public class EventsActivity extends BaseActivity {
 
         //set banner to allow user to access gallery
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
-        ParseFile bannerImage = currentEvent.getParseFile("bannerimage");
+        ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
 
         if (bannerImage != null)
         {
@@ -159,13 +172,47 @@ public class EventsActivity extends BaseActivity {
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
 
+        getEmergencyNotifications();
         // Populate the recycler views appropriate
         loadEventUsers();
-        getEmergencyNotifications();
     }
 
     public void getEmergencyNotifications() {
-        // TODO -- implement notifications!
+        alerts = currentEvent.getAlerts();
+        if (alerts == null)
+        {
+            return;
+        }
+        else {
+            for (int i = 0; i < alerts.size(); i++)
+            {
+                Alert curr = alerts.get(i);
+                if (curr.getSeenBy() == null ||
+                        !curr.getSeenBy().contains(currentUser.getObjectId()))
+                {
+                    // Schedule a notification for this alert
+                    try {
+                        String message = curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) +
+                                " says: " + curr.getMessage();
+                        notificationUtil
+                                .scheduleNotification(notificationUtil
+                                        .getAlertNotification(message), 0);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    // Mark it as seen by this user
+                    curr.addSeenBy(currentUser.getObjectId());
+                    // Save the alert state to Parse
+                    try {
+                        curr.save();
+                    }
+                    catch (ParseException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     public void loadEventUsers() {
@@ -264,10 +311,7 @@ public class EventsActivity extends BaseActivity {
 
     public void onSearchUser(View view) {
 
-        Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
-
         String username = etUsername.getText().toString();
-
         // Do not allow user to add themselves to an event that they are already part of!
         if (username == currentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you are already part of this event!",
@@ -280,7 +324,7 @@ public class EventsActivity extends BaseActivity {
 
         // Allow them to enter other users as long as they can provide a valid username.
         final User.Query userQuery = new User.Query();
-        userQuery.getTop().whereEqualTo("username", username);
+        userQuery.getTop().whereEqualTo(KEY_USERNAME, username);
         userQuery.findInBackground(new FindCallback<User>() {
             @Override
             public void done(List<User> objects, ParseException e) {
@@ -315,6 +359,30 @@ public class EventsActivity extends BaseActivity {
     }
 
     public void onSendAlert(View view) {
+        tvMessage.setVisibility(View.VISIBLE);
+        btnSend.setVisibility(View.VISIBLE);
+    }
+
+    public void onSend(View view) {
+        String message = tvMessage.getText().toString();
+        final Alert alert = new Alert();
+        alert.setMessage(message);
+        alert.setName(currentUser.getName());
+        alert.setUserame(currentUser.getUsername());
+        alert.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                currentEvent.addAlert(alert);
+                currentEvent.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        tvMessage.setVisibility(View.INVISIBLE);
+                        btnSend.setVisibility(View.INVISIBLE);
+                        getEmergencyNotifications();
+                    }
+                });
+            }
+        });
     }
 }
 

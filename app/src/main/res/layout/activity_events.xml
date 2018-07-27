@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/rvFriends"
-                android:layout_marginBottom="216dp"
+                android:layout_marginBottom="212dp"
                 android:fontFamily="@font/arimo"
                 android:text="MEMBERS"
                 android:textColor="#000000"
@@ -193,9 +193,10 @@
             <Button
                 android:id="@+id/btnSendAlert"
                 android:layout_width="351dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/etUsername"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="213dp"
                 android:background="@color/coral"
                 android:onClick="onSendAlert"
                 android:text="Send an event alert " />
@@ -204,22 +205,25 @@
                 android:id="@+id/tvMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btnSend"
                 android:layout_alignStart="@+id/btnSendAlert"
-                android:layout_below="@+id/btnSendAlert"
                 android:hint="Enter your message here"
                 android:textColor="@color/black"
-                android:textColorHint="@color/gray" />
+                android:textColorHint="@color/gray"
+                android:visibility="invisible" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignEnd="@+id/btnSendAlert"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="257dp"
                 android:background="@color/lightGray"
+                android:onClick="onSend"
                 android:text="Send"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:visibility="invisible" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->
