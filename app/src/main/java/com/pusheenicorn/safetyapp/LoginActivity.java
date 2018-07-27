@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void logIn (String username, String password) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
-
             @Override
             public void done(ParseUser user, com.parse.ParseException e) {
                 if (e == null) {
