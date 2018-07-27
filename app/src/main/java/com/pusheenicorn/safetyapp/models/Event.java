@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ParseClassName("Event")
-public class Event extends ParseObject{
+public class Event extends ParseObject {
     private final static String KEY_NAME = "name";
     private final static String KEY_USERS = "usersAttending";
     private final static String KEY_START = "startTime";
     private final static String KEY_END = "endTime";
     private final static String KEY_LOCATION = "location";
     private final static String KEY_BANNER_IMAGE = "bannerimage";
-    private  final static String KEY_ALERT = "alert";
-    private final static String KEY_ALERT_MESSAGE = "alertMessage";
+    private final static String KEY_ALERTS = "alerts";
 
     public String getLocation() {
         return getString(KEY_LOCATION);
@@ -31,8 +30,7 @@ public class Event extends ParseObject{
         return getString(KEY_NAME);
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         put(KEY_NAME, name);
     }
 
@@ -48,8 +46,7 @@ public class Event extends ParseObject{
         return getString(KEY_START);
     }
 
-    public void setStart(String start)
-    {
+    public void setStart(String start) {
         put(KEY_START, start);
     }
 
@@ -57,8 +54,7 @@ public class Event extends ParseObject{
         return getString(KEY_END);
     }
 
-    public void setEnd(String end)
-    {
+    public void setEnd(String end) {
         put(KEY_END, end);
     }
 
@@ -66,28 +62,18 @@ public class Event extends ParseObject{
         return getList(KEY_USERS);
     }
 
-    public boolean getAlert()
-    {
-        return getBoolean(KEY_ALERT);
+    public List<Alert> getAlerts() {
+        return getList(KEY_ALERTS);
     }
 
-    public void setAlert(boolean alert) {
-        put(KEY_ALERT, alert);
-    }
-
-    public String getAlertMessage() {
-        return getString(KEY_ALERT_MESSAGE);
-    }
-
-    public void setAlertMessage(String message) {
-        put(KEY_ALERT, message);
+    public void addAlert(Alert alert) {
+        add(KEY_ALERTS, alert);
     }
 
     public ArrayList<String> getUsersIds() {
         List<User> myUsers = getUsers();
         ArrayList<String> myUsersIds = new ArrayList<String>();
-        for (int i = 0; i < myUsers.size(); i++)
-        {
+        for (int i = 0; i < myUsers.size(); i++) {
             myUsersIds.add(myUsers.get(i).getObjectId());
         }
         return myUsersIds;
@@ -104,6 +90,7 @@ public class Event extends ParseObject{
 
         /**
          * Modifies the query such that only the top 20 entries are returned.
+         *
          * @return this: a modified query.
          */
         public Event.Query getTop() {

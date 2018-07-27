@@ -10,7 +10,7 @@ import java.util.List;
 @ParseClassName("Friend")
 public class Friend extends ParseObject{
     private final static String KEY_USER = "user";
-    private final static String KEY_NAME = "name";
+    public final static String KEY_NAME = "name";
     private final static String KEY_PERMISSIONS = "permissions";
 
     public User getUser()

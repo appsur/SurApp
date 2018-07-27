@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -56,24 +55,21 @@ public class SettingsActivity extends BaseActivity {
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
     // Define profile image view.
-    ImageView ibProfileImage;
+    private ImageView ibProfileImage;
     public File photoFile;
 
     // Define variables for image toggle.
-    ImageButton ibClock;
-    ImageButton ibLocator;
-    ImageButton ibCompass;
-    ToggleButton tbSafe;
-    ToggleButton tbLocation;
-    ToggleButton tbRing;
-    ToggleButton tbCheckin;
-    EditText etNum;
-    TextView tvNum;
+    private ToggleButton tbSafe;
+    private ToggleButton tbLocation;
+    private ToggleButton tbRing;
+    private ToggleButton tbCheckin;
+    private EditText etNum;
+    private TextView tvNum;
 
     // ImageButton ibAlert;
-    ImageButton ibEdit;
-    Button btnDone;
-    Button btnEditFrequency;
+    private ImageButton ibEdit;
+    private Button btnDone;
+    private Button btnEditFrequency;
     boolean isClock = false;
 
     // Define variables for making frequency buttons appear.
@@ -82,6 +78,7 @@ public class SettingsActivity extends BaseActivity {
     Button btnWeekly;
 
     private static int RESULT_LOAD_IMAGE = 1;
+    public static final String PROFILE_KEY = "profileimage";
 
 //    public File photoFile;
 //    Uri photoURI;
@@ -90,29 +87,59 @@ public class SettingsActivity extends BaseActivity {
 //    private static final String AUTHORITY = "com.pusheenicorn.sur-app";
 
     // Define global current user.
-    User currentUser;
+    private User currentUser;
 
     // Define Text Views
-    TextView tvNameValue;
-    TextView tvPhoneValue;
-    TextView tvUsernameValue;
-    TextView tvCheckinFrequency;
+    private TextView tvNameValue;
+    private TextView tvPhoneValue;
+    private TextView tvUsernameValue;
+    private TextView tvCheckinFrequency;
 
     // Define Edit Texts
-    EditText etUsername;
-    EditText etPhoneNumber;
-    EditText etName;
+    private EditText etUsername;
+    private EditText etPhoneNumber;
+    private EditText etName;
 
     //button for logging out
     private Button logOutButton;
 
-    Context context;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         context = this;
+        implementLogout();
+        //set and populated the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation_settings);
+        setNavigationDestinations(SettingsActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        SettingsActivity.this, mNavItems);
+            }
+        });
+
+        setViews();
+        setSafetyToggle();
+        setLocationToggle();
+        setRingToggle();
+        setCheckinToggle();
+    }
+
+    public void implementLogout() {
         //log out button implementation
         logOutButton = findViewById(R.id.btnLogOut);
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -126,28 +153,9 @@ public class SettingsActivity extends BaseActivity {
         });
         currentUser = (User) ParseUser.getCurrentUser();
 
-        //set and populated the bottom navigation view
-        bottomNavigationView = findViewById(R.id.bottom_navigation_settings);
-        setNavigationDestinations(SettingsActivity.this, bottomNavigationView);
+    }
 
-        initializeNavItems(mNavItems);
-        // DrawerLayout
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Populate the Navigtion Drawer with options
-        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
-        mDrawerList = (ListView) findViewById(R.id.navList);
-        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
-        mDrawerList.setAdapter(adapter);
-
-        // Drawer Item click listeners
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
-                        SettingsActivity.this, mNavItems);
-            }
-        });
+    public void setViews() {
 
         // Initialize profile image view.
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
@@ -162,8 +170,6 @@ public class SettingsActivity extends BaseActivity {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
-
-
         // ibAlert = (ImageButton) findViewById(R.id.ibAlert);
         ibEdit = (ImageButton) findViewById(R.id.ibEdit);
         btnDone = (Button) findViewById(R.id.btnDone);
@@ -201,21 +207,14 @@ public class SettingsActivity extends BaseActivity {
         tvPhoneValue.setText(phoneNumber);
 
         // Load the profile image
-        if (currentUser.getProfileImage() != null)
-        {
+        if (currentUser.getProfileImage() != null) {
             Glide.with(this).load(currentUser.getProfileImage()
                     .getUrl()).into(ibProfileImage);
         }
-
-        setSafetyToggle();
-        setLocationToggle();
-        setRingToggle();
-        setCheckinToggle();
     }
 
     // Set safety toggle
-    public void setSafetyToggle()
-    {
+    public void setSafetyToggle() {
         // Set safety toggle
         tbSafe = (ToggleButton) findViewById(R.id.tbSafe);
         tbSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -232,24 +231,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getSafe())
-        {
+        if (currentUser.getSafe()) {
             tbSafe.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbSafe.setChecked(false);
         }
     }
 
     // Set location toggle
-    public void setLocationToggle()
-    {
+    public void setLocationToggle() {
         // Set safety toggle
         tbLocation = (ToggleButton) findViewById(R.id.tbLocation);
         tbLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -266,24 +260,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getTrackable())
-        {
+        if (currentUser.getTrackable()) {
             tbLocation.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbLocation.setChecked(false);
         }
     }
 
     // Set ring toggle
-    public void setRingToggle()
-    {
+    public void setRingToggle() {
         // Set safety toggle
         tbRing = (ToggleButton) findViewById(R.id.tbRing);
         tbRing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -300,24 +289,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getRingable())
-        {
+        if (currentUser.getRingable()) {
             tbRing.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbRing.setChecked(false);
         }
     }
 
     // Set checkin toggle
-    public void setCheckinToggle()
-    {
+    public void setCheckinToggle() {
         // Set safety toggle
         tbCheckin = (ToggleButton) findViewById(R.id.tbCheckin);
         tbCheckin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -334,17 +318,13 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getCheckMe())
-        {
+        if (currentUser.getCheckMe()) {
             tbCheckin.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbCheckin.setChecked(false);
         }
     }
@@ -358,8 +338,7 @@ public class SettingsActivity extends BaseActivity {
     public void onClock(View view) {
         // UI response
         isClock = !isClock;
-        if (isClock)
-        {
+        if (isClock) {
             btnEditFrequency.setText("DONE");
             btnHourly.setVisibility(View.VISIBLE);
             btnDaily.setVisibility(View.VISIBLE);
@@ -367,8 +346,7 @@ public class SettingsActivity extends BaseActivity {
             etNum.setText(tvNum.getText().toString());
             etNum.setVisibility(View.VISIBLE);
             tvNum.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             // Functionality
             btnEditFrequency.setText("EDIT");
             btnHourly.setVisibility(View.INVISIBLE);
@@ -394,7 +372,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Hourly");
                     user.saveInBackground();
@@ -417,7 +395,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Weekly");
                     user.saveInBackground();
@@ -440,7 +418,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Daily");
                     user.saveInBackground();
@@ -456,6 +434,7 @@ public class SettingsActivity extends BaseActivity {
     /**
      * Thsi function is called when the user clicks the edit icon. It makes the
      * edit views visible.
+     *
      * @param view: the edit button view.
      */
     public void onEdit(View view) {
@@ -481,10 +460,10 @@ public class SettingsActivity extends BaseActivity {
     /**
      * This function is called when the user clicks the "done button." It updates the
      * user's data, updates the text views, and hides the edit views.
+     *
      * @param view: the done button view
      */
     public void onDone(View view) {
-
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -526,8 +505,7 @@ public class SettingsActivity extends BaseActivity {
                     tvNameValue.setText(user.getName());
                     tvUsernameValue.setText(user.getUserName());
                     String newNumber = user.getPhonNumber();
-                    if (newNumber.length() >= 20)
-                    {
+                    if (newNumber.length() >= 20) {
                         newNumber = "(" + phoneNumber.substring(0, 3) + ") "
                                 + phoneNumber.substring(3, 6) + "-"
                                 + phoneNumber.substring(6, 10);
@@ -552,6 +530,7 @@ public class SettingsActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -573,13 +552,13 @@ public class SettingsActivity extends BaseActivity {
             //set the banner to the image that is selected by the user
             ibProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             //convert bitmap to a parsefile
-            final ParseFile parseFile =  conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            final ParseFile parseFile = conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
             currentUser.setProfileImage(parseFile);
             //save in background so the image updates correctly
             parseFile.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    currentUser.put("profileimage", parseFile);
+                    currentUser.put(PROFILE_KEY, parseFile);
                     currentUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -594,15 +573,14 @@ public class SettingsActivity extends BaseActivity {
             });
 
         }
-
-
     }
+
     //converts bitmap to parse file
-    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        ParseFile parseFile = new ParseFile("image_file.png", imageByte);
         return parseFile;
     }
 }

@@ -13,7 +13,6 @@ public class HomeActivity extends AppCompatActivity {
     //declared variables for the buttons available on the page
     Button logInButton;
     Button signUpButton;
-    boolean isIshaniTesting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +21,8 @@ public class HomeActivity extends AppCompatActivity {
         //initialized the parse user
         ParseUser currentUser = ParseUser.getCurrentUser();
         //makes sure that login or sign up occurs only if there is no current user
-        if (currentUser != null && isIshaniTesting) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-        }
 
-        else if (currentUser != null) {
+        if (currentUser != null) {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }

@@ -93,9 +93,10 @@
             android:resource="@color/colorAccent" />
 
         <receiver android:name=".NotificationPublisher" />
-        <receiver android:name=".Receiver" />
+        <receiver android:name=".CheckinReceiver" />
 
         <activity android:name=".BaseActivity" />
+        <activity android:name=".HotlineActivity"></activity>
     </application>
 
 </manifest>

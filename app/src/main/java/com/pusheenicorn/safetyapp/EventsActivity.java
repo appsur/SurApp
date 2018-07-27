@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -32,71 +33,87 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.adapters.events.EventFriendsAdapter;
 import com.pusheenicorn.safetyapp.adapters.events.EventUsersAdapter;
+import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventsActivity extends BaseActivity {
-    //declared variables
+    //declared views
     ImageButton ibBanner;
     ImageButton ibAddMembers;
     Button btnSendAlert;
     ImageButton ibSearch;
     TextView tvEventTitle;
-    TextView tvEmergencyAlert;
+    EditText tvMessage;
     EditText etUsername;
-    //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
+    Button btnSend;
 
-    //variables for the draw out menu
+    // Declare notification utility
+    NotificationUtil notificationUtil;
+
+    // Variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
-
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
     private static int RESULT_LOAD_IMAGE = 1;
     Event currentEvent;
     Context context;
 
+    // Declare adapters.
     EventUsersAdapter eventUsersAdapter;
     ArrayList<User> users;
     RecyclerView rvUsers;
-
     EventFriendsAdapter eventFriendsAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvFriends;
 
+    // Declare current user and instantiate fields for later use.
     User currentUser;
     User user;
+    List<Alert> alerts;
+
+    // Declare some keys.
+    private static String KEY_USERNAME = "username";
+    private static String KEY_BANNER = "bannerimage";
+    private static String KEY_EVENT = "event";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        // Set the context
-        context = this;
-        // Get the current event and cast appropriately.
-        currentEvent = (Event) getIntent().getParcelableExtra("event");
-        Toast.makeText(EventsActivity.this, currentEvent.getObjectId(), Toast.LENGTH_LONG).show();
-        tvEventTitle = findViewById(R.id.tvEventTitle);
-        etUsername = (EditText) findViewById(R.id.etUsername);
-        ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
-        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
-        btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
-        //added title to the event page
-        tvEventTitle.setText(currentEvent.getName());
-        //initialize bottom navigation bar
-        bottomNavigationView = findViewById(R.id.bottom_navigation_events);
-        setNavigationDestinations(EventsActivity.this, bottomNavigationView);
+        context = this;                             // Set the context.
+        initializeViews();                          // Initialize all views.
+        initializeNavigation();                     // Initialize navigation logic.
+        allowBannerFunctionality();                 // Allow banner to change.
+        getEmergencyNotifications();                // Get any notification.
+        loadEventUsers();                           // Populate the recycler views appropriately.
+    }
 
+    public void allowBannerFunctionality() {
+        ibBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create a picture chooser from gallery
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
+    }
+
+    public void initializeNavigation() {
         initializeNavItems(mNavItems);
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -115,57 +132,82 @@ public class EventsActivity extends BaseActivity {
                         EventsActivity.this, mNavItems);
             }
         });
+    }
+
+    public void initializeViews() {
+        // Get the current user
+        currentUser = (User) ParseUser.getCurrentUser();
+
+        // Unwrap event
+        currentEvent = (Event) getIntent().getParcelableExtra(KEY_EVENT);
+        tvEventTitle = findViewById(R.id.tvEventTitle);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
+        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
+        btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
+        //added title to the event page
+        tvEventTitle.setText(currentEvent.getName());
+        tvMessage = (EditText) findViewById(R.id.tvMessage);
+        //initialize bottom navigation bar
+        bottomNavigationView = findViewById(R.id.bottom_navigation_events);
+        setNavigationDestinations(EventsActivity.this, bottomNavigationView);
+        btnSend = (Button) findViewById(R.id.btnSend);
+        notificationUtil = new NotificationUtil(context, currentUser);
+
+        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
+        users = new ArrayList<User>();
+        rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
+        friends = new ArrayList<Friend>();
+
+        eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser);
+        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        rvUsers.setAdapter(eventUsersAdapter);
+
+        eventFriendsAdapter = new EventFriendsAdapter(friends);
+        rvFriends.setLayoutManager(new LinearLayoutManager(this));
+        rvFriends.setAdapter(eventFriendsAdapter);
 
         //set banner to allow user to access gallery
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
-        ParseFile bannerImage = currentEvent.getParseFile("bannerimage");
+        ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
 
-        if (bannerImage != null)
-        {
+        if (bannerImage != null) {
             //load image using glide
             Glide.with(EventsActivity.this).load(bannerImage.getUrl())
                     .into(ibBanner);
         }
-
-        ibBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //create a picture chooser from gallery
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-            }
-        });
-
-        // Get the current user
-        currentUser = (User) ParseUser.getCurrentUser();
-
-        // Find recycler views and hook up adapter
-        rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
-        users = new ArrayList<User>();
-        // construct the adapter from this data source
-        eventUsersAdapter = new EventUsersAdapter(users);
-        // recycler view setup
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
-        rvUsers.setAdapter(eventUsersAdapter);
-
-        // Find recycler views and hook up adapter
-        rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
-        friends = new ArrayList<Friend>();
-        // construct the adapter from this data source
-        eventFriendsAdapter = new EventFriendsAdapter(friends);
-        // recycler view setup
-        rvFriends.setLayoutManager(new LinearLayoutManager(this));
-        rvFriends.setAdapter(eventFriendsAdapter);
-
-        // Populate the recycler views appropriate
-        loadEventUsers();
-        getEmergencyNotifications();
     }
 
     public void getEmergencyNotifications() {
-        // TODO -- implement notifications!
+        alerts = currentEvent.getAlerts();
+        if (alerts == null) {
+            return;
+        } else {
+            for (int i = 0; i < alerts.size(); i++) {
+                Alert curr = alerts.get(i);
+                if (curr.getSeenBy() == null ||
+                        !curr.getSeenBy().contains(currentUser.getObjectId())) {
+                    // Schedule a notification for this alert
+                    try {
+                        String message = curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) +
+                                " says: " + curr.getMessage();
+                        notificationUtil
+                                .scheduleNotification(notificationUtil
+                                        .getAlertNotification(message), 0);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    // Mark it as seen by this user
+                    curr.addSeenBy(currentUser.getObjectId());
+                    // Save the alert state to Parse
+                    try {
+                        curr.save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     public void loadEventUsers() {
@@ -180,15 +222,13 @@ public class EventsActivity extends BaseActivity {
                         // If this user belongs to the event
                         if (currentEvent.getUsersIds().contains(objects.get(i).getObjectId())) {
                             // If this user is a friend, then...
-                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId()))
-                            {
+                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId())) {
                                 int index = currentUser.getFriendUsers()
                                         .indexOf(objects.get(i).getObjectId());
                                 Friend newFriend = currentUser.getFriends().get(index);
                                 friends.add(newFriend);
                                 eventFriendsAdapter.notifyDataSetChanged();
-                            }
-                            else {
+                            } else {
                                 users.add(objects.get(i));
                                 // notify the adapter
                                 eventUsersAdapter.notifyDataSetChanged();
@@ -264,10 +304,7 @@ public class EventsActivity extends BaseActivity {
 
     public void onSearchUser(View view) {
 
-        Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
-
         String username = etUsername.getText().toString();
-
         // Do not allow user to add themselves to an event that they are already part of!
         if (username == currentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you are already part of this event!",
@@ -280,7 +317,7 @@ public class EventsActivity extends BaseActivity {
 
         // Allow them to enter other users as long as they can provide a valid username.
         final User.Query userQuery = new User.Query();
-        userQuery.getTop().whereEqualTo("username", username);
+        userQuery.getTop().whereEqualTo(KEY_USERNAME, username);
         userQuery.findInBackground(new FindCallback<User>() {
             @Override
             public void done(List<User> objects, ParseException e) {
@@ -315,6 +352,30 @@ public class EventsActivity extends BaseActivity {
     }
 
     public void onSendAlert(View view) {
+        tvMessage.setVisibility(View.VISIBLE);
+        btnSend.setVisibility(View.VISIBLE);
+    }
+
+    public void onSend(View view) {
+        String message = tvMessage.getText().toString();
+        final Alert alert = new Alert();
+        alert.setMessage(message);
+        alert.setName(currentUser.getName());
+        alert.setUserame(currentUser.getUsername());
+        alert.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                currentEvent.addAlert(alert);
+                currentEvent.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        tvMessage.setVisibility(View.INVISIBLE);
+                        btnSend.setVisibility(View.INVISIBLE);
+                        getEmergencyNotifications();
+                    }
+                });
+            }
+        });
     }
 }
 
