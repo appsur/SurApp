@@ -55,24 +55,21 @@ public class SettingsActivity extends BaseActivity {
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
     // Define profile image view.
-    ImageView ibProfileImage;
+    private ImageView ibProfileImage;
     public File photoFile;
 
     // Define variables for image toggle.
-    ImageButton ibClock;
-    ImageButton ibLocator;
-    ImageButton ibCompass;
-    ToggleButton tbSafe;
-    ToggleButton tbLocation;
-    ToggleButton tbRing;
-    ToggleButton tbCheckin;
-    EditText etNum;
-    TextView tvNum;
+    private ToggleButton tbSafe;
+    private ToggleButton tbLocation;
+    private ToggleButton tbRing;
+    private ToggleButton tbCheckin;
+    private EditText etNum;
+    private TextView tvNum;
 
     // ImageButton ibAlert;
-    ImageButton ibEdit;
-    Button btnDone;
-    Button btnEditFrequency;
+    private ImageButton ibEdit;
+    private Button btnDone;
+    private Button btnEditFrequency;
     boolean isClock = false;
 
     // Define variables for making frequency buttons appear.
@@ -90,29 +87,59 @@ public class SettingsActivity extends BaseActivity {
 //    private static final String AUTHORITY = "com.pusheenicorn.sur-app";
 
     // Define global current user.
-    User currentUser;
+    private User currentUser;
 
     // Define Text Views
-    TextView tvNameValue;
-    TextView tvPhoneValue;
-    TextView tvUsernameValue;
-    TextView tvCheckinFrequency;
+    private TextView tvNameValue;
+    private TextView tvPhoneValue;
+    private TextView tvUsernameValue;
+    private TextView tvCheckinFrequency;
 
     // Define Edit Texts
-    EditText etUsername;
-    EditText etPhoneNumber;
-    EditText etName;
+    private EditText etUsername;
+    private EditText etPhoneNumber;
+    private EditText etName;
 
     //button for logging out
     private Button logOutButton;
 
-    Context context;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         context = this;
+        implementLogout();
+        //set and populated the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation_settings);
+        setNavigationDestinations(SettingsActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        SettingsActivity.this, mNavItems);
+            }
+        });
+
+        setViews();
+        setSafetyToggle();
+        setLocationToggle();
+        setRingToggle();
+        setCheckinToggle();
+    }
+
+    public void implementLogout() {
         //log out button implementation
         logOutButton = findViewById(R.id.btnLogOut);
         logOutButton.setOnClickListener(new View.OnClickListener() {
@@ -126,28 +153,9 @@ public class SettingsActivity extends BaseActivity {
         });
         currentUser = (User) ParseUser.getCurrentUser();
 
-        //set and populated the bottom navigation view
-        bottomNavigationView = findViewById(R.id.bottom_navigation_settings);
-        setNavigationDestinations(SettingsActivity.this, bottomNavigationView);
+    }
 
-        initializeNavItems(mNavItems);
-        // DrawerLayout
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Populate the Navigtion Drawer with options
-        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
-        mDrawerList = (ListView) findViewById(R.id.navList);
-        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
-        mDrawerList.setAdapter(adapter);
-
-        // Drawer Item click listeners
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
-                        SettingsActivity.this, mNavItems);
-            }
-        });
+    public void setViews() {
 
         // Initialize profile image view.
         ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
@@ -162,8 +170,6 @@ public class SettingsActivity extends BaseActivity {
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
-
-
         // ibAlert = (ImageButton) findViewById(R.id.ibAlert);
         ibEdit = (ImageButton) findViewById(R.id.ibEdit);
         btnDone = (Button) findViewById(R.id.btnDone);
@@ -206,11 +212,6 @@ public class SettingsActivity extends BaseActivity {
             Glide.with(this).load(currentUser.getProfileImage()
                     .getUrl()).into(ibProfileImage);
         }
-
-        setSafetyToggle();
-        setLocationToggle();
-        setRingToggle();
-        setCheckinToggle();
     }
 
     // Set safety toggle
@@ -484,7 +485,6 @@ public class SettingsActivity extends BaseActivity {
      * @param view: the done button view
      */
     public void onDone(View view) {
-
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -594,8 +594,6 @@ public class SettingsActivity extends BaseActivity {
             });
 
         }
-
-
     }
     //converts bitmap to parse file
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){

@@ -44,46 +44,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsActivity extends BaseActivity {
-    //declared variables
+    //declared views
     ImageButton ibBanner;
     ImageButton ibAddMembers;
     Button btnSendAlert;
     ImageButton ibSearch;
     TextView tvEventTitle;
     EditText tvMessage;
-    TextView tvEmergencyAlert;
     EditText etUsername;
-    //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
     Button btnSend;
+
+    // Declare notification utility
     NotificationUtil notificationUtil;
 
-    //variables for the draw out menu
+    // Variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
-
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
     private static int RESULT_LOAD_IMAGE = 1;
     Event currentEvent;
     Context context;
 
+    // Declare adapters.
     EventUsersAdapter eventUsersAdapter;
     ArrayList<User> users;
     RecyclerView rvUsers;
-
     EventFriendsAdapter eventFriendsAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvFriends;
 
+    // Declare current user and instantiate fields for later use.
     User currentUser;
     User user;
     List<Alert> alerts;
 
+    // Declare some keys.
     private static String KEY_USERNAME = "username";
     private static String KEY_BANNER = "bannerimage";
     private static String KEY_EVENT = "event";
@@ -92,24 +92,28 @@ public class EventsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        // Set the context
-        context = this;
-        // Get the current event and cast appropriately.
-        currentEvent = (Event) getIntent().getParcelableExtra(KEY_EVENT);
-        tvEventTitle = findViewById(R.id.tvEventTitle);
-        etUsername = (EditText) findViewById(R.id.etUsername);
-        ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
-        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
-        btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
-        //added title to the event page
-        tvEventTitle.setText(currentEvent.getName());
-        tvMessage = (EditText) findViewById(R.id.tvMessage);
-        //initialize bottom navigation bar
-        bottomNavigationView = findViewById(R.id.bottom_navigation_events);
-        setNavigationDestinations(EventsActivity.this, bottomNavigationView);
-        btnSend = (Button) findViewById(R.id.btnSend);
-        notificationUtil = new NotificationUtil(context, currentUser);
+        context = this;                             // Set the context.
+        initializeViews();                          // Initialize all views.
+        initializeNavigation();                     // Initialize navigation logic.
+        allowBannerFunctionality();                 // Allow banner to change.
+        getEmergencyNotifications();                // Get any notification.
+        loadEventUsers();                           // Populate the recycler views appropriately.
+    }
 
+    public void allowBannerFunctionality() {
+        ibBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create a picture chooser from gallery
+                Intent i = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
+    }
+
+    public void initializeNavigation() {
         initializeNavItems(mNavItems);
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -128,32 +132,26 @@ public class EventsActivity extends BaseActivity {
                         EventsActivity.this, mNavItems);
             }
         });
-
-        //set banner to allow user to access gallery
-        ibBanner = (ImageButton) findViewById(R.id.ibBanner);
-        ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
-
-        if (bannerImage != null)
-        {
-            //load image using glide
-            Glide.with(EventsActivity.this).load(bannerImage.getUrl())
-                    .into(ibBanner);
-        }
-
-        ibBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //create a picture chooser from gallery
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
-            }
-        });
-
+    }
+    public void initializeViews() {
         // Get the current user
         currentUser = (User) ParseUser.getCurrentUser();
 
+        // Unwrap event
+        currentEvent = (Event) getIntent().getParcelableExtra(KEY_EVENT);
+        tvEventTitle = findViewById(R.id.tvEventTitle);
+        etUsername = (EditText) findViewById(R.id.etUsername);
+        ibAddMembers = (ImageButton) findViewById(R.id.ibAddMembers);
+        ibSearch = (ImageButton) findViewById(R.id.ibSearch);
+        btnSendAlert = (Button) findViewById(R.id.btnSendAlert);
+        //added title to the event page
+        tvEventTitle.setText(currentEvent.getName());
+        tvMessage = (EditText) findViewById(R.id.tvMessage);
+        //initialize bottom navigation bar
+        bottomNavigationView = findViewById(R.id.bottom_navigation_events);
+        setNavigationDestinations(EventsActivity.this, bottomNavigationView);
+        btnSend = (Button) findViewById(R.id.btnSend);
+        notificationUtil = new NotificationUtil(context, currentUser);
         // Find recycler views and hook up adapter
         rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
         users = new ArrayList<User>();
@@ -172,9 +170,16 @@ public class EventsActivity extends BaseActivity {
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
 
-        getEmergencyNotifications();
-        // Populate the recycler views appropriate
-        loadEventUsers();
+        //set banner to allow user to access gallery
+        ibBanner = (ImageButton) findViewById(R.id.ibBanner);
+        ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
+
+        if (bannerImage != null)
+        {
+            //load image using glide
+            Glide.with(EventsActivity.this).load(bannerImage.getUrl())
+                    .into(ibBanner);
+        }
     }
 
     public void getEmergencyNotifications() {

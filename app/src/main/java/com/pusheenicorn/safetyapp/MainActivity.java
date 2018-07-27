@@ -125,6 +125,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         getLocation();                                      // Get the user's location.
         initializeNavItems(mNavItems);                      // Initialize navigation items
         setUpDrawerLayout();                                // Set up the pull-out menu.
+        onResume();
     }
 
     /**
