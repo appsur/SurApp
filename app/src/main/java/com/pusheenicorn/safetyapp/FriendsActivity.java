@@ -21,6 +21,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pusheenicorn.safetyapp.adapters.friends.AlertFriendsAdapter;
 import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
@@ -43,8 +44,14 @@ public class FriendsActivity extends BaseActivity {
     ProgressBar progressBar;
 
     SafeFriendsAdapter safeFriendsAdapter;
-    ArrayList<Friend> friends;
-    RecyclerView rvFriendList;
+    ArrayList<Friend> safeFriends;
+    //    ArrayList<Friend> friends;
+    RecyclerView rvSafeFriendList;
+
+    AlertFriendsAdapter alertFriendsAdapter;
+    ArrayList<Friend> alertFriends;
+    RecyclerView rvAlertFriendList;
+
     EditText etUsername;
     ImageButton ibAddFriend;
     ImageButton ibSearch;
@@ -83,13 +90,21 @@ public class FriendsActivity extends BaseActivity {
             }
         });
 
-        rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
-        friends = new ArrayList<Friend>();
+        rvSafeFriendList = (RecyclerView) findViewById(R.id.rvSafe);
+        safeFriends = new ArrayList<Friend>();
         // construct the adapter from this data source
-        safeFriendsAdapter = new SafeFriendsAdapter(friends);
+        safeFriendsAdapter = new SafeFriendsAdapter(safeFriends);
         // recycler view setup
-        rvFriendList.setLayoutManager(new LinearLayoutManager(this));
-        rvFriendList.setAdapter(safeFriendsAdapter);
+        rvSafeFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvSafeFriendList.setAdapter(safeFriendsAdapter);
+
+
+        rvAlertFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
+        alertFriends = new ArrayList<>();
+        alertFriendsAdapter = new AlertFriendsAdapter(alertFriends);
+        // recycler view setup
+        rvAlertFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvAlertFriendList.setAdapter(alertFriendsAdapter);
 
         // declare username
         etUsername = (EditText) findViewById(R.id.etUsername);
@@ -97,10 +112,10 @@ public class FriendsActivity extends BaseActivity {
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
 
         currentUser = (User) ParseUser.getCurrentUser();
-        populateSafeList();
+        populateList();
     }
 
-    public void populateSafeList() {
+    public void populateList() {
         final User.Query userQuery = new User.Query();
         userQuery.getTop();
 
@@ -109,20 +124,29 @@ public class FriendsActivity extends BaseActivity {
             public void done(List<User> objects, ParseException e) {
                 if (e == null) {
                     for (int i = objects.size() - 1; i > -1; i--) {
-                        // If this user belongs to the event
-                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId()))
-                            {
-                                int index = currentUser.getFriendUsers()
-                                        .indexOf(objects.get(i).getObjectId());
-                                Friend newFriend = currentUser.getFriends().get(index);
-                                friends.add(newFriend);
+                        // If this user is a friend of the current user
+                        if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId())) {
+                            int index = currentUser.getFriendUsers()
+                                    .indexOf(objects.get(i).getObjectId());
+                            Friend newFriend = currentUser.getFriends().get(index);
+                            User userFriend;
+                            Boolean isSafe = true;
+                            try {
+                                userFriend = (User) newFriend.fetchIfNeeded().getParseUser("user");
+                                isSafe = userFriend.fetchIfNeeded().getBoolean("safe");
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+
+                            if (isSafe) {
+                                safeFriends.add(newFriend);
                                 safeFriendsAdapter.notifyDataSetChanged();
+                            } else {
+                                alertFriends.add(newFriend);
+                                alertFriendsAdapter.notifyDataSetChanged();
                             }
-                            else {
-//                                users.add(objects.get(i));
-//                                // notify the adapter
-//                                eventUsersAdapter.notifyDataSetChanged();
-                            }
+                        } else {
+                        }
                     }
                 } else {
                     e.printStackTrace();
@@ -131,6 +155,7 @@ public class FriendsActivity extends BaseActivity {
         });
         // Populate the friends list, separating onAlert from not onAlert.
     }
+
 
     public void onSettings(View view) {
         //create intent to access the map activity and then toast the information
@@ -149,8 +174,7 @@ public class FriendsActivity extends BaseActivity {
         String username = etUsername.getText().toString();
 
         // Do not allow the user to add themselves as a friend!
-        if (username == currentUser.getUsername())
-        {
+        if (username == currentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you cannot add yourself as a friend!",
                     Toast.LENGTH_LONG).show();
             ibAddFriend.setVisibility(View.VISIBLE);
@@ -167,14 +191,12 @@ public class FriendsActivity extends BaseActivity {
             public void done(List<User> objects, com.parse.ParseException e) {
                 if (e == null) {
                     // Get the user that matches this name, if one exists.
-                    if (objects != null && objects.size() > 0)
-                    {
+                    if (objects != null && objects.size() > 0) {
                         user = objects.get(0);
                     }
 
                     // Otherwise, tell the user to try again.
-                    else
-                    {
+                    else {
                         Toast.makeText(context, "Sorry, that user doesn't exist",
                                 Toast.LENGTH_LONG).show();
                         return;
@@ -193,7 +215,8 @@ public class FriendsActivity extends BaseActivity {
                                 newFriend.saveInBackground();
                                 // Repopulate the friends list.
                                 safeFriendsAdapter.clear();
-                                populateSafeList();
+                                alertFriendsAdapter.clear();
+                                populateList();
                                 // Hide/show views
                                 ibAddFriend.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);
@@ -213,8 +236,7 @@ public class FriendsActivity extends BaseActivity {
                             }
                         }
                     });
-                }
-                else {
+                } else {
                     e.printStackTrace();
                 }
             }

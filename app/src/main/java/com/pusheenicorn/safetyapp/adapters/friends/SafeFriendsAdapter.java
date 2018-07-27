@@ -71,9 +71,7 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
         User userFriend;
         try {
             userFriend = (User) friend.fetchIfNeeded().getParseUser("user");
-//            if (userFriend.getBoolean("safe")) {
-                name = userFriend.fetchIfNeeded().getString("username");
-//            }
+            name = userFriend.fetchIfNeeded().getString("username");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -96,6 +94,7 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
         Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
 
         final User friendUser = friend.getUser();
+
         String checkinId = friendUser.getLastCheckin().getObjectId();
 
         // Query by checkinId
@@ -125,10 +124,14 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
 
     //create the ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.tvPhoneNumber) TextView tvPhoneNumber;
-        @BindView(R.id.tvName) TextView tvName;
-        @BindView(R.id.tvTime) TextView tvTime;
-        @BindView(R.id.ivProfileImage) ImageView ivProfile;
+        @BindView(R.id.tvPhoneNumber)
+        TextView tvPhoneNumber;
+        @BindView(R.id.tvName)
+        TextView tvName;
+        @BindView(R.id.tvTime)
+        TextView tvTime;
+        @BindView(R.id.ivProfileImage)
+        ImageView ivProfile;
         ParseUser user;
 
         public ViewHolder(final View itemView) {
@@ -137,10 +140,11 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
             user = ParseUser.getCurrentUser();
             itemView.setOnClickListener(this);
         }
+
         @Override
-        public void onClick(View v){
+        public void onClick(View v) {
             int position = getAdapterPosition();
-            if (position != RecyclerView.NO_POSITION){
+            if (position != RecyclerView.NO_POSITION) {
                 Friend friend = mFriends.get(position);
                 Intent i = new Intent(context, MapActivity.class);
                 i.putExtra(Friend.class.getSimpleName(), Parcels.wrap(friend));
@@ -151,7 +155,7 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
         }
     }
 
-    public int timeUntilCheckin (Date prevDate, User user) {
+    public int timeUntilCheckin(Date prevDate, User user) {
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
 
