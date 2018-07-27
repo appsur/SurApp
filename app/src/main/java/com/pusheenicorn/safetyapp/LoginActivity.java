@@ -18,8 +18,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
     Button btnLogin;
 
-    boolean ishaniIsTesting = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +49,8 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, com.parse.ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity","Login Successful");
-                    Intent intent;
-                    if (ishaniIsTesting)
-                    {
-                        intent = new Intent(LoginActivity.this,
-                                SettingsActivity.class);
-                    }
-                    else {
-                        intent = new Intent(LoginActivity.this,
+                    Intent intent = new Intent(LoginActivity.this,
                                 MainActivity.class);
-                    }
                     startActivity(intent);
                     finish();
                 } else {
