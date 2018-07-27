@@ -2,6 +2,7 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -38,8 +39,6 @@ import java.util.ArrayList;
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback{
-
-
     // Declare views
     BottomNavigationView bottomNavigationView;
 
@@ -50,6 +49,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private DrawerLayout mDrawerLayout;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+
+    ImageButton ibPhone;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -127,6 +128,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         tvPhone.setText(number);
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_title.setText(friend.getName());
+
+        ibPhone = findViewById(R.id.ibPhone);
+        ibPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               dialFriendPhone(friendUser.getPhonNumber());
+            }
+        });
 
 
     }
@@ -214,5 +223,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         return super.onOptionsItemSelected(item);
     }
 
+    //method for dialing the contact number provided
+    private void dialFriendPhone(final String phoneNumber) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+    }
 
 }

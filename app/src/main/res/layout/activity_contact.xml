@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rvFriendList"
+        android:layout_alignStart="@+id/rvChatFriendList"
         android:layout_marginTop="87dp"
         android:fontFamily="@font/arimo"
         android:text="FRIENDS"
@@ -32,7 +32,7 @@
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriendList"
+        android:id="@+id/rvChatFriendList"
         android:layout_width="327dp"
         android:layout_height="227dp"
         android:layout_alignParentTop="true"
@@ -183,7 +183,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignBottom="@+id/tvFriendsTitle"
-        android:layout_alignEnd="@+id/rvFriendList"
+        android:layout_alignEnd="@+id/rvChatFriendList"
         android:background="@color/coral"
         android:text="CHAT" />
 
