@@ -207,16 +207,14 @@ public class SettingsActivity extends BaseActivity {
         tvPhoneValue.setText(phoneNumber);
 
         // Load the profile image
-        if (currentUser.getProfileImage() != null)
-        {
+        if (currentUser.getProfileImage() != null) {
             Glide.with(this).load(currentUser.getProfileImage()
                     .getUrl()).into(ibProfileImage);
         }
     }
 
     // Set safety toggle
-    public void setSafetyToggle()
-    {
+    public void setSafetyToggle() {
         // Set safety toggle
         tbSafe = (ToggleButton) findViewById(R.id.tbSafe);
         tbSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -233,24 +231,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getSafe())
-        {
+        if (currentUser.getSafe()) {
             tbSafe.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbSafe.setChecked(false);
         }
     }
 
     // Set location toggle
-    public void setLocationToggle()
-    {
+    public void setLocationToggle() {
         // Set safety toggle
         tbLocation = (ToggleButton) findViewById(R.id.tbLocation);
         tbLocation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -267,24 +260,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getTrackable())
-        {
+        if (currentUser.getTrackable()) {
             tbLocation.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbLocation.setChecked(false);
         }
     }
 
     // Set ring toggle
-    public void setRingToggle()
-    {
+    public void setRingToggle() {
         // Set safety toggle
         tbRing = (ToggleButton) findViewById(R.id.tbRing);
         tbRing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -301,24 +289,19 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getRingable())
-        {
+        if (currentUser.getRingable()) {
             tbRing.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbRing.setChecked(false);
         }
     }
 
     // Set checkin toggle
-    public void setCheckinToggle()
-    {
+    public void setCheckinToggle() {
         // Set safety toggle
         tbCheckin = (ToggleButton) findViewById(R.id.tbCheckin);
         tbCheckin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -335,17 +318,13 @@ public class SettingsActivity extends BaseActivity {
 
         try {
             currentUser.fetch();
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (currentUser.getCheckMe())
-        {
+        if (currentUser.getCheckMe()) {
             tbCheckin.setChecked(true);
-        }
-        else
-        {
+        } else {
             tbCheckin.setChecked(false);
         }
     }
@@ -359,8 +338,7 @@ public class SettingsActivity extends BaseActivity {
     public void onClock(View view) {
         // UI response
         isClock = !isClock;
-        if (isClock)
-        {
+        if (isClock) {
             btnEditFrequency.setText("DONE");
             btnHourly.setVisibility(View.VISIBLE);
             btnDaily.setVisibility(View.VISIBLE);
@@ -368,8 +346,7 @@ public class SettingsActivity extends BaseActivity {
             etNum.setText(tvNum.getText().toString());
             etNum.setVisibility(View.VISIBLE);
             tvNum.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             // Functionality
             btnEditFrequency.setText("EDIT");
             btnHourly.setVisibility(View.INVISIBLE);
@@ -395,7 +372,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Hourly");
                     user.saveInBackground();
@@ -418,7 +395,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Weekly");
                     user.saveInBackground();
@@ -441,7 +418,7 @@ public class SettingsActivity extends BaseActivity {
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null){
+                if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
                     user.setFrequency("Daily");
                     user.saveInBackground();
@@ -457,6 +434,7 @@ public class SettingsActivity extends BaseActivity {
     /**
      * Thsi function is called when the user clicks the edit icon. It makes the
      * edit views visible.
+     *
      * @param view: the edit button view.
      */
     public void onEdit(View view) {
@@ -482,6 +460,7 @@ public class SettingsActivity extends BaseActivity {
     /**
      * This function is called when the user clicks the "done button." It updates the
      * user's data, updates the text views, and hides the edit views.
+     *
      * @param view: the done button view
      */
     public void onDone(View view) {
@@ -526,8 +505,7 @@ public class SettingsActivity extends BaseActivity {
                     tvNameValue.setText(user.getName());
                     tvUsernameValue.setText(user.getUserName());
                     String newNumber = user.getPhonNumber();
-                    if (newNumber.length() >= 20)
-                    {
+                    if (newNumber.length() >= 20) {
                         newNumber = "(" + phoneNumber.substring(0, 3) + ") "
                                 + phoneNumber.substring(3, 6) + "-"
                                 + phoneNumber.substring(6, 10);
@@ -552,6 +530,7 @@ public class SettingsActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -573,7 +552,7 @@ public class SettingsActivity extends BaseActivity {
             //set the banner to the image that is selected by the user
             ibProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             //convert bitmap to a parsefile
-            final ParseFile parseFile =  conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            final ParseFile parseFile = conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
             currentUser.setProfileImage(parseFile);
             //save in background so the image updates correctly
             parseFile.saveInBackground(new SaveCallback() {
@@ -595,12 +574,13 @@ public class SettingsActivity extends BaseActivity {
 
         }
     }
+
     //converts bitmap to parse file
-    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        ParseFile parseFile = new ParseFile("image_file.png", imageByte);
         return parseFile;
     }
 }

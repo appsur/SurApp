@@ -133,6 +133,7 @@ public class EventsActivity extends BaseActivity {
             }
         });
     }
+
     public void initializeViews() {
         // Get the current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -152,21 +153,17 @@ public class EventsActivity extends BaseActivity {
         setNavigationDestinations(EventsActivity.this, bottomNavigationView);
         btnSend = (Button) findViewById(R.id.btnSend);
         notificationUtil = new NotificationUtil(context, currentUser);
-        // Find recycler views and hook up adapter
+
         rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
         users = new ArrayList<User>();
-        // construct the adapter from this data source
-        eventUsersAdapter = new EventUsersAdapter(users);
-        // recycler view setup
+        rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
+        friends = new ArrayList<Friend>();
+
+        eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
         rvUsers.setAdapter(eventUsersAdapter);
 
-        // Find recycler views and hook up adapter
-        rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
-        friends = new ArrayList<Friend>();
-        // construct the adapter from this data source
         eventFriendsAdapter = new EventFriendsAdapter(friends);
-        // recycler view setup
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
 
@@ -174,8 +171,7 @@ public class EventsActivity extends BaseActivity {
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
         ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
 
-        if (bannerImage != null)
-        {
+        if (bannerImage != null) {
             //load image using glide
             Glide.with(EventsActivity.this).load(bannerImage.getUrl())
                     .into(ibBanner);
@@ -184,17 +180,13 @@ public class EventsActivity extends BaseActivity {
 
     public void getEmergencyNotifications() {
         alerts = currentEvent.getAlerts();
-        if (alerts == null)
-        {
+        if (alerts == null) {
             return;
-        }
-        else {
-            for (int i = 0; i < alerts.size(); i++)
-            {
+        } else {
+            for (int i = 0; i < alerts.size(); i++) {
                 Alert curr = alerts.get(i);
                 if (curr.getSeenBy() == null ||
-                        !curr.getSeenBy().contains(currentUser.getObjectId()))
-                {
+                        !curr.getSeenBy().contains(currentUser.getObjectId())) {
                     // Schedule a notification for this alert
                     try {
                         String message = curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) +
@@ -210,9 +202,7 @@ public class EventsActivity extends BaseActivity {
                     // Save the alert state to Parse
                     try {
                         curr.save();
-                    }
-                    catch (ParseException e)
-                    {
+                    } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
@@ -232,15 +222,13 @@ public class EventsActivity extends BaseActivity {
                         // If this user belongs to the event
                         if (currentEvent.getUsersIds().contains(objects.get(i).getObjectId())) {
                             // If this user is a friend, then...
-                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId()))
-                            {
+                            if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId())) {
                                 int index = currentUser.getFriendUsers()
                                         .indexOf(objects.get(i).getObjectId());
                                 Friend newFriend = currentUser.getFriends().get(index);
                                 friends.add(newFriend);
                                 eventFriendsAdapter.notifyDataSetChanged();
-                            }
-                            else {
+                            } else {
                                 users.add(objects.get(i));
                                 // notify the adapter
                                 eventUsersAdapter.notifyDataSetChanged();

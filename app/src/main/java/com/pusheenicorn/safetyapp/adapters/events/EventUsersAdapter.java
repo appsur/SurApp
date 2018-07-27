@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.util.List;
@@ -21,11 +24,15 @@ import butterknife.ButterKnife;
 
 public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.ViewHolder> {
     List<User> mUsers;
+    List<Friend> mFriends;
     Context context;
+    User mCurrentUser;
 
     // constructor
-    public EventUsersAdapter(List<User> users) {
+    public EventUsersAdapter(List<User> users, List<Friend> friends, User currentUser) {
         mUsers = users;
+        mFriends = friends;
+        mCurrentUser = currentUser;
     }
 
     @NonNull
@@ -108,8 +115,33 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
                 // get the tweet at the position, this won't work if the class is static
-                User user = mUsers.get(position);
-                // TODO -- Add as friend??
+                final User user = mUsers.get(position);
+                if (user.getUserName() == mCurrentUser.getUserName())
+                {
+                    return;
+                }
+                final Friend newFriend = new Friend();
+                try {
+                    newFriend.setName(user.fetchIfNeeded().getString(Friend.KEY_NAME));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                newFriend.setUser(user);
+                newFriend.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        mCurrentUser.addFriend(newFriend);
+                        mCurrentUser.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                int index = mUsers.indexOf(user);
+                                mUsers.remove(index);
+                                mFriends.add(newFriend);
+                            }
+                        });
+                    }
+                });
+
             }
         }
     }

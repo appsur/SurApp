@@ -199,7 +199,7 @@
                 android:layout_marginTop="213dp"
                 android:background="@color/coral"
                 android:onClick="onSendAlert"
-                android:text="Send an event alert " />
+                android:text="Send an event alert!" />
 
             <EditText
                 android:id="@+id/tvMessage"
