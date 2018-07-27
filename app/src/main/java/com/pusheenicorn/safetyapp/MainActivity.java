@@ -81,6 +81,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity implements LocationListener {
+
     // Declare views
     BottomNavigationView bottomNavigationView;
     ImageButton ibEvents;
@@ -103,7 +104,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     // Declare fields
@@ -122,116 +122,60 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public String bestProvider;
 
     // Declare adapter, events list, and events adapter
-    EventAdapter eventAdapter;
-    ArrayList<Event> events;
-    RecyclerView rvEvents;
+    private EventAdapter eventAdapter;
+    private ArrayList<Event> events;
+    private RecyclerView rvEvents;
 
     // Define channel id for checkin notifications
     private static final String CHANNEL_ID = "checkin";
+
+    public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+    public static final DateFormat DATE_FORMAT =
+            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Check for geotracking permissions.
-        checkPermissionsPlease();
-
-        // Create notification channel for notifications.
-        createNotificationChannel();
-
-
-        // Set default values
-        isCheckedIn = false;
-        context = this;
-
-        // Setup adapter logic
-        rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
-        events = new ArrayList<Event>();
-        // construct the adapter from this data source
-        eventAdapter = new EventAdapter(events);
-        // recycler view setup
-        rvEvents.setLayoutManager(new LinearLayoutManager(this));
-        rvEvents.setAdapter(eventAdapter);
-
+        checkPermissionsPlease();                           // Check for geotracking permissions.
+        createNotificationChannel();                        // Create notification channel.
+        isCheckedIn = false;                                // Set default values
+        context = this;                                     // Set default values
+        setEventsAdapter();                                 // Set up the events adapter.
+        // Set up the BNV.
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);
+        currentUser = (User) ParseUser.getCurrentUser();    // Get the current user.
+        initializeViews();                                  // Initialize the views.
+        populateEvents();                                   // Populate the events recycler view.
+        getLocation();                                      // Get the user's location.
+        initializeNavItems(mNavItems);                      // Initialize navigation items
+        setUpDrawerLayout();                                // Set up the pull-out menu.
+    }
 
-        // Get the current user.
-        currentUser = (User) ParseUser.getCurrentUser();
+    /**
+     * This function is called whenever the user restarts or reopens the main activity (e.g.
+     * after a push notification interacted with the app) so we need to refresh some views.
+     */
+    @Override
+    public void onResume() {
+        // Do this after onCreate is executed
+        super.onResume();
+        findLastCheckin();
+    }
 
-        // Initialize views.
-        tvCheckinTime = (TextView) findViewById(R.id.tvCheckinTime);
-        tvUpcomingActivities = (TextView) findViewById(R.id.tvUpcomingActivities);
-        tvRelativeCheckinTime = (TextView) findViewById(R.id.tvRelativeCheckinTime);
-        tvUsername = (TextView) findViewById(R.id.tvUsername);
-        tvName = (TextView) findViewById(R.id.tvName);
-        ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
-        ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
-        etEndTime = (EditText) findViewById(R.id.etEndTime);
-        etStartTime = (EditText) findViewById(R.id.etStartTime);
-        etEventLocation = (EditText) findViewById(R.id.etEventLocation);
-        etEventName = (EditText) findViewById(R.id.etEventName);
-        ibAddEvent = (ImageButton) findViewById(R.id.ibAddEvent);
-        ibConfirmEvent = (ImageButton) findViewById(R.id.ibConfirmEvent);
-
-        // Set values.
-        tvUsername.setText(currentUser.getUserName());
-        tvName.setText(currentUser.getName());
-
-        // Find time of last checkin by geting checkin id and making query.
-        final String checkinId;
-        checkinId = currentUser.getLastCheckin().getObjectId();
-        final Checkin.Query checkinQuery = new Checkin.Query();
-        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
-        checkinQuery.findInBackground(new FindCallback<Checkin>() {
-            @Override
-            public void done(List<Checkin> objects, com.parse.ParseException e) {
-                if (e == null) {
-                    checkin = objects.get(0);
-                    Date date = checkin.getCreatedAt();
-                    DateFormat dateFormat =
-                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-                    String formatedDate = dateFormat.format(date);
-                    String newString = getRelativeTimeAgo(formatedDate);
-                    String[] formatedDateArr = formatedDate.split(" ");
-                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                            formatedDateArr[2] +
-                            " " + formatedDateArr[3];
-                    tvRelativeCheckinTime.setText(newString);
-                    tvCheckinTime.setText(formatedDate);
-                    isCheckedIn = isCheckedIn(date);
-                    if (isCheckedIn) {
-                        ibCheckin.setImageResource(R.drawable.check);
-                    } else {
-                        ibCheckin.setImageResource(R.drawable.check_outline);
-                        //Toast.makeText(context, "Click the check button to checkin!", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
-        populateEvents();
-
-// JARED-------------------------------------------------------------------------------------------
-        getLocation();
-
-        initializeNavItems(mNavItems);
-
-
-        // DrawerLayout
+    /**
+     * This function sets up the drawer layout for this activity.
+     */
+    public void setUpDrawerLayout() {
+        // Set up the drawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         // Populate the Navigtion Drawer with options
         mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
         mDrawerList = (ListView) findViewById(R.id.navList);
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
-
         // Drawer Item click listeners
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -241,9 +185,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         });
     }
-// JARED -----------------------------------------------------------------------------------------
 
-
+    /**
+     * TODO -- ADD JAVADOC
+     *
+     * @param loc
+     */
     public void saveLocation(Location loc) {
         //retrieve location from best existing source
         double longitude = loc.getLongitude();
@@ -261,13 +208,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
-    // Update the checkin button each time the app is restarted/reopened in case the user made a
-    // checkin through a push notification while the app was closed/in-background.
-    @Override
-    public void onResume() {
-        // Do this after onCreate is executed
-        super.onResume();
-
+    /**
+     * This function finds the user's last checkin and determines whether or not
+     * to send a checkin reminder. It then sends the reminder if needed. It takes
+     * no arguments.
+     */
+    public void findLastCheckin() {
         // Find id of last checkin.
         final String checkinId;
         currentUser = (User) ParseUser.getCurrentUser();
@@ -280,19 +226,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    // Get the checkin object and format its date
                     checkin = objects.get(0);
-                    Date date = checkin.getCreatedAt();
-                    DateFormat dateFormat =
-                            new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-                    String formatedDate = dateFormat.format(date);
-                    // Get the relative time difference
-                    String newString = getRelativeTimeAgo(formatedDate);
-                    String[] formatedDateArr = formatedDate.split(" ");
-                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
-                            formatedDateArr[2] +
-                            " " + formatedDateArr[3];
-                    tvRelativeCheckinTime.setText(newString);
+                    Date date = checkin.getCreatedAt();                     // Get date of creation.
+                    String formatedDate = DATE_FORMAT.format(date);
+                    String newString = getRelativeTimeAgo(formatedDate);    // Get relative time.
+                    formatedDate = getFormattedStringDate(formatedDate);    // Format nicely.
+                    tvRelativeCheckinTime.setText(newString);               // Update TV's.
                     tvCheckinTime.setText(formatedDate);
                     // If the last checkin is not expired, set the green check. Otherwise, prompt
                     // the user to check in.
@@ -301,9 +240,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                         ibCheckin.setImageResource(R.drawable.check);
                     } else {
                         ibCheckin.setImageResource(R.drawable.check_outline);
-                        // Provide an in-app reminder.
-                        Toast.makeText(context, "Click the check button to checkin!",
-                                Toast.LENGTH_LONG).show();
+                        // Send an immediate notification.
                         scheduleNotification(getNotification(), 0);
                     }
                 } else {
@@ -313,7 +250,63 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
-    // JARED --------------------------------------------------------------------------------------
+    /**
+     * This function takes a String that represents a date and formats it for display.
+     *
+     * @param formatedDate: the String to be formatted.
+     * @return the formatted String.
+     */
+    public String getFormattedStringDate(String formatedDate) {
+        String[] formatedDateArr = formatedDate.split(" ");
+        formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
+                formatedDateArr[2] +
+                " " + formatedDateArr[3];
+        return formatedDate;
+    }
+
+    /**
+     * This function initializes the views and some text fields
+     * in the layout. It takes no arguments.
+     */
+    public void initializeViews() {
+        // Find the views.
+        tvCheckinTime = (TextView) findViewById(R.id.tvCheckinTime);
+        tvUpcomingActivities = (TextView) findViewById(R.id.tvUpcomingActivities);
+        tvRelativeCheckinTime = (TextView) findViewById(R.id.tvRelativeCheckinTime);
+        tvUsername = (TextView) findViewById(R.id.tvUsername);
+        tvName = (TextView) findViewById(R.id.tvName);
+        ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+        ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
+        etEndTime = (EditText) findViewById(R.id.etEndTime);
+        etStartTime = (EditText) findViewById(R.id.etStartTime);
+        etEventLocation = (EditText) findViewById(R.id.etEventLocation);
+        etEventName = (EditText) findViewById(R.id.etEventName);
+        ibAddEvent = (ImageButton) findViewById(R.id.ibAddEvent);
+        ibConfirmEvent = (ImageButton) findViewById(R.id.ibConfirmEvent);
+        // Set username + name.
+        tvUsername.setText(currentUser.getUserName());
+        tvName.setText(currentUser.getName());
+        // Load the profile image.
+        Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+    }
+
+    /**
+     * This function takes no arguments and sets up the events adapter.
+     */
+    public void setEventsAdapter() {
+        // Setup adapter logic
+        rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
+        events = new ArrayList<Event>();
+        // construct the adapter from this data source
+        eventAdapter = new EventAdapter(events);
+        // recycler view setup
+        rvEvents.setLayoutManager(new LinearLayoutManager(this));
+        rvEvents.setAdapter(eventAdapter);
+    }
+
+    /**
+     * TODO -- ADD JAVADOC
+     */
     // this will open a prompt to let the user know that gps is not enabled on their phone and will
     // allow the user to turn it on
     private void showGPSDisabledAlertToUser() {
@@ -338,8 +331,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-    // JARED ---------------------------------------------------------------------------------------
-
 
     /**
      * This function populates the events adapter.
@@ -390,8 +381,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * @return relativeDate: the relative time between rawDate and present
      */
     public String getRelativeTimeAgo(String rawDate) {
-        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_FORMAT, Locale.ENGLISH);
         sf.setLenient(true);
 
         String relativeDate = "";
@@ -414,74 +404,64 @@ public class MainActivity extends BaseActivity implements LocationListener {
      */
     public void onCheckin(View view) {
 
-        // Initialize some checkins for later use.
-        final Checkin checkin;
-        final Date newCheckinDate;
+        if (isCheckedIn)
+        {
+            // If the user is checking in again when they are already checked in, we need to
+            // cancel the scheduled notification.
+            Context context = getApplicationContext();
+            AlarmManager alarmManager =
+                    (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent cancelServiceIntent = new Intent(context, Receiver.class);
+            PendingIntent cancelServicePendingIntent = PendingIntent.getBroadcast(context,
+                    Receiver.SERVICE_ID, cancelServiceIntent,0);
+            alarmManager.cancel(cancelServicePendingIntent);
+        }
 
-        // JARED------------------------------------------------------------------------------------
+        // Update the view to reflect a checked circle (if needed)
+        ibCheckin.setImageResource(R.drawable.check);
+        checkInUser();
+    }
 
 
-        // JARED------------------------------------------------------------------------------------
+    public void checkInUser() {
 
-        // If the user is elligible to checkin at this time...
-        if (!isCheckedIn) {
-            // Update the view to reflect a checked circle
-            ibCheckin.setImageResource(R.drawable.check);
-            // Create a new checkin object and save it in background
-            checkin = new Checkin();
-            newCheckinDate = new Date();
-            checkin.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        checkin.saveInBackground();
-                        currentUser.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(com.parse.ParseException e) {
-                                if (e == null) {
-                                    // Set the current user to point to the newly created checkin
-                                    // object as its last checkin.
-                                    final User user = (User) ParseUser.getCurrentUser();
-                                    user.setLastCheckin(checkin);
-                                    // Save the user and update the textviews in the activity.
-                                    user.saveInBackground();
-                                    DateFormat dateFormat =
-                                            new SimpleDateFormat("EEE MMM dd " +
-                                                    "HH:mm:ss ZZZZZ yyyy");
-                                    String formatedDate = dateFormat.format(newCheckinDate);
-                                    String newString = getRelativeTimeAgo(formatedDate);
-                                    String[] formatedDateArr = formatedDate.split(" ");
-                                    formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] +
-                                            " " + formatedDateArr[2] + " " + formatedDateArr[3];
-                                    tvRelativeCheckinTime.setText(newString);
-                                    tvCheckinTime.setText(formatedDate);
-                                    isCheckedIn = isCheckedIn(newCheckinDate);
-                                    if (isCheckedIn) {
-                                        ibCheckin.setImageResource(R.drawable.check);
-                                    } else {
-                                        ibCheckin.setImageResource(R.drawable.check_outline);
-                                    }
-                                    // Schedule the next notification based on the user's
-                                    // checkin frequency.
-                                    int mins = (int) currentUser.getNumber("checkin");
-                                    scheduleNotification(getNotification(), mins * 60000);
-                                } else {
-                                    e.printStackTrace();
-                                }
+        // Create a new checkin object and save it in background
+        final Checkin checkin = new Checkin();
+        final Date newCheckinDate = new Date();
+        checkin.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    checkin.saveInBackground();                         // Save to Parse
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(com.parse.ParseException e) {
+                            if (e == null) {
+                                final User user = (User) ParseUser.getCurrentUser();
+                                user.setLastCheckin(checkin);           // Update user's checkin.
+                                user.saveInBackground();                // Save to Parse
+                                // Format the dates nicely.
+                                String formatedDate = DATE_FORMAT.format(newCheckinDate);
+                                String newString = getRelativeTimeAgo(formatedDate);
+                                formatedDate = getFormattedStringDate(formatedDate);
+                                // Update the TV's
+                                tvRelativeCheckinTime.setText(newString);
+                                tvCheckinTime.setText(formatedDate);
+                                isCheckedIn = isCheckedIn(newCheckinDate);
+                                // Schedule the next notification.
+                                int mins = (int) currentUser.getNumber("checkin");
+                                scheduleNotification(getNotification(), mins * 60000);
+                            } else {
+                                e.printStackTrace();
                             }
-                        });
+                        }
+                    });
 
-                    } else {
-                        e.printStackTrace();
-                    }
+                } else {
+                    e.printStackTrace();
                 }
-            });
-        }
-        // Otherwise, the user is not eligible to checkin, so toast a message to this effect.
-        else {
-            Toast.makeText(this, "You are already checked in!",
-                    Toast.LENGTH_LONG).show();
-        }
+            }
+        });
     }
 
     /**
@@ -520,10 +500,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
     }
 
-
-    // JARED---------------------------------------------------------------------------------------
-
-
     /*---------- Listener class to get coordinates -------------*/
     protected void getLocation() {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -549,18 +525,14 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//           this is good
         } else {
             showGPSDisabledAlertToUser();
         }
-
-
     }
 
 
     @Override
     public void onLocationChanged(Location loc) {
-
 
 //            //remove location callback:
 //            locationManager.removeUpdates(this);
@@ -604,32 +576,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    // JARED-----------------------------------------------------------------------------------
-
 
     public static boolean isLocationEnabled(Context context) {
         //...............
         return true;
     }
 
-
-//    public void makeNotification() {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.check)
-//                .setContentTitle("My notification")
-//                .setContentText("Hello World!")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                // Set the intent that will fire when the user taps the notification
-//                .setContentIntent(pendingIntent)
-//                .setAutoCancel(true);
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-//        notificationManager.notify(1234, mBuilder.build());
-//    }
-
+    /**
+     * This function creates a notification channel if necessary.
+     */
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -646,6 +601,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
     }
 
+    /**
+     * Create a notification to go to Receiver class.
+     * @return: the generated notification.
+     */
     public Notification getNotification() {
         //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(context, Receiver.class);
@@ -653,7 +612,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         intent.putExtra("user", currentUser);
 
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 10,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Receiver.SERVICE_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =
@@ -690,6 +649,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
+    /**
+     * TODO -- ADD JAVADOC
+     */
     private void checkPermissionsPlease() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

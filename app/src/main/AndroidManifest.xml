@@ -96,7 +96,6 @@
         <receiver android:name=".Receiver" />
 
         <activity android:name=".BaseActivity" />
-        <activity android:name=".ComposeAlertActivity"></activity>
     </application>
 
 </manifest>
