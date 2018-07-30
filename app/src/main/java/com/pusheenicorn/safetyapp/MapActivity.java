@@ -155,9 +155,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
 
         currentUser = (User) ParseUser.getCurrentUser();
-        if (currentUser == null){
-            //currentUser = (User) getIntent().getSerializableExtra("user");
-        }
+
 
         boolean isNotif = getIntent().getBooleanExtra("notif", false);
         if (isNotif) {
