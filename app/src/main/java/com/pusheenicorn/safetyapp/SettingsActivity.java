@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -279,6 +283,13 @@ public class SettingsActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     currentUser.setRingable(true);
+                    //disable silencing settings
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(SettingsActivity.this);
+                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
                     currentUser.saveInBackground();
                 } else {
                     currentUser.setRingable(false);
@@ -295,6 +306,12 @@ public class SettingsActivity extends BaseActivity {
 
         if (currentUser.getRingable()) {
             tbRing.setChecked(true);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(SettingsActivity.this);
+            mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
         } else {
             tbRing.setChecked(false);
         }
