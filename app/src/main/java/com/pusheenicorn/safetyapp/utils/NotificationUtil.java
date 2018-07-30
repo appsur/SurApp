@@ -26,6 +26,7 @@ public class NotificationUtil {
 
     Context mContext;
     User mCurrentUser;
+    Friend mFriend;
     public static String KEY_CHECKIN = "checkIn";
     public static String KEY_ALERT = "alert";
     public static String KEY_USER = "user";
@@ -33,6 +34,11 @@ public class NotificationUtil {
     public NotificationUtil(Context context, User currentUser) {
         mContext = context;
         mCurrentUser = currentUser;
+    }
+    public NotificationUtil(Context context, User currentUser , Friend friend){
+        mContext = context;
+        mCurrentUser = currentUser;
+        mFriend = friend;
     }
 
     /**
@@ -107,12 +113,13 @@ public class NotificationUtil {
             Intent intent = new Intent(mContext.getApplicationContext(), MapActivity.class);
             intent.putExtra("actionName", "alert");
             intent.putExtra("user", mCurrentUser);
-            intent.putExtra(User.class.getSimpleName(), Parcels.wrap(friend));
+            intent.putExtra("notif", true);
+            intent.putExtra("friend", mFriend);
 
-            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 10,
 //                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent pendingIntent = PendingIntent.getActivity(mContext , 0 , intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext , 0 , intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Builder builder =
                     (NotificationCompat.Builder) new NotificationCompat.Builder(mContext.getApplicationContext(), CheckinReceiver.CHANNEL_ID)

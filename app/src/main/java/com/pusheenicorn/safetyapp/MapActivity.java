@@ -153,9 +153,22 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
-        friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
+
         currentUser = (User) ParseUser.getCurrentUser();
+        if (currentUser == null){
+            //currentUser = (User) getIntent().getSerializableExtra("user");
+        }
+
+        boolean isNotif = getIntent().getBooleanExtra("notif", false);
+        if (isNotif) {
+            friend = getIntent().getParcelableExtra("friend");
+        }
+        else {
+            friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
+        }
+
         friendUser = (User) friend.getUser();
+
         tvPhone = (TextView) findViewById(R.id.tvPhone);
 
         String number = "(" + friendUser.getPhonNumber().substring(0, 3) + ") " +
@@ -174,6 +187,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
 
 
+    }
+    @Override
+    protected void onNewIntent(Intent intent){
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
