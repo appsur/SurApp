@@ -31,7 +31,7 @@ public class CheckinReceiver extends WakefulBroadcastReceiver {
     Checkin checkin;
     Context mContext;
     public static final int SERVICE_ID = 10;
-    private static final String CHANNEL_ID = "checkin";
+    public static final String CHANNEL_ID = "checkin";
     private static final String ACTION_NAME = "actionName";
     private static final String CHECKIN_ACTION_ID = "checkIn";
     private static final String USER_KEY = "user";

@@ -31,11 +31,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
+import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
@@ -66,6 +69,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
     EditText etEndTime;
     EditText etEventName;
     EditText etEventLocation;
+
+
     //variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
@@ -86,6 +91,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public LocationManager locationManager;
     public Criteria criteria;
     public String bestProvider;
+    public FriendAlert alert;
+
+    // Declare adapter, events list, and events adapter
     // Declare adapter, events list, and events adapter.
     private EventAdapter eventAdapter;
     private ArrayList<Event> events;
@@ -127,6 +135,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         getLocation();                                      // Get the user's location.
         initializeNavItems(mNavItems);                      // Initialize navigation items
         setUpDrawerLayout();                                // Set up the pull-out menu.
+        friendsCheck();                                     // Check if friends need to check-in
         onResume();
     }
 
@@ -173,8 +182,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         double latitude = loc.getLatitude();
         //store the user's location
         final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
-        Toast.makeText(MainActivity.this, latitude + ":"
-                + longitude, Toast.LENGTH_LONG).show();
+//        Toast.makeText(MainActivity.this, latitude + ":"
+//                + longitude, Toast.LENGTH_LONG).show();
         currentUser.setPlace(point);
 
         currentUser.saveInBackground(new SaveCallback() {
@@ -234,6 +243,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * @param formatedDate: the String to be formatted.
      * @return the formatted String.
      */
+
     public String getFormattedStringDate(String formatedDate) {
         String[] formatedDateArr = formatedDate.split(" ");
         formatedDate = formatedDateArr[0] + " " + formatedDateArr[1] + " " +
@@ -281,6 +291,16 @@ public class MainActivity extends BaseActivity implements LocationListener {
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
         rvEvents.setAdapter(eventAdapter);
     }
+
+
+
+    public void friendsCheck(){
+        alert = new FriendAlert();
+        currentUser = (User) ParseUser.getCurrentUser();
+        alert.alertNeeded(context);
+    }
+
+
 
     /**
      * TODO -- ADD JAVADOC

@@ -1,9 +1,25 @@
 package com.pusheenicorn.safetyapp.models;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.MapActivity;
+import com.pusheenicorn.safetyapp.NotificationPublisher;
+import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.CheckinReceiver;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
+
+import org.parceler.Parcels;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,17 +36,24 @@ public class FriendAlert {
     List<Friend> friends;
     User currentUser;
     User myFriend;
+    NotificationManager notif;
+    User primary;
+    String their_id;
+    String my_id;
+
+    private static final String CHANNEL_ID = "checkin";
 
 
 
 
-
-    public int timeSinceLastCheckin (Date prevDate, User user) {
+    private int timeSinceLastCheckin (Date prevDate, User user) {
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
 
         // Get current Date.
         Date currDate = new Date();
+
+
 
         // Split by regex "/" convert to int array and find time difference.
         String[] currDateArr = df.format(currDate).split("/");
@@ -53,31 +76,89 @@ public class FriendAlert {
         return (trueCurr - truePrev);
     }
 
-    public void alertNeeded(User user, int time) {
+    public void alertNeeded(final Context context) {
+
         currentUser = (User) ParseUser.getCurrentUser();
         friends = currentUser.getFriends();
+        notif = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        try {
+            my_id = currentUser.fetchIfNeeded().getObjectId();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
-        
         //iterate through friends and check each friend's check in status
-        for (Friend fr : friends) {
-            myFriend = (User) fr.getUser();
-            if (myFriend.getPrimary() == currentUser){
+        for (final Friend fr : friends) {
+            try {
+                myFriend = (User) fr.fetchIfNeeded().getParseUser("user");
+                primary = (User) myFriend.fetchIfNeeded().getParseUser("primaryContact");
+                their_id = primary.fetchIfNeeded().getObjectId();
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            //Toast.makeText(context, "My id is: " + my_id + "\n Their id is: " + their_id, Toast.LENGTH_LONG).show();
+            if (my_id.equals(their_id)){
+                Toast.makeText(context, "HELLLOOO", Toast.LENGTH_LONG).show();
                 //assign friend's last checkin to a date object
-                Date date = myFriend.getLastCheckin().getCreatedAt();
-                int placeholder = 5;
-                int cycle = (int) myFriend.getNumber("checkin");
-                if (timeSinceLastCheckin(date, myFriend ) > (placeholder * cycle) ){
-                    //TODO: send notification
-                }
+                //Ishani----------------------------------------------------------------------------
+                String checkinId = myFriend.getLastCheckin().getObjectId();
+
+                // Query by checkinId
+                final Checkin.Query checkinQuery = new Checkin.Query();
+                checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+                checkinQuery.findInBackground(new FindCallback<Checkin>() {
+                    @Override
+                    public void done(List<Checkin> objects, ParseException e) {
+                        if (e == null) {
+                            // Get the checkin object and format its date
+                            final Checkin checkin = objects.get(0);
+                            Date date = checkin.getCreatedAt();
+                            int placeholder = 1;
+                            int cycle = (int) myFriend.getNumber("checkin");
+                            int time = timeSinceLastCheckin(date,myFriend);
+                            if (time > (placeholder * cycle) ){
+                                NotificationUtil notificationUtil = new NotificationUtil(context, currentUser);
+                                notificationUtil.createNotificationChannel();
+                                notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);
+                                //notif.notify(0, getNotification(currentUser , myFriend , context));
+                            }
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         }
-        
-
-
     }
-    
+
+
+    public Notification getNotification(User user, User friend , Context context) {
+        //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(context.getApplicationContext(), MapActivity.class);
+        intent.putExtra("actionName", "alert");
+        intent.putExtra("user", currentUser);
+        intent.putExtra(User.class.getSimpleName(), Parcels.wrap(friend));
+
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 10,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context , 0 , intent, 0);
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
+                        .setContentTitle("Sûr")
+                        .setSmallIcon(R.drawable.check)
+                        .setContentText(user.getName() + " has not checked-in in a while")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .addAction(R.drawable.ic_person, "view" , pendingIntent)
+                        .setOngoing(true);
+        builder.setContentIntent(pendingIntent);
+         builder.setAutoCancel(true);
+        return builder.build();
+    }
 
 
 

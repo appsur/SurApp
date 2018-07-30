@@ -10,12 +10,17 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.pusheenicorn.safetyapp.CheckinReceiver;
 import com.pusheenicorn.safetyapp.MainActivity;
+import com.pusheenicorn.safetyapp.MapActivity;
 import com.pusheenicorn.safetyapp.NotificationPublisher;
 import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+
+import org.parceler.Parcels;
 
 public class NotificationUtil {
 
@@ -95,6 +100,31 @@ public class NotificationUtil {
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
         return builder.build();
+    }
+
+    public Notification getReminderNotification(Friend friend) {
+            //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(mContext.getApplicationContext(), MapActivity.class);
+            intent.putExtra("actionName", "alert");
+            intent.putExtra("user", mCurrentUser);
+            intent.putExtra(User.class.getSimpleName(), Parcels.wrap(friend));
+
+            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 10,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(mContext , 0 , intent, 0);
+
+            NotificationCompat.Builder builder =
+                    (NotificationCompat.Builder) new NotificationCompat.Builder(mContext.getApplicationContext(), CheckinReceiver.CHANNEL_ID)
+                            .setContentTitle("Sûr")
+                            .setSmallIcon(R.drawable.ic_person)
+                            .setContentText(friend.getName() + " has not checked-in in a while")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .addAction(R.drawable.ic_person, "view" , pendingIntent)
+                            .setOngoing(true);
+            builder.setContentIntent(pendingIntent);
+            builder.setAutoCancel(true);
+            return builder.build();
     }
 
     /**
