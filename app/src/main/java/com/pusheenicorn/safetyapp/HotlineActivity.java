@@ -1,11 +1,22 @@
 package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 public class HotlineActivity extends AppCompatActivity {
+
+    private static final String SUICIDE_NUMBER = "18008277571";
+    private static final String DOMESTIC_NUMBER = "18007997233";
+    private static final String SPANISH_NUMBER = "18009426908";
+    private static final String BWC_NUMBER = "18006034357";
+    private static final String ELDER_NUMBER = "18002528966";
+    private static final String DRUG_NUMBER = "18006624357";
+    private static final String ALCOHOL_NUMBER = "18002526465";
+    private static final String SOCIAL_SERVICES_NUMBER = "18003423720";
+    private static final String TELEPHONE_KEY = "tel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +31,47 @@ public class HotlineActivity extends AppCompatActivity {
 
     public void onSuicidePrevention(View view) {
         // Call: 1-800-827-7571
+        dialContactPhone(SUICIDE_NUMBER);
     }
 
     public void onDomesticAbuse(View view) {
         // Call: 1-800-799-SAFE
+        dialContactPhone(DOMESTIC_NUMBER);
     }
 
+    public void onDomesticAbuseSpanish(View view) {
+        // Call: 1-800-942-6908
+        dialContactPhone(SPANISH_NUMBER);
+    }
+
+    public void onBatteredWomenAndChildren(View view) {
+        // Call: 1-800-603-HELP
+        dialContactPhone(BWC_NUMBER);
+    }
+
+    public void onElderAbuse(View view) {
+        // Call: 1-800-252-8966
+        dialContactPhone(ELDER_NUMBER);
+    }
+
+    public void onDrugs(View view) {
+        // Call 1-800-662-4357
+        dialContactPhone(DRUG_NUMBER);
+    }
+
+    public void onSS(View view) {
+        // Call: 1-800-342-3720
+        dialContactPhone(SOCIAL_SERVICES_NUMBER);
+    }
+
+    public void onAlcoholics(View view) {
+        // Call: 1-800-252-6465
+        dialContactPhone(ALCOHOL_NUMBER);
+    }
+
+    //method for dialing the contact number provided
+    private void dialContactPhone(final String phoneNumber) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts(TELEPHONE_KEY, phoneNumber,
+                null)));
+    }
 }

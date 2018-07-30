@@ -13,18 +13,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="93dp"
+        android:onClick="onSuicidePrevention"
         android:text="Suicide Prevention Hotline "
         android:textColor="@color/black"
-        android:onClick="onSuicidePrevention"/>
+        android:textSize="22sp" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:background="@color/lightGray"
         app:titleTextColor="@android:color/black">
 
@@ -90,71 +89,85 @@
         android:id="@+id/tvBWC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_marginTop="209dp"
-        android:text="Battered Women and Children Hotline: 1-800-603-HELP"
-        android:textColor="@color/black" />
+        android:layout_below="@+id/tvDomesticAbuseSpanish"
+        android:layout_marginTop="30dp"
+        android:onClick="onBatteredWomenAndChildren"
+        android:text="Battered Women and Children Hotline"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvElderlyAbuse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginTop="256dp"
-        android:text="Elder Abuse Hotline: "
-        android:textColor="@color/black" />
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvChildAbuse"
+        android:layout_marginTop="30dp"
+        android:onClick="onElderAbuse"
+        android:text="Elder Abuse Hotline"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvDrugAbuse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginTop="300dp"
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvAlcoholics"
+        android:layout_marginTop="30dp"
+        android:onClick="onDrugs"
         android:text="Drug Abuse National Hotline"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvChildAbuse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginTop="351dp"
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvBWC"
+        android:layout_marginTop="30dp"
+        android:onClick="onSS"
         android:text="Child Abuse Hotline/Social Services"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvAlcoholics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginBottom="333dp"
-        android:text="Alcohol Treatment Referal Hotline: "
-        android:textColor="@color/black" />
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvElderlyAbuse"
+        android:layout_marginTop="30dp"
+        android:onClick="onAlcoholics"
+        android:text="Alcohol Treatment Referal Hotline"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvDomesticAbuse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginTop="113dp"
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvSuicidePrevention"
+        android:layout_marginTop="30dp"
+        android:onClick="onDomesticAbuse"
         android:text="National Domestic Abuse Hotline"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tvDomesticAbuseSpanish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/tvBWC"
-        android:layout_marginTop="160dp"
-        android:text="National Domestic Abuse Hotline (Spanish): 1-800-942-6908"
-        android:textColor="@color/black" />
+        android:layout_alignStart="@+id/tvSuicidePrevention"
+        android:layout_below="@+id/tvDomesticAbuse"
+        android:layout_marginTop="30dp"
+        android:onClick="onDomesticAbuseSpanish"
+        android:text="National Domestic Abuse Hotline (Spanish)"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
 
 
 </RelativeLayout>
