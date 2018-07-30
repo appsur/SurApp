@@ -32,6 +32,12 @@ import java.util.List;
  */
 
 public class FriendAlert {
+    public static final int SECOND_TO_MILLIS = 60000;
+    public static final String OBJECT_ID_KEY = "objectId";
+    public static final int MONTHS_TO_SECONDS = 43800;
+    public static final int DAYS_TO_SECONDS = 1440;
+    public static final int YEARS_TO_SECONDS = 525600;
+    public static final int MINS_TO_SECONDS = 60;
     Context context;
     List<Friend> friends;
     User currentUser;
@@ -40,6 +46,7 @@ public class FriendAlert {
     User primary;
     String their_id;
     String my_id;
+    int PLACEHOLDER = 1;
 
     private static final String CHANNEL_ID = "checkin";
 
@@ -66,10 +73,10 @@ public class FriendAlert {
         }
 
         // true curr - truePrev is the number of minutes ago that the user checked in
-        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
-                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
-        int truePrev = (prevDateInts[0] * 43800) + (prevDateInts[1] * 1440)
-                + (prevDateInts[2] * 525600) + (prevDateInts[3] * 60) + prevDateInts[4];
+        int trueCurr = (currDateInts[0] * MONTHS_TO_SECONDS) + (currDateInts[1] * DAYS_TO_SECONDS)
+                + (currDateInts[2] * YEARS_TO_SECONDS) + (currDateInts[3] * MINS_TO_SECONDS) + currDateInts[4];
+        int truePrev = (prevDateInts[0] * MONTHS_TO_SECONDS) + (prevDateInts[1] * DAYS_TO_SECONDS)
+                + (prevDateInts[2] * YEARS_TO_SECONDS) + (prevDateInts[3] * MINS_TO_SECONDS) + prevDateInts[4];
         // threshold is the length of a user's checkin cycle
         //int threshold = (int) user.getNumber("checkin");
 
@@ -116,10 +123,9 @@ public class FriendAlert {
                             // Get the checkin object and format its date
                             final Checkin checkin = objects.get(0);
                             Date date = checkin.getCreatedAt();
-                            int placeholder = 1;
                             int cycle = (int) myFriend.getNumber("checkin");
                             int time = timeSinceLastCheckin(date,myFriend);
-                            if (time > (placeholder * cycle) ){
+                            if (time > (PLACEHOLDER * cycle) ){
                                 NotificationUtil notificationUtil = new NotificationUtil(context, currentUser, fr);
                                 notificationUtil.createNotificationChannel();
                                 notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);
