@@ -1,9 +1,16 @@
 package com.pusheenicorn.safetyapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,9 +44,7 @@ import java.util.ArrayList;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback{
-
-
+public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     // Declare views
     BottomNavigationView bottomNavigationView;
 
@@ -50,6 +55,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private DrawerLayout mDrawerLayout;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+
+    ImageButton ibPhone;
+    ImageButton ibAlert;
+    Boolean isRinging;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -68,17 +77,45 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private final static String Key_location = "location";
     TextView tvPhone;
     TextView toolbar_title;
+    AudioManager myAudioManager;
 
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
+        myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        ibAlert = findViewById(R.id.ibAlert);
+        ibAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                AudioManager audio = (AudioManager) MapActivity.this.getSystemService(Context.AUDIO_SERVICE);
+//                int currentVolume = audio.getStreamVolume(AudioManager.STREAM_RING);
+//                int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+//                audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//                audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+//                int volume = myAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+//                if(volume==0)
+//                    volume = myAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+//                myAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+//                ringtone = RingtoneManager.getRingtone(getApplicationContext(), Uri.parse(ringTonePath));
+//                if(ringtone!=null){
+//                    ringtone.setStreamType(AudioManager.STREAM_ALARM);
+//                    ringtone.play();
+//                    isRinging = true;
+//                }
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(MapActivity.this);
+                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+            }
+        });
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
@@ -128,6 +165,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_title.setText(friend.getName());
 
+        ibPhone = findViewById(R.id.ibPhone);
+        ibPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialFriendPhone(friendUser.getPhonNumber());
+            }
+        });
+
 
     }
 
@@ -138,10 +183,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     }
 
 
-
     public void onSettings(View view) {
         Intent intent = new Intent(MapActivity.this, SettingsActivity.class);
-        Toast.makeText(MapActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG ).show();
+        Toast.makeText(MapActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 
@@ -164,7 +208,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         if (map != null) {
 
 
-
             // Map is ready
             googleMap.addMarker(new MarkerOptions().position(them)
                     .title(friendUser.getName()));
@@ -178,7 +221,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
 
             //zoom out to zoom level 10, animating with a duration of 2 seconds
-            map.animateCamera(CameraUpdateFactory.zoomTo(10) , 2000 ,null);
+            map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -190,15 +233,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
-
-
-
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
 
         } else {
             Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -214,5 +255,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         return super.onOptionsItemSelected(item);
     }
 
+    //method for dialing the contact number provided
+    private void dialFriendPhone(final String phoneNumber) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+    }
 
 }

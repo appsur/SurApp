@@ -32,25 +32,34 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriendList"
-        android:layout_width="327dp"
-        android:layout_height="103dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="109dp"
-        android:visibility="visible"
-        tools:listitem="@layout/item_friend" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvChatList"
+                android:layout_width="44dp"
+                android:layout_height="154dp"
+                android:layout_alignTop="@+id/rvChatFriendList"
+                android:layout_toEndOf="@+id/rvChatFriendList"
+                android:visibility="visible"
+                tools:listitem="@layout/item_chat" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        tools:ignore="Orientation">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvChatFriendList"
+                android:layout_width="327dp"
+                android:layout_height="155dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/tvFriendsTitle"
+                android:layout_marginTop="109dp"
+                android:visibility="visible"
+                tools:listitem="@layout/item_friend" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:visibility="visible"
+                tools:ignore="Orientation">
+
+            </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation_chat"

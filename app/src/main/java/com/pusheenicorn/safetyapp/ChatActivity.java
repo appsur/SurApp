@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.adapters.ChatAdapter;
 import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
@@ -41,7 +42,11 @@ public class ChatActivity extends BaseActivity {
     //initializing variables to populate the friend recycler view
     SafeFriendsAdapter friendAdapter;
     ArrayList<Friend> friends;
-    RecyclerView rvFriendList;
+    RecyclerView rvChatFriendList;
+
+    ChatAdapter chatAdapter;
+    ArrayList<Friend> chats;
+    RecyclerView rvChatList;
 
     //initializing the current user
     User currentUser;
@@ -63,10 +68,11 @@ public class ChatActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
-            if (intent.equals("SMS_RECEIVED_ACTION")) {
+            //TODO - figure this out?? if the check is added then the message will not display :O
+//            if (intent.equals("SMS_RECEIVED_ACTION")) {
                 //set text view with the message and phone number from the reply
                 tvTextMessage.setText(intent.getExtras().getString("message"));
-            }
+//            }
         }
     };
 
@@ -110,18 +116,25 @@ public class ChatActivity extends BaseActivity {
                 //code for sending the message
                 String message = etTextMessage.getText().toString();
                 //TODO - allow clicking on the friend object to take user to chat activity and auto-populate phone number
-                String number = currentUser.getPhonNumber().toString();
+                Intent intent = getIntent();
+                String number = intent.getStringExtra("number");
                 sendMessage(number, message);
             }
         });
 
-        rvFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
-        friends = new ArrayList<Friend>();
+        rvChatFriendList = (RecyclerView) findViewById(R.id.rvChatFriendList);
+        friends = new ArrayList<>();
         // construct the adapter from this data source
         friendAdapter = new SafeFriendsAdapter(friends);
         // recycler view setup
-        rvFriendList.setLayoutManager(new LinearLayoutManager(this));
-        rvFriendList.setAdapter(friendAdapter);
+        rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvChatFriendList.setAdapter(friendAdapter);
+
+        rvChatList = (RecyclerView) findViewById(R.id.rvChatList);
+        chats = new ArrayList<>();
+        chatAdapter = new ChatAdapter(friends);
+        rvChatList.setLayoutManager(new LinearLayoutManager(this));
+        rvChatList.setAdapter(chatAdapter);
 
         //initialize current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -131,23 +144,24 @@ public class ChatActivity extends BaseActivity {
     }
 
     public void populateFriendList() {
-        // Populate the friends list.
-        final Friend.Query friendQuery = new Friend.Query();
-        friendQuery.getTop().withUser();
+        final User.Query userQuery = new User.Query();
+        userQuery.getTop();
 
-        friendQuery.findInBackground(new FindCallback<Friend>() {
+        userQuery.findInBackground(new FindCallback<User>() {
             @Override
-            public void done(List<Friend> objects, ParseException e) {
+            public void done(List<User> objects, ParseException e) {
                 if (e == null) {
-                    for (int i = objects.size() - 1; i > -1; i--)
-                    {
-                        if (currentUser.getFriends() != null &&
-                                currentUser.getFriendIds().contains(objects.get(i).getObjectId()))
-                        {
-                            // add the friend object
-                            friends.add(objects.get(i));
-                            // notify the adapter
-                            friendAdapter.notifyDataSetChanged();
+                    for (int i = objects.size() - 1; i > -1; i--) {
+                        // If this user is a friend of the current user
+                        if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId())) {
+                            int index = currentUser.getFriendUsers()
+                                    .indexOf(objects.get(i).getObjectId());
+                            Friend newFriend = currentUser.getFriends().get(index);
+                                friends.add(newFriend);
+                                chats.add(newFriend);
+                                friendAdapter.notifyDataSetChanged();
+                                chatAdapter.notifyDataSetChanged();
+                        } else {
                         }
                     }
                 } else {
