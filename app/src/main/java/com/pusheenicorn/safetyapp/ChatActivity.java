@@ -70,8 +70,8 @@ public class ChatActivity extends BaseActivity {
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
             //TODO - figure this out?? if the check is added then the message will not display :O
 //            if (intent.equals("SMS_RECEIVED_ACTION")) {
-                //set text view with the message and phone number from the reply
-                tvTextMessage.setText(intent.getExtras().getString("message"));
+            //set text view with the message and phone number from the reply
+            tvTextMessage.setText(intent.getExtras().getString("message"));
 //            }
         }
     };
@@ -144,31 +144,13 @@ public class ChatActivity extends BaseActivity {
     }
 
     public void populateFriendList() {
-        final User.Query userQuery = new User.Query();
-        userQuery.getTop();
-
-        userQuery.findInBackground(new FindCallback<User>() {
-            @Override
-            public void done(List<User> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = objects.size() - 1; i > -1; i--) {
-                        // If this user is a friend of the current user
-                        if (currentUser.getFriendUsers().contains(objects.get(i).getObjectId())) {
-                            int index = currentUser.getFriendUsers()
-                                    .indexOf(objects.get(i).getObjectId());
-                            Friend newFriend = currentUser.getFriends().get(index);
-                                friends.add(newFriend);
-                                chats.add(newFriend);
-                                friendAdapter.notifyDataSetChanged();
-                                chatAdapter.notifyDataSetChanged();
-                        } else {
-                        }
-                    }
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+        for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
+            Friend newFriend = currentUser.getFriends().get(i);
+            friends.add(newFriend);
+            chats.add(newFriend);
+            friendAdapter.notifyDataSetChanged();
+        }
+        chatAdapter.notifyDataSetChanged();
     }
 
     protected void sendMessage(String number, String message) {
