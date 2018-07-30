@@ -150,7 +150,6 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
                 Friend friend = mFriends.get(position);
                 Intent i = new Intent(context, MapActivity.class);
                 i.putExtra(Friend.class.getSimpleName(), Parcels.wrap(friend));
-
                 //show activity
                 context.startActivity(i);
             }
