@@ -1,5 +1,7 @@
 package com.pusheenicorn.safetyapp;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -15,6 +17,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +41,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import org.parceler.Parcels;
 
@@ -79,6 +84,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     TextView toolbar_title;
     AudioManager myAudioManager;
 
+    NotificationUtil notif;
+
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -88,34 +95,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
         myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-        ibAlert = findViewById(R.id.ibAlert);
-        ibAlert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                AudioManager audio = (AudioManager) MapActivity.this.getSystemService(Context.AUDIO_SERVICE);
-//                int currentVolume = audio.getStreamVolume(AudioManager.STREAM_RING);
-//                int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-//                audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-//                audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-//                int volume = myAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-//                if(volume==0)
-//                    volume = myAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-//                myAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-//                ringtone = RingtoneManager.getRingtone(getApplicationContext(), Uri.parse(ringTonePath));
-//                if(ringtone!=null){
-//                    ringtone.setStreamType(AudioManager.STREAM_ALARM);
-//                    ringtone.play();
-//                    isRinging = true;
-//                }
-//                NotificationCompat.Builder mBuilder =
-//                        new NotificationCompat.Builder(MapActivity.this);
-//                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//                r.play();
-            }
-        });
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
@@ -155,9 +134,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
 
         currentUser = (User) ParseUser.getCurrentUser();
-        if (currentUser == null){
-            //currentUser = (User) getIntent().getSerializableExtra("user");
-        }
+
 
         boolean isNotif = getIntent().getBooleanExtra("notif", false);
         if (isNotif) {
@@ -186,7 +163,45 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
-
+        ibAlert = findViewById(R.id.ibAlert);
+        ibAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+                // Check if the notification policy access has been granted for the app.
+                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                    startActivity(intent);
+                }
+                sendSMS();
+//                notif.scheduleNotification(notif.getNotification(), 0);
+//                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", friendUser.getPhonNumber(), null)));
+//                AudioManager audio = (AudioManager) MapActivity.this.getSystemService(Context.AUDIO_SERVICE);
+//                int currentVolume = audio.getStreamVolume(AudioManager.STREAM_RING);
+//                int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
+//                audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+//                audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+//                int volume = myAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+//                if(volume==0)
+//                    volume = myAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+//                myAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+//                ringtone = RingtoneManager.getRingtone(getApplicationContext(), Uri.parse(ringTonePath));
+//                if(ringtone!=null){
+//                    ringtone.setStreamType(AudioManager.STREAM_ALARM);
+//                    ringtone.play();
+//                    isRinging = true;
+//                }
+//                NotificationCompat.Builder mBuilder =
+//                        new NotificationCompat.Builder(MapActivity.this);
+//                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+//                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+//                r.play();
+            }
+        });
+        notif = new NotificationUtil(MapActivity.this, currentUser);
+        notif.createNotificationChannel();
     }
     @Override
     protected void onNewIntent(Intent intent){
@@ -278,4 +293,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
     }
 
+    private void sendSMS() {
+        PendingIntent pi = PendingIntent.getActivity(this, 0,
+                new Intent(this, MapActivity.class), 0);
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(friendUser.getPhonNumber(), null, "SUR", pi, null);
+        //check to see if the length is above the maximum character length, and if so, to divide message
+            sms.sendTextMessage(friendUser.getPhonNumber(), null, "SUR", pi, null);
+    }
 }

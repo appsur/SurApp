@@ -408,14 +408,15 @@
         android:text="Notify friends after: "
         android:textColor="@color/black" />
 
-    <TextView
-        android:id="@+id/tvNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvName"
-        android:layout_alignTop="@+id/tvNotify"
-        android:text="Num"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tvNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tvNotify"
+                android:layout_alignBottom="@+id/tvNotify"
+                android:layout_alignStart="@+id/tvPhoneNumberSettings"
+                android:text="Num"
+                android:textColor="@color/black" />
 
     <EditText
         android:id="@+id/etNum"

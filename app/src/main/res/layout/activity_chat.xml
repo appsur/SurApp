@@ -127,15 +127,6 @@
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/menu"
-        android:background="@color/lightGray"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"/>
 
     <Button
         android:id="@+id/btnSendText"
