@@ -134,6 +134,16 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public static boolean isAMEnd;
     public static int monthStart;
     public static int monthEnd;
+    public static String LIGHT_GRAY = "#F5F5F5";
+    public static String TEAL = "#66C7CB";
+    public static String PAST_ID = "ago";
+    public static String FROM_CALENDAR = "fromCalendar";
+    public static String START_KEY = "start";
+    public static String END_KEY = "end";
+    public static String DATE_KEY = "date";
+    public static String BLACK = "#000000";
+    private static String END_TIME_KEY = "endTime";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,20 +172,19 @@ public class MainActivity extends BaseActivity implements LocationListener {
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
-        onResume();
 
         Intent incoming = getIntent();
-        boolean fromCalendar = incoming.getBooleanExtra("fromCalendar", false);
+        boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
 
         if (fromCalendar)
         {
-            boolean start = incoming.getBooleanExtra("start", false);
-            boolean end = incoming.getBooleanExtra("end", false);
+            boolean start = incoming.getBooleanExtra(START_KEY, false);
+            boolean end = incoming.getBooleanExtra(END_KEY, false);
 
-            String date = incoming.getStringExtra("date");
+            String date = incoming.getStringExtra(DATE_KEY);
             if (start)
             {
-                tvStartDate.setTextColor(Color.parseColor("#000000"));
+                tvStartDate.setTextColor(Color.parseColor(BLACK));
                 tvStartDate.setText(date);
                 startString = date;
                 String[] dateArr = date.split(" ");
@@ -184,7 +193,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 // Restore previous state
                 if (endString != null)
                 {
-                    tvEndDate.setTextColor(Color.parseColor("#000000"));
+                    tvEndDate.setTextColor(Color.parseColor(BLACK));
                     tvEndDate.setText(endString);
                 }
                 restoreState();
@@ -209,6 +218,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 setNewVisible();
             }
         }
+        onResume();
     }
 
     public void restoreState() {
@@ -231,13 +241,21 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
         if (isAMStart)
         {
-            btnAM2.setBackgroundColor(Color.parseColor("#66C7CB"));
-            btnPM2.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            btnAM2.setBackgroundColor(Color.parseColor(TEAL));
+            btnPM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        }
+        else {
+            btnAM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+            btnPM2.setBackgroundColor(Color.parseColor(TEAL));
         }
         if (isAMEnd)
         {
-            btnAM.setBackgroundColor(Color.parseColor("#66C7CB"));
-            btnPM.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            btnAM.setBackgroundColor(Color.parseColor(TEAL));
+            btnPM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        }
+        else {
+            btnAM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+            btnPM.setBackgroundColor(Color.parseColor(TEAL));
         }
     }
 
@@ -359,7 +377,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         // Get the actual checkin object by making a query.
         final Checkin.Query checkinQuery = new Checkin.Query();
-        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+        checkinQuery.getTop().whereEqualTo(Checkin.OBJECT_ID_KEY, checkinId);
         checkinQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
@@ -810,26 +828,26 @@ public class MainActivity extends BaseActivity implements LocationListener {
     }
 
     public void onAM(View view) {
-        btnAM.setBackgroundColor(Color.parseColor("#66C7CB"));
-        btnPM.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        btnAM.setBackgroundColor(Color.parseColor(TEAL));
+        btnPM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
         isAMEnd = true;
     }
 
     public void onPM(View view) {
-        btnPM.setBackgroundColor(Color.parseColor("#66C7CB"));
-        btnAM.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        btnPM.setBackgroundColor(Color.parseColor(TEAL));
+        btnAM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
         isAMEnd = false;
     }
 
     public void onPM2(View view) {
-        btnPM2.setBackgroundColor(Color.parseColor("#66C7CB"));
-        btnAM2.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        btnPM2.setBackgroundColor(Color.parseColor(TEAL));
+        btnAM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
         isAMStart = false;
     }
 
     public void onAM2(View view) {
-        btnAM2.setBackgroundColor(Color.parseColor("#66C7CB"));
-        btnPM2.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        btnAM2.setBackgroundColor(Color.parseColor(TEAL));
+        btnPM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
         isAMStart = true;
     }
 
@@ -946,51 +964,16 @@ public class MainActivity extends BaseActivity implements LocationListener {
     {
         String end = "";
         try {
-            end = getRelativeTimeAgo(event.fetchIfNeeded().getString("endTime"));
+            end = getRelativeTimeAgo(event.fetchIfNeeded().getString(END_TIME_KEY));
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
 
-        if (end.contains("ago")){
+        if (end.contains(PAST_ID)){
             return true;
-        }
-        if (end.contains("In")){
-            return false;
         }
 
         return false;
-    }
-
-    public int getValMonth(String prettyMonth)
-    {
-        switch(prettyMonth)
-        {
-            case "JAN":
-                return 1;
-            case "FEB":
-                return 2;
-            case "MAR":
-                return 3;
-            case "APR":
-                return 4;
-            case "MAY":
-                return 5;
-            case "JUN":
-                return 6;
-            case "JUL":
-                return 7;
-            case "AUG":
-                return 8;
-            case "SEP":
-                return 9;
-            case "OCT":
-                return 10;
-            case "NOV":
-                return 11;
-            case "DEC":
-                return 12;
-        }
-        return 0;
     }
 
     public void sortEvents() {

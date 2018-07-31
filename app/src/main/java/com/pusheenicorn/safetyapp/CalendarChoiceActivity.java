@@ -24,8 +24,8 @@ public class CalendarChoiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_layout);
 
-        final boolean start = getIntent().getBooleanExtra("start", false);
-        final boolean end = getIntent().getBooleanExtra("end", false);
+        final boolean start = getIntent().getBooleanExtra(MainActivity.START_KEY, false);
+        final boolean end = getIntent().getBooleanExtra(MainActivity.END_KEY, false);
 
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -73,14 +73,14 @@ public class CalendarChoiceActivity extends AppCompatActivity {
                         MainActivity.class);
                 if (start)
                 {
-                    intent.putExtra("start", true);
+                    intent.putExtra(MainActivity.START_KEY, true);
                 }
                 else if (end)
                 {
-                    intent.putExtra("end", true);
+                    intent.putExtra(MainActivity.END_KEY, true);
                 }
-                intent.putExtra("date", date);
-                intent.putExtra("fromCalendar", true);
+                intent.putExtra(MainActivity.DATE_KEY, date);
+                intent.putExtra(MainActivity.FROM_CALENDAR, true);
                 startActivity(intent);
 
             }
