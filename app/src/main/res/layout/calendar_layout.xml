@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/coral"
+        android:dateTextAppearance="@style/CalenderViewDateCustomText"
+        android:focusedMonthDateColor="@color/teal"
+        android:foregroundTint="@color/teal"
+        android:nextClusterForward="@color/teal"
+        android:nextFocusDown="@color/teal"
+        android:nextFocusForward="@color/teal"
+        android:nextFocusLeft="@color/teal"
+        android:nextFocusRight="@color/teal"
+        android:nextFocusUp="@color/teal"
+        android:selectedWeekBackgroundColor="@color/teal"
+        android:theme="@style/CalenderViewCustom"
+        android:unfocusedMonthDateColor="@color/teal"
+        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
 </LinearLayout>
