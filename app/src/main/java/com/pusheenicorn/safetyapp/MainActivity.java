@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -49,6 +50,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -512,6 +514,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                         }
                     }
                     removeExpiredEvents();
+                    sortEvents();
                 } else {
                     e.printStackTrace();
                 }
@@ -738,16 +741,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
         event.setName(etEventName.getText().toString());
         event.setLocation(etEventLocation.getText().toString());
 
-        String timeStart = Integer
-                .parseInt(etStartTime.getText().toString().substring(0, 2)) + 1 + "";
-
-        String timeEnd = Integer
-                .parseInt(etEndTime.getText().toString().substring(0, 2)) + 1 + "";
-
         String startTotalTime = retrievePrettyDate(tvStartDate.getText().toString(),
-                timeStart, true);
+                etStartTime.getText().toString(), true);
         String endTotalTime = retrievePrettyDate(tvEndDate.getText().toString(),
-               timeEnd, false);
+               etEndTime.getText().toString(), false);
 
         event.setStart(startTotalTime);
         event.setEnd(endTotalTime);
@@ -926,15 +923,23 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     // Once an event has expired, remove it from the list.
     public void removeExpiredEvents() {
+        ArrayList<Event> eventsToRemove = new ArrayList<Event>();
+
         for (int i = 0; i < events.size(); i++)
         {
             Event event = events.get(i);
             if (isExpired(event))
             {
-                events.remove(event);
-                eventAdapter.notifyDataSetChanged();
+                eventsToRemove.add(event);
             }
         }
+
+        while(!eventsToRemove.isEmpty())
+        {
+            events.remove(eventsToRemove.get(0));
+            eventsToRemove.remove(0);
+        }
+        eventAdapter.notifyDataSetChanged();
     }
 
     public boolean isExpired(Event event)
@@ -986,5 +991,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 return 12;
         }
         return 0;
+    }
+
+    public void sortEvents() {
+        Collections.sort(events);
     }
 }
