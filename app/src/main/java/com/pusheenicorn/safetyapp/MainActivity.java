@@ -130,6 +130,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public static String endTimeString;
     public static boolean isAMStart;
     public static boolean isAMEnd;
+    public static int monthStart;
+    public static int monthEnd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +154,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);
         initializeViews();                                  // Initialize the views.
-        populateEvents();                                   // Populate the events recycler view.
-        // removeExpiredEvents();
+        populateEvents();                                   // Populate the events recycler view
         getLocation();                                      // Get the user's location.
         initializeNavItems(mNavItems);                      // Initialize navigation items
         setUpDrawerLayout();                                // Set up the pull-out menu.
@@ -175,6 +176,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 tvStartDate.setTextColor(Color.parseColor("#000000"));
                 tvStartDate.setText(date);
                 startString = date;
+                String[] dateArr = date.split(" ");
+                monthStart = Integer.parseInt(dateArr[1].split("/")[0]);
                 setNewVisible();
                 // Restore previous state
                 if (endString != null)
@@ -190,6 +193,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 tvEndDate.setTextColor(Color.parseColor("#000000"));
                 tvEndDate.setText(date);
                 endString = date;
+                String[] dateArr = date.split(" ");
+                monthEnd = Integer.parseInt(dateArr[1].split("/")[0]);
                 setNewVisible();
                 // Restore previous state
                 if (startString != null)
@@ -488,6 +493,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * This function populates the events adapter.
      */
     public void populateEvents() {
+        // Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
         // Make a new query.
         final Event.Query eventQuery = new Event.Query();
         // Get only the top 20 events in the database.
@@ -505,7 +511,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                             eventAdapter.notifyDataSetChanged();
                         }
                     }
-
+                    removeExpiredEvents();
                 } else {
                     e.printStackTrace();
                 }
@@ -732,10 +738,17 @@ public class MainActivity extends BaseActivity implements LocationListener {
         event.setName(etEventName.getText().toString());
         event.setLocation(etEventLocation.getText().toString());
 
+        String timeStart = Integer
+                .parseInt(etStartTime.getText().toString().substring(0, 2)) + 1 + "";
+
+        String timeEnd = Integer
+                .parseInt(etEndTime.getText().toString().substring(0, 2)) + 1 + "";
+
         String startTotalTime = retrievePrettyDate(tvStartDate.getText().toString(),
-                etStartTime.getText().toString(), true);
+                timeStart, true);
         String endTotalTime = retrievePrettyDate(tvEndDate.getText().toString(),
-                etEndTime.getText().toString(), false);
+               timeEnd, false);
+
         event.setStart(startTotalTime);
         event.setEnd(endTotalTime);
         event.addUser(currentUser);
@@ -746,14 +759,13 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     // Add the event to the events list, notify the adapter, and update views
                     eventAdapter.clear();
                     populateEvents();
-                    //removeExpiredEvents();
                     setNewInvisible();
                     // Add to the user's events
                     final User thisUser = (User) ParseUser.getCurrentUser();
+                    thisUser.addEvent(event);
                     thisUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(com.parse.ParseException e) {
-                            thisUser.addEvent(event);
                             thisUser.saveInBackground();
                         }
                     });
@@ -914,8 +926,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     // Once an event has expired, remove it from the list.
     public void removeExpiredEvents() {
-        List<Event> events = currentUser.getEvents();
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < events.size(); i++)
         {
             Event event = events.get(i);
             if (isExpired(event))
@@ -926,40 +937,54 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
     }
 
-    public boolean isExpired (Event event) {
-        // Define format type.
-        DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
-
-        // Get current Date.
-        Date currDate = new Date();
-
-        // Split by regex "/" convert to int array and find time difference.
-        String[] currDateArr = df.format(currDate).split("/");
-        String[] endDateArr = new String[5];
+    public boolean isExpired(Event event)
+    {
+        String end = "";
         try {
-            endDateArr = event.fetchIfNeeded().getString("endTime").split(":/");
+            end = getRelativeTimeAgo(event.fetchIfNeeded().getString("endTime"));
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
 
-        int[] currDateInts = new int[5];
-        int[] endDateInts = new int[5];
-        for (int i = 0; i < 5; i++) {
-            currDateInts[i] = Integer.parseInt(currDateArr[i]);
-            endDateInts[i] = Integer.parseInt(endDateArr[i]);
-        }
-
-        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
-                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
-        int trueEnd = (endDateInts[0] * 43800) + (endDateInts[1] * 1440)
-                + (endDateInts[2] * 525600) + (endDateInts[3] * 60) + endDateInts[4];
-
-        // If the current time is greater than the end time, the event has expired.
-        if (trueCurr > trueEnd) {
+        if (end.contains("ago")){
             return true;
-        } else {
-            // Otherwise, it is still valid.
+        }
+        if (end.contains("In")){
             return false;
         }
+
+        return false;
+    }
+
+    public int getValMonth(String prettyMonth)
+    {
+        switch(prettyMonth)
+        {
+            case "JAN":
+                return 1;
+            case "FEB":
+                return 2;
+            case "MAR":
+                return 3;
+            case "APR":
+                return 4;
+            case "MAY":
+                return 5;
+            case "JUN":
+                return 6;
+            case "JUL":
+                return 7;
+            case "AUG":
+                return 8;
+            case "SEP":
+                return 9;
+            case "OCT":
+                return 10;
+            case "NOV":
+                return 11;
+            case "DEC":
+                return 12;
+        }
+        return 0;
     }
 }
