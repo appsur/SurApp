@@ -96,7 +96,9 @@
         <receiver android:name=".CheckinReceiver" />
 
         <activity android:name=".BaseActivity" />
-        <activity android:name=".HotlineActivity"></activity>
+        <activity android:name=".HotlineActivity" />
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".CalendarChoiceActivity"></activity>
     </application>
 
 </manifest>

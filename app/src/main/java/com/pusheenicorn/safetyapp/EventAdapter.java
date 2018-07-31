@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +23,21 @@ import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.pusheenicorn.safetyapp.MainActivity.TWITTER_FORMAT;
+
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     List<Event> mEvents;
     Context context;
+    public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
     // constructor
     public EventAdapter(List<Event> events) {
@@ -52,11 +58,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull EventAdapter.ViewHolder holder, int position) {
         // get the data according to position
         Event event = mEvents.get(position);
-
-        // populate the views according to this data
         holder.tvEventName.setText(event.getName());
         holder.tvEventLocation.setText(event.getLocation());
-        holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
+
+        String time = "STARTS: " + getRelativeTimeAgo(event.getStart()) + "       ENDS: "
+                + getRelativeTimeAgo(event.getEnd());
+        if (time == null)
+        {
+            holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
+        }
+        else {
+            holder.tvTime.setText(time);
+        }
     }
 
     @Override
@@ -74,6 +87,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     public void addAll(List<Event> list) {
         mEvents.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public String getRelativeTimeAgo(String rawDate) {
+        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_FORMAT, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return relativeDate;
     }
 
     // create ViewHolder class
