@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     EditText etEndTime;
     EditText etEventName;
     EditText etEventLocation;
+    ImageButton ibVideo;
 
 
     //variables for the draw out menu
@@ -127,6 +128,14 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         isCheckedIn = false;                                // Set default values
         setEventsAdapter();                                 // Set up the events adapter.
+        ibVideo = findViewById(R.id.ibVideo);
+        ibVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goVideo = new Intent(MainActivity.this, VideoActivity.class);
+                startActivity(goVideo);
+            }
+        });
         // Set up the BNV.
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);

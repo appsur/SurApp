@@ -173,11 +173,21 @@
                 android:id="@+id/tvRelativeCheckinTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tvCheckinTime"
                 android:layout_alignLeft="@id/tvCheckinTime"
+                android:layout_below="@id/tvCheckinTime"
                 android:text="10:35 PM"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/ibVideo"
+                android:layout_width="58dp"
+                android:layout_height="49dp"
+                android:layout_alignTop="@+id/toolbar"
+                android:layout_toEndOf="@+id/ibCheckin"
+                android:background="@android:color/transparent"
+                android:tint="@color/teal"
+                app:srcCompat="@drawable/message_video" />
 
             <TextView
                 android:id="@+id/tvCheckinTime"
@@ -274,21 +284,19 @@
 
         <!-- The navigation drawer -->
         <RelativeLayout
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
             android:id="@+id/drawerPane"
-            android:background="@color/coral"
-            android:layout_gravity="start">
-        <!-- List of Actions (pages) -->
-        <ListView
-            android:id="@+id/navList"
             android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:choiceMode="singleChoice"
-            android:background="@color/coral" />
+            android:layout_gravity="start"
+            android:background="@color/coral">
+            <!-- List of Actions (pages) -->
+            <ListView
+                android:id="@+id/navList"
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:background="@color/coral"
+                android:choiceMode="singleChoice" />
         </RelativeLayout>
-
-
 
 
     </android.support.v4.widget.DrawerLayout>

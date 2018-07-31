@@ -81,6 +81,7 @@ public class SettingsActivity extends BaseActivity {
     Button btnDaily;
     Button btnWeekly;
 
+
     private static int RESULT_LOAD_IMAGE = 1;
     public static final String PROFILE_KEY = "profileimage";
 
