@@ -32,8 +32,6 @@ import java.util.List;
  */
 
 public class FriendAlert {
-    public static final int SECOND_TO_MILLIS = 60000;
-    public static final String OBJECT_ID_KEY = "objectId";
     public static final int MONTHS_TO_SECONDS = 43800;
     public static final int DAYS_TO_SECONDS = 1440;
     public static final int YEARS_TO_SECONDS = 525600;
@@ -141,30 +139,6 @@ public class FriendAlert {
     }
 
 
-    public Notification getNotification(User user, User friend , Context context) {
-        //Toast.makeText(context, "Going to receiver??", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(context.getApplicationContext(), MapActivity.class);
-        intent.putExtra("actionName", "alert");
-        intent.putExtra("user", currentUser);
-        intent.putExtra(User.class.getSimpleName(), Parcels.wrap(friend));
-
-        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), 10,
-//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context , 0 , intent, 0);
-
-        NotificationCompat.Builder builder =
-                (NotificationCompat.Builder) new NotificationCompat.Builder(context.getApplicationContext(), CHANNEL_ID)
-                        .setContentTitle("Sûr")
-                        .setSmallIcon(R.drawable.check)
-                        .setContentText(user.getName() + " has not checked-in in a while")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .addAction(R.drawable.ic_person, "view" , pendingIntent)
-                        .setOngoing(true);
-        builder.setContentIntent(pendingIntent);
-         builder.setAutoCancel(true);
-        return builder.build();
-    }
 
 
 

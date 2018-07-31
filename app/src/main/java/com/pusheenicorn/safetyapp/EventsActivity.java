@@ -44,16 +44,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsActivity extends BaseActivity {
+
     //declared views
-    ImageButton ibBanner;
-    ImageButton ibAddMembers;
-    Button btnSendAlert;
-    ImageButton ibSearch;
-    TextView tvEventTitle;
-    EditText tvMessage;
-    EditText etUsername;
-    BottomNavigationView bottomNavigationView;
-    Button btnSend;
+    private ImageButton ibBanner;
+    private ImageButton ibAddMembers;
+    private Button btnSendAlert;
+    private ImageButton ibSearch;
+    private TextView tvEventTitle;
+    private EditText tvMessage;
+    private EditText etUsername;
+    private BottomNavigationView bottomNavigationView;
+    private Button btnSend;
+
 
     // Declare notification utility
     NotificationUtil notificationUtil;
@@ -376,6 +378,17 @@ public class EventsActivity extends BaseActivity {
                 });
             }
         });
+    }
+
+    public void onCalendar(View view) {
+        Intent intent = new Intent(EventsActivity.this, CalendarActivity.class);
+        intent.putExtra("starting", true);
+        startActivity(intent);
+    }
+
+    public void onSettings(View view) {
+        Intent intent = new Intent(EventsActivity.this, SettingsActivity.class);
+        startActivity(intent);
     }
 }
 

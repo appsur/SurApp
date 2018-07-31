@@ -97,8 +97,7 @@
         <receiver android:name=".CheckinReceiver" />
 
         <activity android:name=".BaseActivity" />
-        <activity android:name=".HotlineActivity" />
-        <activity android:name=".VideoActivity"></activity>
+        <activity android:name=".HotlineActivity"></activity>
     </application>
 
 </manifest>

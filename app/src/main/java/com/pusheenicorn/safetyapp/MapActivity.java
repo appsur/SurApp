@@ -218,7 +218,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     public void onSettings(View view) {
         Intent intent = new Intent(MapActivity.this, SettingsActivity.class);
-        Toast.makeText(MapActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 

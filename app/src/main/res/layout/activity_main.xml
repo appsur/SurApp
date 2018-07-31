@@ -30,10 +30,10 @@
                 android:id="@+id/etStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@+id/btnAM"
                 android:layout_alignStart="@+id/ibCheckin"
-                android:layout_marginBottom="168dp"
-                android:hint="Start time"
+                android:hint="Enter a start time"
+                android:inputType="time"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray"
                 android:textSize="16sp"
@@ -43,9 +43,10 @@
                 android:id="@+id/etEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/etStartTime"
-                android:layout_toEndOf="@+id/etEventName"
-                android:hint="End time"
+                android:layout_alignBottom="@+id/rvEvents"
+                android:layout_alignStart="@+id/etStartTime"
+                android:hint="Enter an end time"
+                android:inputType="time"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray"
                 android:textSize="16sp"
@@ -203,10 +204,9 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvEvents"
                 android:layout_width="334dp"
-                android:layout_height="293dp"
-                android:layout_alignBottom="@+id/etStartTime"
+                android:layout_height="305dp"
+                android:layout_alignTop="@+id/etEventName"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="-98dp"
                 android:background="@color/white"
                 tools:listitem="@layout/item_event" />
 
@@ -221,16 +221,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
-
-            <ImageButton
-                android:id="@+id/ibRefresh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/rvEvents"
-                android:layout_alignTop="@+id/ibProfileImage"
-                android:background="@android:color/transparent"
-                android:onClick="onRefresh"
-                app:srcCompat="@drawable/ic_vector_retweet_stroke" />
 
             <ImageButton
                 android:id="@+id/ibAddEvent"
@@ -258,10 +248,10 @@
                 android:id="@+id/etEventLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/etStartTime"
-                android:layout_marginBottom="241dp"
-                android:hint="Location"
+                android:layout_below="@+id/etEventName"
+                android:layout_marginTop="-315dp"
+                android:hint="Enter an event location"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray"
                 android:textSize="16sp"
@@ -274,10 +264,114 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/etStartTime"
                 android:layout_marginBottom="318dp"
-                android:hint="Event name"
+                android:hint="Enter an event name"
                 android:textColor="@color/black"
                 android:textColorHint="@color/gray"
                 android:textSize="16sp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tvStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/etStartTime"
+                android:layout_below="@+id/etEventLocation"
+                android:layout_marginTop="20dp"
+                android:text="Select start date"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:id="@+id/tvEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/etStartTime"
+                android:layout_below="@+id/tvStartDate"
+                android:layout_marginTop="20dp"
+                android:text="Select end date"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                android:layout_marginLeft="5dp"/>
+
+            <Button
+                android:id="@+id/btnSelectStart"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/tvStartDate"
+                android:layout_toEndOf="@+id/etEventLocation"
+                android:background="@color/lightGray"
+                android:onClick="onSelectStart"
+                android:text="Select"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnSelectEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/tvEndDate"
+                android:layout_toEndOf="@+id/etEventLocation"
+                android:background="@color/lightGray"
+                android:onClick="onSelectEnd"
+                android:text="Select"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnAM"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/etEndTime"
+                android:layout_centerHorizontal="true"
+                android:background="@color/lightGray"
+                android:onClick="onAM"
+                android:text="AM"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnAM2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/etStartTime"
+                android:layout_centerHorizontal="true"
+                android:background="@color/lightGray"
+                android:onClick="onAM2"
+                android:text="AM"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnPM"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_below="@+id/etStartTime"
+                android:layout_toEndOf="@+id/tvUsername"
+                android:background="@color/lightGray"
+                android:onClick="onPM"
+                android:text="PM"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/btnPM2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignTop="@+id/etStartTime"
+                android:layout_toEndOf="@+id/tvUsername"
+                android:background="@color/lightGray"
+                android:onClick="onPM2"
+                android:text="PM"
+                android:textColor="@color/black"
+                android:textSize="12sp"
                 android:visibility="invisible" />
 
         </RelativeLayout>

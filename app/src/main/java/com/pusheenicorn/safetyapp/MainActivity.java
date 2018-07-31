@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,8 +21,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -47,6 +50,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -54,23 +58,32 @@ import java.util.Locale;
 public class MainActivity extends BaseActivity implements LocationListener {
 
     // Declare views
-    BottomNavigationView bottomNavigationView;
-    ImageButton ibEvents;
-    ImageButton ibProfileImage;
-    ImageButton ibCheckin;
-    ImageButton ibAddEvent;
-    ImageButton ibConfirmEvent;
-    TextView tvName;
-    TextView tvUsername;
-    TextView tvCheckinTime;
-    TextView tvRelativeCheckinTime;
-    TextView tvUpcomingActivities;
-    EditText etStartTime;
-    EditText etEndTime;
-    EditText etEventName;
-    EditText etEventLocation;
+    private BottomNavigationView bottomNavigationView;
+    private ImageButton ibEvents;
+    private ImageButton ibProfileImage;
+    private ImageButton ibCheckin;
+    private ImageButton ibAddEvent;
+    private ImageButton ibConfirmEvent;
+    private TextView tvName;
+    private TextView tvUsername;
+    private TextView tvCheckinTime;
+    private TextView tvRelativeCheckinTime;
+    private TextView tvUpcomingActivities;
+    private EditText etStartTime;
+    private EditText etEndTime;
+    private EditText etEventName;
+    private EditText etEventLocation;
+    private TextView tvStartDate;
+    private TextView tvEndDate;
+    private EditText startTime;
+    private EditText endTime;
+    private Button btnAM;
+    private Button btnPM;
+    private Button btnAM2;
+    private Button btnPM2;
+    private Button btnSelectStart;
+    private Button btnSelectEnd;
     ImageButton ibVideo;
-
 
     //variables for the draw out menu
     ListView mDrawerList;
@@ -105,10 +118,32 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
     public static final DateFormat DATE_FORMAT =
             new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+    public static final String NEAT_FORMAT = "%s %s %s:%s:00 %s 20%s%s";
     // Notification channel for this class
     NotificationUtil notificationUtil;
     CheckinUtil checkinUtil;
 
+
+    // Variables for saving state between restarts
+    public static String startString;
+    public static String endString;
+    public static String nameString;
+    public static String locationString;
+    public static String startTimeString;
+    public static String endTimeString;
+    public static boolean isAMStart;
+    public static boolean isAMEnd;
+    public static int monthStart;
+    public static int monthEnd;
+    public static String LIGHT_GRAY = "#F5F5F5";
+    public static String TEAL = "#66C7CB";
+    public static String PAST_ID = "ago";
+    public static String FROM_CALENDAR = "fromCalendar";
+    public static String START_KEY = "start";
+    public static String END_KEY = "end";
+    public static String DATE_KEY = "date";
+    public static String BLACK = "#000000";
+    private static String END_TIME_KEY = "endTime";
 
 
     @Override
@@ -140,12 +175,147 @@ public class MainActivity extends BaseActivity implements LocationListener {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);
         initializeViews();                                  // Initialize the views.
-        populateEvents();                                   // Populate the events recycler view.
+        populateEvents();                                   // Populate the events recycler view
         getLocation();                                      // Get the user's location.
         initializeNavItems(mNavItems);                      // Initialize navigation items
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
+        setNewInvisible();                                  // Hide all edit views
+
+        Intent incoming = getIntent();
+        boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
+
+        if (fromCalendar)
+        {
+            boolean start = incoming.getBooleanExtra(START_KEY, false);
+            boolean end = incoming.getBooleanExtra(END_KEY, false);
+
+            String date = incoming.getStringExtra(DATE_KEY);
+            if (start)
+            {
+                tvStartDate.setTextColor(Color.parseColor(BLACK));
+                tvStartDate.setText(date);
+                startString = date;
+                String[] dateArr = date.split(" ");
+                monthStart = Integer.parseInt(dateArr[1].split("/")[0]);
+                setNewVisible();
+                // Restore previous state
+                if (endString != null)
+                {
+                    tvEndDate.setTextColor(Color.parseColor(BLACK));
+                    tvEndDate.setText(endString);
+                }
+                restoreState();
+            }
+
+            else if (end)
+            {
+                tvEndDate.setTextColor(Color.parseColor("#000000"));
+                tvEndDate.setText(date);
+                endString = date;
+                String[] dateArr = date.split(" ");
+                monthEnd = Integer.parseInt(dateArr[1].split("/")[0]);
+                setNewVisible();
+                // Restore previous state
+                if (startString != null)
+                {
+                    tvStartDate.setTextColor(Color.parseColor("#000000"));
+                    tvStartDate.setText(startString);
+                }
+                restoreState();
+
+                setNewVisible();
+            }
+        }
         onResume();
+    }
+
+    public void restoreState() {
+
+        if (nameString != null)
+        {
+            etEventName.setText(nameString);
+        }
+        if (locationString != null)
+        {
+            etEventLocation.setText(locationString);
+        }
+        if (startTimeString != null)
+        {
+            etStartTime.setText(startTimeString);
+        }
+        if (endTimeString != null)
+        {
+            etEndTime.setText(endTimeString);
+        }
+        if (isAMStart)
+        {
+            btnAM2.setBackgroundColor(Color.parseColor(TEAL));
+            btnPM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        }
+        else {
+            btnAM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+            btnPM2.setBackgroundColor(Color.parseColor(TEAL));
+        }
+        if (isAMEnd)
+        {
+            btnAM.setBackgroundColor(Color.parseColor(TEAL));
+            btnPM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        }
+        else {
+            btnAM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+            btnPM.setBackgroundColor(Color.parseColor(TEAL));
+        }
+    }
+
+    public void setNewVisible() {
+        // Date et's
+        tvStartDate.setVisibility(View.VISIBLE);
+        tvEndDate.setVisibility(View.VISIBLE);
+        // Title
+        tvUpcomingActivities.setText("NEW EVENT");
+        // Time et's
+        etEndTime.setVisibility(View.VISIBLE);
+        etStartTime.setVisibility(View.VISIBLE);
+        // Location and Name
+        etEventLocation.setVisibility(View.VISIBLE);
+        etEventName.setVisibility(View.VISIBLE);
+        // Switch from icon for adding event to confirming event
+        ibAddEvent.setVisibility(View.INVISIBLE);
+        ibConfirmEvent.setVisibility(View.VISIBLE);
+        // Hide rv
+        rvEvents.setVisibility(View.INVISIBLE);
+        btnSelectStart.setVisibility(View.VISIBLE);
+        btnSelectEnd.setVisibility(View.VISIBLE);
+        btnAM.setVisibility(View.VISIBLE);
+        btnPM.setVisibility(View.VISIBLE);
+        btnAM2.setVisibility(View.VISIBLE);
+        btnPM2.setVisibility(View.VISIBLE);
+    }
+
+    public void setNewInvisible() {
+        // Date et's
+        tvStartDate.setVisibility(View.INVISIBLE);
+        tvEndDate.setVisibility(View.INVISIBLE);
+        // Title
+        tvUpcomingActivities.setText("UPCOMING ACTIVITIES");
+        // Time et's
+        etEndTime.setVisibility(View.INVISIBLE);
+        etStartTime.setVisibility(View.INVISIBLE);
+        // Location and Name
+        etEventLocation.setVisibility(View.INVISIBLE);
+        etEventName.setVisibility(View.INVISIBLE);
+        // Switch from icon for adding event to confirming event
+        ibAddEvent.setVisibility(View.VISIBLE);
+        ibConfirmEvent.setVisibility(View.INVISIBLE);
+        // Hide rv
+        rvEvents.setVisibility(View.VISIBLE);
+        btnSelectStart.setVisibility(View.INVISIBLE);
+        btnSelectEnd.setVisibility(View.INVISIBLE);
+        btnAM.setVisibility(View.INVISIBLE);
+        btnPM.setVisibility(View.INVISIBLE);
+        btnAM2.setVisibility(View.INVISIBLE);
+        btnPM2.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -216,7 +386,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         // Get the actual checkin object by making a query.
         final Checkin.Query checkinQuery = new Checkin.Query();
-        checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+        checkinQuery.getTop().whereEqualTo(Checkin.OBJECT_ID_KEY, checkinId);
         checkinQuery.findInBackground(new FindCallback<Checkin>() {
             @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
@@ -283,6 +453,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
         // Set username + name.
         tvUsername.setText(currentUser.getUserName());
         tvName.setText(currentUser.getName());
+        tvStartDate = (TextView) findViewById(R.id.tvStartDate);
+        tvEndDate = (TextView) findViewById(R.id.tvEndDate);
+        btnSelectStart = (Button) findViewById(R.id.btnSelectStart);
+        btnSelectEnd = (Button) findViewById(R.id.btnSelectEnd);
+        btnAM = (Button) findViewById(R.id.btnAM);
+        btnPM = (Button) findViewById(R.id.btnPM);
+        btnAM2 = (Button) findViewById(R.id.btnAM2);
+        btnPM2 = (Button) findViewById(R.id.btnPM2);
+
         // Load the profile image.
         Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
     }
@@ -343,6 +522,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * This function populates the events adapter.
      */
     public void populateEvents() {
+        // Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
         // Make a new query.
         final Event.Query eventQuery = new Event.Query();
         // Get only the top 20 events in the database.
@@ -360,7 +540,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
                             eventAdapter.notifyDataSetChanged();
                         }
                     }
-
+                    removeExpiredEvents();
+                    sortEvents();
                 } else {
                     e.printStackTrace();
                 }
@@ -578,46 +759,37 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * @param view: the add event button
      */
     public void onAddEvent(View view) {
-        tvUpcomingActivities.setText("NEW EVENT");
-        etEndTime.setVisibility(View.VISIBLE);
-        etStartTime.setVisibility(View.VISIBLE);
-        etEventLocation.setVisibility(View.VISIBLE);
-        etEventName.setVisibility(View.VISIBLE);
-        ibAddEvent.setVisibility(View.INVISIBLE);
-        ibConfirmEvent.setVisibility(View.VISIBLE);
-        rvEvents.setVisibility(View.INVISIBLE);
+        setNewVisible();
     }
 
     public void onConfirmEvent(View view) {
         final Event event = new Event();
+        // Set the event attributes and save in background
+        event.setName(etEventName.getText().toString());
+        event.setLocation(etEventLocation.getText().toString());
+
+        String startTotalTime = retrievePrettyDate(tvStartDate.getText().toString(),
+                etStartTime.getText().toString(), true);
+        String endTotalTime = retrievePrettyDate(tvEndDate.getText().toString(),
+               etEndTime.getText().toString(), false);
+
+        event.setStart(startTotalTime);
+        event.setEnd(endTotalTime);
+        event.addUser(currentUser);
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(com.parse.ParseException e) {
                 if (e == null) {
-                    // Set the event attributes and save in background
-                    event.setName(etEventName.getText().toString());
-                    event.setStart(etStartTime.getText().toString());
-                    event.setEnd(etEndTime.getText().toString());
-                    event.setLocation(etEventLocation.getText().toString());
-                    event.addUser(currentUser);
-                    event.saveInBackground();
                     // Add the event to the events list, notify the adapter, and update views
-                    events.add(event);
-                    eventAdapter.notifyDataSetChanged();
-                    tvUpcomingActivities.setText("UPCOMING EVENTS");
-                    etEndTime.setVisibility(View.INVISIBLE);
-                    etStartTime.setVisibility(View.INVISIBLE);
-                    etEventLocation.setVisibility(View.INVISIBLE);
-                    etEventName.setVisibility(View.INVISIBLE);
-                    ibAddEvent.setVisibility(View.VISIBLE);
-                    ibConfirmEvent.setVisibility(View.INVISIBLE);
-                    rvEvents.setVisibility(View.VISIBLE);
+                    eventAdapter.clear();
+                    populateEvents();
+                    setNewInvisible();
                     // Add to the user's events
                     final User thisUser = (User) ParseUser.getCurrentUser();
+                    thisUser.addEvent(event);
                     thisUser.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(com.parse.ParseException e) {
-                            thisUser.addEvent(event);
                             thisUser.saveInBackground();
                         }
                     });
@@ -628,4 +800,192 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
+    // Save the current static variables
+    public void saveState() {
+        nameString = etEventName.getText().toString();
+        locationString = etEventLocation.getText().toString();
+        startTimeString = etStartTime.getText().toString();
+        endTimeString = etEndTime.getText().toString();
+    }
+
+    public void onSelectStart(View view) {
+        Intent intent = new Intent(MainActivity.this, CalendarChoiceActivity.class);
+        intent.putExtra("start", true);
+        if (tvEndDate.getText() == null)
+        {
+            endString = null;
+        }
+        else {
+            endString = tvEndDate.getText().toString();
+        }
+        saveState();
+        startActivity(intent);
+    }
+
+    public void onSelectEnd(View view) {
+        Intent intent = new Intent(MainActivity.this, CalendarChoiceActivity.class);
+        intent.putExtra("end", true);
+        if (tvStartDate.getText() == null)
+        {
+            startString = null;
+        }
+        else {
+            startString = tvStartDate.getText().toString();
+        }
+        saveState();
+        startActivity(intent);
+    }
+
+    public void onAM(View view) {
+        btnAM.setBackgroundColor(Color.parseColor(TEAL));
+        btnPM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        isAMEnd = true;
+    }
+
+    public void onPM(View view) {
+        btnPM.setBackgroundColor(Color.parseColor(TEAL));
+        btnAM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        isAMEnd = false;
+    }
+
+    public void onPM2(View view) {
+        btnPM2.setBackgroundColor(Color.parseColor(TEAL));
+        btnAM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        isAMStart = false;
+    }
+
+    public void onAM2(View view) {
+        btnAM2.setBackgroundColor(Color.parseColor(TEAL));
+        btnPM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
+        isAMStart = true;
+    }
+
+    public String retrievePrettyDate(String date, String time, boolean startValue) {
+        String[] dateVals = date.split(" ");
+        String[] dateRaw = dateVals[1].split("/");
+        String ret = "";
+        ret = dateVals[0] + " " + getPrettyMonth(dateRaw[0]) + " "
+                + getPrettyDay(dateRaw[1]) + " "
+                + getMilitaryTime(time, startValue) + ":00 "
+                + dateVals[dateVals.length - 1] + " "
+                + getPrettyYear(dateRaw[2]) + " " ;
+        return ret;
+    }
+
+    public String getMilitaryTime(String time, boolean startValue){
+        String milTime = time;
+        String[] timeArr = time.split(":");
+        if ((startValue && !isAMStart) || (!startValue && !isAMEnd))
+        {
+            int timeInt = Integer.parseInt(timeArr[0]) + 12;
+            milTime = timeInt + ":" + timeArr[1];
+        }
+        return milTime;
+    }
+
+    public String getPrettyYear(String year)
+    {
+        String prettyYear = year;
+        if (year.length() < 4)
+        {
+           prettyYear = "20" + year;
+        }
+        return prettyYear;
+    }
+
+    public String getPrettyDay(String day)
+    {
+        String prettyDay = day;
+        if (day.length() < 2)
+        {
+            prettyDay = "0" + day;
+        }
+        return prettyDay;
+    }
+
+    public String getPrettyMonth(String month) {
+        String prettyMonth = month;
+        switch(month)
+        {
+            case "1":
+                month = "JAN";
+                break;
+            case "2":
+                month = "FEB";
+                break;
+            case "3":
+                month = "MAR";
+                break;
+            case "4":
+                month = "APR";
+                break;
+            case "5":
+                month = "MAY";
+                break;
+            case "6":
+                month = "JUN";
+                break;
+            case "7":
+                month = "JUL";
+                break;
+            case "8":
+                month = "AUG";
+                break;
+            case "9":
+                month = "SEP";
+                break;
+            case "10":
+                month = "OCT";
+                break;
+            case "11":
+                month = "NOV";
+                break;
+            case "12":
+                month = "DEC";
+                break;
+        }
+        return month;
+    }
+
+
+    // Once an event has expired, remove it from the list.
+    public void removeExpiredEvents() {
+        ArrayList<Event> eventsToRemove = new ArrayList<Event>();
+
+        for (int i = 0; i < events.size(); i++)
+        {
+            Event event = events.get(i);
+            if (isExpired(event))
+            {
+                eventsToRemove.add(event);
+            }
+        }
+
+        while(!eventsToRemove.isEmpty())
+        {
+            events.remove(eventsToRemove.get(0));
+            eventsToRemove.remove(0);
+        }
+        eventAdapter.notifyDataSetChanged();
+    }
+
+    public boolean isExpired(Event event)
+    {
+        String end = "";
+        try {
+            end = getRelativeTimeAgo(event.fetchIfNeeded().getString(END_TIME_KEY));
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (end.contains(PAST_ID)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public void sortEvents() {
+        Collections.sort(events);
+    }
 }

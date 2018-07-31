@@ -12,6 +12,7 @@ import com.parse.ParseQuery;
  */
 @ParseClassName("Checkin")
 public class Checkin extends ParseObject {
+    public static String OBJECT_ID_KEY = "objectId";
     public static class Query extends ParseQuery<Checkin> {
         public Query() {
             super(Checkin.class);
