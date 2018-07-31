@@ -177,4 +177,9 @@ public class ChatActivity extends BaseActivity {
         unregisterReceiver(intentReceiver);
         super.onPause();
     }
+
+    public void onSettings(View view) {
+        Intent intent = new Intent(ChatActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }

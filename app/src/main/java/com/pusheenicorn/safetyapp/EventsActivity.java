@@ -385,5 +385,10 @@ public class EventsActivity extends BaseActivity {
         intent.putExtra("starting", true);
         startActivity(intent);
     }
+
+    public void onSettings(View view) {
+        Intent intent = new Intent(EventsActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }
 

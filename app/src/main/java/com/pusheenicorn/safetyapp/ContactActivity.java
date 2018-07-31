@@ -148,4 +148,8 @@ public class ContactActivity extends BaseActivity {
     }
 
 
+    public void onSettings(View view) {
+        Intent intent = new Intent(ContactActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }
