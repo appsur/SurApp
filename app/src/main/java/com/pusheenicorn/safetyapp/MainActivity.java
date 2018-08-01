@@ -1015,26 +1015,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
             endDateInts[i] = Integer.parseInt(endDateArr[i]);
         }
 
-        String text = "";
-
-        for (int i = 0; i < currDateInts.length; i++)
-        {
-            text += currDateInts[i] + ", ";
-        }
-
-
-        String text2 = "";
-
-        for (int i = 0; i < endDateInts.length; i++)
-        {
-            text2 += endDateInts[i] + ", ";
-        }
-
-        if (event.getObjectId().equals("fs1vyja8ud"))
-        {
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-        }
-
         int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
                 + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
         int trueEnd = (endDateInts[0] * 43800) + (endDateInts[1] * 1440)
