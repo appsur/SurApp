@@ -85,18 +85,18 @@
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/tvMembersTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvAlert2"
-        android:layout_marginBottom="215dp"
-        android:fontFamily="@font/arimo"
-        android:text="SAFE"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvMembersTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/tvAlert2"
+                android:layout_marginBottom="341dp"
+                android:fontFamily="@font/arimo"
+                android:text="SAFE"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvAlert2"
@@ -111,23 +111,23 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvFriendList"
-        android:layout_width="323dp"
-        android:layout_height="216dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="102dp"
-        android:visibility="visible"
-        tools:listitem="@layout/item_friend" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvFriendList"
+                android:layout_width="323dp"
+                android:layout_height="272dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="102dp"
+                android:visibility="visible"
+                tools:listitem="@layout/item_friend" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvSafe"
-        android:layout_width="319dp"
-        android:layout_height="146dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/tvMembersTitle"
-        android:layout_marginBottom="65dp" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvSafe"
+                android:layout_width="319dp"
+                android:layout_height="265dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/tvMembersTitle"
+                android:layout_marginBottom="65dp" />
 
     <ImageButton
         android:id="@+id/ibAddFriend"
@@ -152,16 +152,17 @@
         android:textColorHint="@color/gray"
         android:visibility="invisible" />
 
-    <ImageButton
-        android:id="@+id/ibSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/etUsername"
-        android:layout_centerVertical="true"
-        android:background="@android:color/transparent"
-        android:onClick="onSearch"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/account_search_outline" />
+            <ImageButton
+                android:id="@+id/ibSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/tvAlert2"
+                android:layout_marginEnd="35dp"
+                android:background="@android:color/transparent"
+                android:onClick="onSearch"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/account_search_outline" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->

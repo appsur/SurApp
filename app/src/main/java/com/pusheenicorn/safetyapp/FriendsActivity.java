@@ -63,7 +63,6 @@ public class FriendsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
         // Set the context.
         context = this;
         //setting the bottom navigation view
@@ -141,7 +140,6 @@ public class FriendsActivity extends BaseActivity {
     public void onSettings(View view) {
         //create intent to access the map activity and then toast the information
         Intent intent = new Intent(FriendsActivity.this, SettingsActivity.class);
-        Toast.makeText(FriendsActivity.this, "Settings Page Accessed", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 
@@ -210,6 +208,9 @@ public class FriendsActivity extends BaseActivity {
                                         // Add the new friend to the user's list of friends on Parse
                                         currentUser.addFriend(newFriend);
                                         currentUser.saveInBackground();
+                                        alertFriendsAdapter.clear();
+                                        safeFriendsAdapter.clear();
+                                        populateList();
                                     }
                                 });
                             } else {
