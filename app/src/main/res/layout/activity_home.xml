@@ -41,12 +41,11 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="264dp"
-        android:layout_height="248dp"
+        android:layout_width="359dp"
+        android:layout_height="413dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="47dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="110dp"
         app:srcCompat="@drawable/logo3" />
 
 </RelativeLayout>
