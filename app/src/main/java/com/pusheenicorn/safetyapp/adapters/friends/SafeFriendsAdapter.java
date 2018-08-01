@@ -91,9 +91,9 @@ public class SafeFriendsAdapter extends RecyclerView.Adapter<SafeFriendsAdapter.
                 number.substring(3, 6) + "-" +
                 number.substring(6, 10);
         holder.tvPhoneNumber.setText(number);
-
-        // Get the friend's last checkin id
-        Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
+//
+//        // Get the friend's last checkin id
+//        Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
 
         final User friendUser = friend.getUser();
 
