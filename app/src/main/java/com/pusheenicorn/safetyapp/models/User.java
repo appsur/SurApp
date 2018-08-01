@@ -233,4 +233,16 @@ public class User extends ParseUser {
         }
     }
 
+
+    public List<String> getFriendUserNames() {
+        List<Friend> friends = getFriends();
+        ArrayList<String> names = new ArrayList<String>();
+        for (int i = 0; i < friends.size(); i++)
+        {
+            Friend friend = friends.get(i);
+            names.add(friend.getUser().getUsername());
+        }
+        return names;
+    }
+
 }

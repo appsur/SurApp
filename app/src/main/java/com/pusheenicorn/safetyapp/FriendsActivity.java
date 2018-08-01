@@ -163,6 +163,15 @@ public class FriendsActivity extends BaseActivity {
             return;
         }
 
+        if (currentUser.getFriendUserNames().contains(username)) {
+            Toast.makeText(this, "Sorry, this user is already your friend!",
+                    Toast.LENGTH_LONG).show();
+            ibAddFriend.setVisibility(View.VISIBLE);
+            ibSearch.setVisibility(View.INVISIBLE);
+            etUsername.setVisibility(View.INVISIBLE);
+            return;
+        }
+
         // Get the actual checkin object by making a query.
         final User.Query userQuery = new User.Query();
         userQuery.getTop().whereEqualTo("username", username);

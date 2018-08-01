@@ -977,7 +977,71 @@ public class MainActivity extends BaseActivity implements LocationListener {
             e.printStackTrace();
         }
 
-        if (end.contains(PAST_ID)){
+        if (end.contains(PAST_ID) || isExpiredEvent(event)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isExpiredEvent (Event event) {
+
+        // Define format type.
+        DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
+
+        // Get current Date.
+        Date currDate = new Date();
+
+        // Split by regex "/" convert to int array and find time difference.
+        String[] currDateArr = df.format(currDate).split("/");
+        String[] endDatePreArr = new String[8];
+        try {
+            endDatePreArr = event.fetchIfNeeded().getString("endTime").split(" |:");
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+
+        String year = endDatePreArr[7].substring(2, 4);
+
+        String month = getValMonth(endDatePreArr[1]) + "";
+
+        String[] endDateArr = {month, endDatePreArr[2], year,
+                endDatePreArr[3],
+                endDatePreArr[4]};
+        int[] currDateInts = new int[5];
+        int[] endDateInts = new int[5];
+        for (int i = 0; i < 5; i++) {
+            currDateInts[i] = Integer.parseInt(currDateArr[i]);
+            endDateInts[i] = Integer.parseInt(endDateArr[i]);
+        }
+
+        String text = "";
+
+        for (int i = 0; i < currDateInts.length; i++)
+        {
+            text += currDateInts[i] + ", ";
+        }
+
+
+        String text2 = "";
+
+        for (int i = 0; i < endDateInts.length; i++)
+        {
+            text2 += endDateInts[i] + ", ";
+        }
+
+        if (event.getObjectId().equals("fs1vyja8ud"))
+        {
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        }
+
+        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
+                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
+        int trueEnd = (endDateInts[0] * 43800) + (endDateInts[1] * 1440)
+                + (endDateInts[2] * 525600) + (endDateInts[3] * 60) + endDateInts[4];
+
+        // If the current time is greater than the end time, the event has expired.
+        if (trueCurr > trueEnd) {
             return true;
         }
 
@@ -986,5 +1050,37 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     public void sortEvents() {
         Collections.sort(events);
+    }
+
+    public int getValMonth(String month) {
+        int monthID = 0;
+        switch(month) {
+            case ("JAN"):
+                return 1;
+            case ("FEB"):
+                return 2;
+            case ("MAR"):
+                return 3;
+            case ("APR"):
+                return 4;
+            case ("MAY"):
+                return 5;
+            case ("JUN"):
+                return 6;
+            case ("JUL"):
+                return 7;
+            case ("AUG"):
+                return 8;
+            case ("SEP"):
+                return 9;
+            case ("OCT"):
+                return 10;
+            case ("NOV"):
+                return 11;
+            case ("DEC"):
+                return 12;
+        }
+
+        return monthID;
     }
 }
