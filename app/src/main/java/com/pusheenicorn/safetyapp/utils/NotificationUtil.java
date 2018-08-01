@@ -8,10 +8,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
+import com.pusheenicorn.safetyapp.AlarmController;
+import com.pusheenicorn.safetyapp.AlarmStopReceiver;
 import com.pusheenicorn.safetyapp.CheckinReceiver;
 import com.pusheenicorn.safetyapp.MainActivity;
 import com.pusheenicorn.safetyapp.MapActivity;
@@ -27,10 +30,15 @@ public class NotificationUtil {
     Context mContext;
     User mCurrentUser;
     Friend mFriend;
+    AlarmController mAlarmController;
     public static String KEY_CHECKIN = "checkIn";
     public static String KEY_ALERT = "alert";
     public static String KEY_USER = "user";
 
+    public NotificationUtil(Context context, AlarmController alarmController) {
+        mContext = context;
+        mAlarmController = alarmController;
+    }
     public NotificationUtil(Context context, User currentUser) {
         mContext = context;
         mCurrentUser = currentUser;
@@ -155,6 +163,29 @@ public class NotificationUtil {
                         .setContentText(message)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setOngoing(true);
+        return builder.build();
+    }
+
+    public Notification getAlarmNotification() {
+        Intent intent = new Intent(mContext, AlarmStopReceiver.class);
+        intent.putExtra("alarm", mAlarmController);
+
+
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, AlarmStopReceiver.SERVICE_ID,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(mContext,
+                        MainActivity.CHANNEL_ID)
+                        .setContentTitle(CheckinReceiver.APP_NAME)
+                        .setSmallIcon(R.drawable.close_octagon_outline)
+                        .setContentText("STOP ALARM")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .addAction(R.drawable.close_octagon_outline, AlarmStopReceiver.ACTION_STOP, pendingIntent)
+                        .setOngoing(true);
+        // builder.setContentIntent(pendingIntent);
+        // builder.setAutoCancel(true);
         return builder.build();
     }
 

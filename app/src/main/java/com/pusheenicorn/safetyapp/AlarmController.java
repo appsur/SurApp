@@ -5,13 +5,17 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.widget.Toast;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class AlarmController {
+public class AlarmController implements Parcelable {
     Context context;
     MediaPlayer mp;
     AudioManager mAudioManager;
@@ -27,7 +31,34 @@ public class AlarmController {
 
         mp = new MediaPlayer();
     }
-//    public void playSound(String soundURI){
+
+    protected AlarmController(android.os.Parcel in) {
+        userVolume = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeInt(userVolume);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<AlarmController> CREATOR = new Creator<AlarmController>() {
+        @Override
+        public AlarmController createFromParcel(android.os.Parcel in) {
+            return new AlarmController(in);
+        }
+
+        @Override
+        public AlarmController[] newArray(int size) {
+            return new AlarmController[size];
+        }
+    };
+
+    //    public void playSound(String soundURI){
     public void playSound() {
         Uri alarmSound = null;
         Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);

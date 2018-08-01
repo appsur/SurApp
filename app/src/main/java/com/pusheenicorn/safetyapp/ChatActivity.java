@@ -72,6 +72,18 @@ public class ChatActivity extends BaseActivity {
 //            if (intent.equals("SMS_RECEIVED_ACTION")) {
             //set text view with the message and phone number from the reply
             tvTextMessage.setText(intent.getExtras().getString("message"));
+//            if (intent.getExtras().getString("body").equals("ISHANI")) {
+//                    AlarmController alarmController = new AlarmController(context);
+//                    alarmController.playSound();
+////                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
+////                    DataInputStream dataInputStream = new DataInputStream(inputStream);
+////                    NotificationCompat.Builder mBuilder =
+////                            new NotificationCompat.Builder(context);
+////                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+////                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+////                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+////                    r.play();
+//            }
 //            }
         }
     };
