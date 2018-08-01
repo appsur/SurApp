@@ -59,10 +59,12 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <activity android:name=".FriendsActivity" />
+        <activity android:name=".FriendsActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MapActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".EventsActivity" />
+        <activity android:name=".EventsActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".SignupActivity" />
 
