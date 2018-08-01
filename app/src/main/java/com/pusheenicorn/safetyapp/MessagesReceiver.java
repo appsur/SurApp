@@ -39,9 +39,28 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             for (int i = 0; i < messages.length; i++) {
                 messages[i] = SmsMessage.createFromPdu((byte[]) (pdus != null ? pdus[i] : null));
                 messageBody += messages[i].getMessageBody();
-                if (messageBody.equals("SUR")) {
-                    AlarmController alarmController = new AlarmController(context);
-                    alarmController.playSound();
+//                if (messageBody.equals("SUR")) {
+//                    AlarmController alarmController = new AlarmController(context);
+//                    alarmController.playSound();
+////                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
+////                    DataInputStream dataInputStream = new DataInputStream(inputStream);
+////                    NotificationCompat.Builder mBuilder =
+////                            new NotificationCompat.Builder(context);
+////                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+////                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+////                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+////                    r.play();
+//                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
+//                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
+//                }
+                str += messages[i].getOriginatingAddress();
+                str += ": ";
+                str += messages[i].getMessageBody();
+                str += "\n";
+            }
+            if (messageBody.equals("SUR")) {
+                AlarmController alarmController = new AlarmController(context);
+                alarmController.playSound();
 //                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
 //                    DataInputStream dataInputStream = new DataInputStream(inputStream);
 //                    NotificationCompat.Builder mBuilder =
@@ -50,13 +69,8 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
 //                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 //                    r.play();
-                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
-                }
-                str += messages[i].getOriginatingAddress();
-                str += ": ";
-                str += messages[i].getMessageBody();
-                str += "\n";
+                NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
+                notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
             }
             //display message
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
