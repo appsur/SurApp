@@ -284,13 +284,13 @@ public class SettingsActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     currentUser.setRingable(true);
-//                    //disable silencing settings
-//                    NotificationCompat.Builder mBuilder =
-//                            new NotificationCompat.Builder(SettingsActivity.this);
-//                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//                    r.play();
+                    //disable silencing settings
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(SettingsActivity.this);
+                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
                     currentUser.saveInBackground();
                 } else {
                     currentUser.setRingable(false);
