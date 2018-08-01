@@ -130,65 +130,65 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     }
 
-//        private void prepareRecorder() {
-//            recorder = new MediaRecorder();
-//            recorder.setPreviewDisplay(holder.getSurface());
-//
-//            if (usecamera) {
-//                camera.setDisplayOrientation(90); // use for set the orientation of the preview
-//                recorder.setOrientationHint(90); // use for set the orientation of output video
-//                camera.unlock();
-//                recorder.setCamera(camera);
-//            }
-//
-//            recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-//            recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
-//
-//            recorder.setProfile(camcorderProfile);
-//
-//            // This is all very sloppy
-//            if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
-//                try {
-//                    File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
-//                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                } catch (IOException e) {
-//                    Log.v(LOGTAG,"Couldn't create file");
-//                    e.printStackTrace();
-//                    finish();
-//                }
-//            } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
-//                try {
-//                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
-//                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                } catch (IOException e) {
-//                    Log.v(LOGTAG,"Couldn't create file");
-//                    e.printStackTrace();
-//                    finish();
-//                }
-//            } else {
-//                try {
-//                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
-//                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                } catch (IOException e) {
-//                    Log.v(LOGTAG,"Couldn't create file");
-//                    e.printStackTrace();
-//                    finish();
-//                }
-//
-//            }
-//            //recorder.setMaxDuration(50000); // 50 seconds
-//            //recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
-//
-//            try {
-//                recorder.prepare();
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//                finish();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                finish();
-//            }
-//        }
+        private void prepareRecorder() {
+            recorder = new MediaRecorder();
+            recorder.setPreviewDisplay(holder.getSurface());
+
+            if (usecamera) {
+                camera.setDisplayOrientation(90); // use for set the orientation of the preview
+                recorder.setOrientationHint(90); // use for set the orientation of output video
+                camera.unlock();
+                recorder.setCamera(camera);
+            }
+
+            recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+            recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+
+            recorder.setProfile(camcorderProfile);
+
+            // This is all very sloppy
+            if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
+                try {
+                    File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
+                    recorder.setOutputFile(newFile.getAbsolutePath());
+                } catch (IOException e) {
+                    Log.v(LOGTAG,"Couldn't create file");
+                    e.printStackTrace();
+                    finish();
+                }
+            } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
+                try {
+                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
+                    recorder.setOutputFile(newFile.getAbsolutePath());
+                } catch (IOException e) {
+                    Log.v(LOGTAG,"Couldn't create file");
+                    e.printStackTrace();
+                    finish();
+                }
+            } else {
+                try {
+                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
+                    recorder.setOutputFile(newFile.getAbsolutePath());
+                } catch (IOException e) {
+                    Log.v(LOGTAG,"Couldn't create file");
+                    e.printStackTrace();
+                    finish();
+                }
+
+            }
+            //recorder.setMaxDuration(50000); // 50 seconds
+            //recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+
+            try {
+                recorder.prepare();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+                finish();
+            } catch (IOException e) {
+                e.printStackTrace();
+                finish();
+            }
+        }
 
     public void surfaceCreated(SurfaceHolder holder) {
         Log.v(LOGTAG, "surfaceCreated");
@@ -235,7 +235,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 e.printStackTrace();
             }
 
-//            prepareRecorder();
+            prepareRecorder();
         }
     }
 
