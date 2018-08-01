@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.ParseException;
@@ -27,12 +28,15 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
     List<Friend> mFriends;
     Context context;
     User mCurrentUser;
+    EventFriendsAdapter mEventFriendsAdapter;
 
     // constructor
-    public EventUsersAdapter(List<User> users, List<Friend> friends, User currentUser) {
+    public EventUsersAdapter(List<User> users, List<Friend> friends, User currentUser,
+                             EventFriendsAdapter eventFriendsAdapter) {
         mUsers = users;
         mFriends = friends;
         mCurrentUser = currentUser;
+        mEventFriendsAdapter = eventFriendsAdapter;
     }
 
     @NonNull
@@ -114,10 +118,12 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
+                Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
                 // get the tweet at the position, this won't work if the class is static
                 final User user = mUsers.get(position);
-                if (user.getUserName() == mCurrentUser.getUserName())
+                if (user.getUserName().equals(mCurrentUser.getUserName()))
                 {
+                    Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
                     return;
                 }
                 final Friend newFriend = new Friend();
@@ -137,6 +143,8 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
                                 int index = mUsers.indexOf(user);
                                 mUsers.remove(index);
                                 mFriends.add(newFriend);
+                                notifyDataSetChanged();
+                                mEventFriendsAdapter.notifyDataSetChanged();
                             }
                         });
                     }

@@ -772,7 +772,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 etStartTime.getText().toString(), true);
         String endTotalTime = retrievePrettyDate(tvEndDate.getText().toString(),
                etEndTime.getText().toString(), false);
-
+        Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
         event.setStart(startTotalTime);
         event.setEnd(endTotalTime);
         event.addUser(currentUser);
