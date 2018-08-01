@@ -178,13 +178,13 @@ public class EventsActivity extends BaseActivity {
         rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
         friends = new ArrayList<Friend>();
 
-        eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser);
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
-        rvUsers.setAdapter(eventUsersAdapter);
-
         eventFriendsAdapter = new EventFriendsAdapter(friends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
+
+        eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser, eventFriendsAdapter);
+        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        rvUsers.setAdapter(eventUsersAdapter);
 
         //set banner to allow user to access gallery
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
@@ -195,6 +195,7 @@ public class EventsActivity extends BaseActivity {
             Glide.with(EventsActivity.this).load(bannerImage.getUrl())
                     .into(ibBanner);
         }
+        etUsername.setSelection(etUsername.getText().length());
     }
 
     public void getEmergencyNotifications() {
@@ -328,6 +329,7 @@ public class EventsActivity extends BaseActivity {
         if (username == currentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you are already part of this event!",
                     Toast.LENGTH_LONG).show();
+            etUsername.setText("");
             etUsername.setVisibility(View.INVISIBLE);
             ibAddMembers.setVisibility(View.VISIBLE);
             ibSearch.setVisibility(View.INVISIBLE);

@@ -225,16 +225,6 @@
                 android:textColor="@color/black"
                 android:visibility="invisible" />
 
-            <Button
-                android:id="@+id/btnCalendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/ibBanner"
-                android:layout_marginEnd="14dp"
-                android:text="Button"
-                android:onClick="onCalendar"/>
-
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
