@@ -16,6 +16,8 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.InputStream;
@@ -29,12 +31,15 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
         Bundle bundle = intent.getExtras();
         SmsMessage[] messages;
         String str = "";
+        String messageBody = "";
 
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
             messages = new SmsMessage[pdus != null ? pdus.length : 0];
             for (int i = 0; i < messages.length; i++) {
-                if (messages[i].getMessageBody().equals("SUR")) {
+                messages[i] = SmsMessage.createFromPdu((byte[]) (pdus != null ? pdus[i] : null));
+                messageBody += messages[i].getMessageBody();
+                if (messageBody.equals("SUR")) {
                     AlarmController alarmController = new AlarmController(context);
                     alarmController.playSound();
 //                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
@@ -45,8 +50,9 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
 //                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 //                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
 //                    r.play();
+                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
+                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
                 }
-                messages[i] = SmsMessage.createFromPdu((byte[]) (pdus != null ? pdus[i] : null));
                 str += messages[i].getOriginatingAddress();
                 str += ": ";
                 str += messages[i].getMessageBody();
@@ -59,6 +65,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction("SMS_RECEIVED_ACTION");
             broadcastIntent.putExtra("message", str);
+            broadcastIntent.putExtra("body", messageBody);
             context.sendBroadcast(broadcastIntent);
         }
     }
