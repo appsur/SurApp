@@ -1,5 +1,7 @@
 package com.pusheenicorn.safetyapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -89,6 +91,10 @@ public class EventsActivity extends BaseActivity {
     private static String KEY_USERNAME = "username";
     private static String KEY_BANNER = "bannerimage";
     private static String KEY_EVENT = "event";
+    public static String INTENT_EVENT_KEY = "event";
+    public static String INTENT_USER_KEY = "user";
+    public static String SERVICE_KEY = "service";
+    public static String ALERT_EVENT = "eventAlert";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +106,17 @@ public class EventsActivity extends BaseActivity {
         allowBannerFunctionality();                 // Allow banner to change.
         getEmergencyNotifications();                // Get any notification.
         loadEventUsers();                           // Populate the recycler views appropriately.
+
+
+        AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra(INTENT_EVENT_KEY, currentEvent);
+        intent.putExtra(INTENT_USER_KEY, currentUser);
+        intent.putExtra(SERVICE_KEY, ALERT_EVENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+                intent, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
+                60000, pendingIntent);
     }
 
     public void allowBannerFunctionality() {
