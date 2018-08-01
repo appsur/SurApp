@@ -90,6 +90,11 @@
             android:exported="false">
         </receiver>
 
+        <receiver
+            android:name="com.pusheenicorn.safetyapp.AlarmReceiver"
+            android:exported="false">
+        </receiver>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_stat_name" />
