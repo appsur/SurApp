@@ -85,6 +85,10 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="com.pusheenicorn.safetyapp.FriendCheckReceiver"
+            android:exported="false">
+        </receiver>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
