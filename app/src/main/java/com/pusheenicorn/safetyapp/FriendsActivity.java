@@ -63,7 +63,7 @@ public class FriendsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-        Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
         // Set the context.
         context = this;
         //setting the bottom navigation view
