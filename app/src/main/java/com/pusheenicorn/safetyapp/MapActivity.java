@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -37,8 +38,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
@@ -46,6 +49,7 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
@@ -60,10 +64,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private DrawerLayout mDrawerLayout;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+    List<Friend> friendList;
 
     ImageButton ibPhone;
     ImageButton ibAlert;
+    ImageButton ibUnfriend;
     Boolean isRinging;
+    Context context;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -71,6 +78,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     User friendUser;
     Friend friend;
     User currentUser;
+    User unFriendUser;
+    boolean trackable;
     ParseGeoPoint loc;
     ParseGeoPoint lic;
     Location mCurrentLocation;
@@ -96,19 +105,48 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_more);
         myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap map) {
-                    loadMap(map);
-                }
-            });
-        } else {
-            Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+        currentUser = (User) ParseUser.getCurrentUser();
+        context = getApplicationContext();
+
+        boolean isNotif = getIntent().getBooleanExtra("notif", false);
+        if (isNotif) {
+            friend = getIntent().getParcelableExtra("friend");
+        }
+        else {
+            friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         }
 
+        friendUser = (User) friend.getUser();
+
+        trackable = friendUser.getCheckMe();
+
+        if (trackable) {
+
+            mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap map) {
+                        loadMap(map);
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+            if (mapFragment != null) {
+                mapFragment.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(GoogleMap map) {
+                        loadMap(map);
+                    }
+                });
+            }
+            mapFragment.getView().setVisibility(View.INVISIBLE);
+        }
         // Logic for bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_more);
         setNavigationDestinations(MapActivity.this, bottomNavigationView);
@@ -132,19 +170,39 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
+        ibUnfriend = (ImageButton) findViewById(R.id.ibUnfriend);
+        ibUnfriend.setOnClickListener(new View.OnClickListener() {
 
-        currentUser = (User) ParseUser.getCurrentUser();
+            @Override
+            public void onClick(View view) {
+                List<Friend> friendList = currentUser.getFriends();
+                List<Friend> toRemove = new ArrayList<Friend>();
 
+                String id_B = friendUser.getObjectId();
+                for (Friend frnd : friendList){
+                    unFriendUser = (User) frnd.getUser();
+                    String id_A = unFriendUser.getObjectId();
+                    if(id_A.equals(id_B)){
+                        toRemove.add(frnd);
+                    }
+                }
+                friendList.removeAll(toRemove);
 
-        boolean isNotif = getIntent().getBooleanExtra("notif", false);
-        if (isNotif) {
-            friend = getIntent().getParcelableExtra("friend");
-        }
-        else {
-            friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
-        }
+                //boolean f =friendList.remove(friend);
+                //Toast.makeText(context ,f + " " , Toast.LENGTH_SHORT).show();
+                currentUser.setFriends(friendList);
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Intent back = new Intent(MapActivity.this,
+                                FriendsActivity.class);
+                        startActivity(back);
+                        finish();
+                    }
+                });
+            }
+        });
 
-        friendUser = (User) friend.getUser();
 
         tvPhone = (TextView) findViewById(R.id.tvPhone);
 
@@ -214,6 +272,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
 
     }
+
+
 
 
     public void onSettings(View view) {
@@ -300,4 +360,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         //check to see if the length is above the maximum character length, and if so, to divide message
             sms.sendTextMessage(friendUser.getPhonNumber(), null, "SUR", pi, null);
     }
+
+
 }

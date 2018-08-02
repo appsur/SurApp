@@ -11,19 +11,19 @@ public class Perm extends ParseObject{
     public final static String TRACKING_NAME = "TrackMe";
     public final static String RINGING_NAME = "RingMe";
 
-    public String getName() {
+    public String getPermName() {
         return getString(KEY_NAME);
     }
 
-    public void setName(String name) {
+    public void setPermName(String name) {
         put(KEY_NAME, name);
     }
 
-    public boolean getVal() {
+    public boolean getPermVal() {
         return getBoolean(KEY_VAL);
     }
 
-    public void setVal(boolean val) {
-        setVal(val);
+    public void setPermVal(boolean val) {
+        put(KEY_VAL, val);
     }
 }

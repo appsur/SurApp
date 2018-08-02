@@ -8,14 +8,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.pusheenicorn.safetyapp.AlarmController;
-import com.pusheenicorn.safetyapp.AlarmStopReceiver;
-import com.pusheenicorn.safetyapp.CheckinReceiver;
+import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;
+import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
 import com.pusheenicorn.safetyapp.MainActivity;
 import com.pusheenicorn.safetyapp.MapActivity;
 import com.pusheenicorn.safetyapp.NotificationPublisher;
@@ -23,9 +21,7 @@ import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
-import org.parceler.Parcels;
-
-import static com.pusheenicorn.safetyapp.AlarmStopReceiver.ACTION_STOP;
+import static com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver.ACTION_STOP;
 
 public class NotificationUtil {
 

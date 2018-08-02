@@ -1,6 +1,8 @@
 package com.pusheenicorn.safetyapp;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,19 +31,17 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
-import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
@@ -122,6 +121,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     // Notification channel for this class
     NotificationUtil notificationUtil;
     CheckinUtil checkinUtil;
+    AlarmManager alarmManager;
 
 
     // Variables for saving state between restarts
@@ -181,6 +181,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
+        //startBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -228,6 +229,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
         onResume();
+    }
+
+    private void startBackground() {
+        context = getApplicationContext();
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 600000,
+                        pendingIntent);
     }
 
     public void restoreState() {
@@ -483,9 +493,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
 
     public void friendsCheck(){
-        alert = new FriendAlert();
-        currentUser = (User) ParseUser.getCurrentUser();
-        alert.alertNeeded(context);
+//        alert = new FriendAlert();
+//        currentUser = (User) ParseUser.getCurrentUser();
+//        alert.alertNeeded(context);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        // execute a friend check every minute
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 60000,
+                pendingIntent);
     }
 
 

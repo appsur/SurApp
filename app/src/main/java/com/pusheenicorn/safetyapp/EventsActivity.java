@@ -25,7 +25,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -39,6 +38,7 @@ import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -109,7 +109,7 @@ public class EventsActivity extends BaseActivity {
 
 
         AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
+        Intent intent = new Intent(context, EventAlertReceiver.class);
         intent.putExtra(INTENT_EVENT_KEY, currentEvent);
         intent.putExtra(INTENT_USER_KEY, currentUser);
         intent.putExtra(SERVICE_KEY, ALERT_EVENT);

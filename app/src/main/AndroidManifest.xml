@@ -94,7 +94,7 @@
         </receiver>
 
         <receiver
-            android:name="com.pusheenicorn.safetyapp.AlarmReceiver"
+            android:name="com.pusheenicorn.safetyapp.receivers.EventAlertReceiver"
             android:exported="false">
         </receiver>
 
@@ -106,8 +106,8 @@
             android:resource="@color/colorAccent" />
 
         <receiver android:name=".NotificationPublisher" />
-        <receiver android:name=".CheckinReceiver" />
-        <receiver android:name=".AlarmStopReceiver" />
+        <receiver android:name=".receivers.CheckinReceiver" />
+        <receiver android:name=".receivers.AlarmStopReceiver" />
 
         <activity android:name=".BaseActivity" />
         <activity android:name=".HotlineActivity"></activity>
