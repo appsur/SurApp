@@ -38,7 +38,7 @@ import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
-import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
+import com.pusheenicorn.safetyapp.receivers.EventEmergencyService;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -104,19 +104,8 @@ public class EventsActivity extends BaseActivity {
         initializeViews();                          // Initialize all views.
         initializeNavigation();                     // Initialize navigation logic.
         allowBannerFunctionality();                 // Allow banner to change.
-        getEmergencyNotifications();                // Get any notification.
+        // getEmergencyNotifications();                // Get any notification.
         loadEventUsers();                           // Populate the recycler views appropriately.
-
-
-        AlarmManager alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, EventAlertReceiver.class);
-        intent.putExtra(INTENT_EVENT_KEY, currentEvent);
-        intent.putExtra(INTENT_USER_KEY, currentUser);
-        intent.putExtra(SERVICE_KEY, ALERT_EVENT);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-                intent, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),
-                60000, pendingIntent);
     }
 
     public void allowBannerFunctionality() {

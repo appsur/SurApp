@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -42,6 +43,7 @@ import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
+import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
@@ -49,6 +51,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -145,6 +148,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public static String BLACK = "#000000";
     private static String END_TIME_KEY = "endTime";
 
+    private PendingIntent pendingIntent;
+    private AlarmManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +233,16 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 setNewVisible();
             }
         }
+
+        // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(this, EventAlertReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this, 0,
+                alarmIntent, 0);
+        Calendar calendar = Calendar.getInstance();
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 10, pendingIntent);
+
         onResume();
     }
 
@@ -398,7 +413,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         final Checkin.Query checkinQuery = new Checkin.Query();
         checkinQuery.getTop().whereEqualTo(Checkin.OBJECT_ID_KEY, checkinId);
         checkinQuery.findInBackground(new FindCallback<Checkin>() {
-            @Override
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
                     checkin = objects.get(0);

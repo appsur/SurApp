@@ -93,10 +93,9 @@
             android:exported="false">
         </receiver>
 
-        <receiver
-            android:name="com.pusheenicorn.safetyapp.receivers.EventAlertReceiver"
-            android:exported="false">
-        </receiver>
+        <service
+            android:name=".receivers.EventEmergencyService"
+            android:exported="false"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -108,6 +107,7 @@
         <receiver android:name=".NotificationPublisher" />
         <receiver android:name=".receivers.CheckinReceiver" />
         <receiver android:name=".receivers.AlarmStopReceiver" />
+        <receiver android:name=".receivers.EventAlertReceiver"></receiver>
 
         <activity android:name=".BaseActivity" />
         <activity android:name=".HotlineActivity"></activity>
