@@ -108,11 +108,19 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                     Date date = checkin.getCreatedAt();
                     String remaining = timeUntilCheckin(date, friendUser) + "";
                     holder.tvTime.setText(remaining + " minutes");
+                    if (timeUntilCheckin(date, friendUser) == 0) {
+                    holder.ivTimerEmpty.setVisibility(View.VISIBLE);
+                    holder.ivTimerGoing.setVisibility(View.INVISIBLE);
+                    } else {
+                        holder.ivTimerGoing.setVisibility(View.VISIBLE);
+                        holder.ivTimerEmpty.setVisibility(View.INVISIBLE);
+                    }
                 } else {
                     e.printStackTrace();
                 }
             }
         });
+
         Glide.with(context).load(friendUser.getProfileImage().getUrl()).into(holder.ivProfile);
     }
 
@@ -131,6 +139,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         TextView tvTime;
         @BindView(R.id.ivProfileImage)
         ImageView ivProfile;
+        @BindView(R.id.ivTimerGoing)
+        ImageView ivTimerGoing;
+        @BindView(R.id.ivTimerEmpty)
+        ImageView ivTimerEmpty;
         ParseUser user;
 
         public ViewHolder(final View itemView) {

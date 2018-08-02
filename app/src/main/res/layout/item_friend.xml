@@ -5,7 +5,7 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="82dp"
         android:layout_height="57dp"
@@ -71,5 +71,24 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:background="@android:color/transparent"
         app:srcCompat="@drawable/rectangle_shape" />
+
+    <ImageView
+        android:id="@+id/ivTimerGoing"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:tint="@color/teal"
+        android:layout_marginEnd="119dp"
+        app:srcCompat="@drawable/timer_sand" />
+
+    <ImageView
+        android:id="@+id/ivTimerEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_alignParentTop="true"
+        android:tint="@color/coral"
+        android:layout_alignStart="@+id/ivTimerGoing"
+        app:srcCompat="@drawable/timer_sand_empty" />
 
 </RelativeLayout>

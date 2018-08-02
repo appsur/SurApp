@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -66,6 +67,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
     List<Friend> friendList;
 
+    TextView tvBlocked;
+    ImageView ivBlur;
     ImageButton ibPhone;
     ImageButton ibAlert;
     ImageButton ibUnfriend;
@@ -134,6 +137,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             } else {
                 Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
             }
+            ivBlur = (ImageView) findViewById(R.id.ivBlur);
+            tvBlocked = (TextView) findViewById(R.id.tvBlocked);
+            ivBlur.setVisibility(View.INVISIBLE);
+            tvBlocked.setVisibility(View.INVISIBLE);
+
         }
         else{
             mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
