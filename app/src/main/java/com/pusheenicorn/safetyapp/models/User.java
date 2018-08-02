@@ -245,4 +245,11 @@ public class User extends ParseUser {
         return names;
     }
 
+
+    public void setFriends(List<Friend> friends)
+    {
+        remove(KEY_FRIENDS);
+        addAll(KEY_FRIENDS, friends);
+    }
+
 }
