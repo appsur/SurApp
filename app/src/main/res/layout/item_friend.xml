@@ -37,16 +37,6 @@
         android:text="PHONE NUMBER"
         android:textColor="@android:color/black" />
 
-    <ProgressBar
-        android:id="@+id/pbTime"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="291dp"
-        android:layout_height="10dp"
-        android:layout_alignBottom="@+id/ivProfileImage"
-        android:layout_marginBottom="10dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:progressDrawable="@color/teal" />
-
     <TextView
         android:id="@+id/tvTimeElapsed"
         android:layout_width="wrap_content"
