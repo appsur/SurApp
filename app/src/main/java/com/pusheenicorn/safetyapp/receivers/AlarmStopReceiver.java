@@ -1,10 +1,11 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.receivers;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import com.pusheenicorn.safetyapp.AlarmController;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 public class AlarmStopReceiver extends WakefulBroadcastReceiver{

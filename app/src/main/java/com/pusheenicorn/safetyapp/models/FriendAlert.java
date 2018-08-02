@@ -1,29 +1,16 @@
 package com.pusheenicorn.safetyapp.models;
 
-import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.MapActivity;
-import com.pusheenicorn.safetyapp.NotificationPublisher;
-import com.pusheenicorn.safetyapp.R;
-import com.pusheenicorn.safetyapp.CheckinReceiver;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
-
-import org.parceler.Parcels;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

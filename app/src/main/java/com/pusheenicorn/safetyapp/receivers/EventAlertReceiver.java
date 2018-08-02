@@ -1,10 +1,11 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import com.parse.ParseException;
+import com.pusheenicorn.safetyapp.EventsActivity;
 import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
@@ -13,7 +14,7 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlarmReceiver extends BroadcastReceiver
+public class EventAlertReceiver extends BroadcastReceiver
 {
     Event mCurrentEvent;
     User mCurrentUser;
