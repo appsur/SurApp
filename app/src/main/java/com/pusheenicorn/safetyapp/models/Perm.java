@@ -5,40 +5,25 @@ import com.parse.ParseObject;
 
 @ParseClassName("Perm")
 public class Perm extends ParseObject{
-    private final static String KEY_RING = "ringMe";
-    private final static String KEY_TRACK = "trackMe";
-    private final static String KEY_MESSAGE = "messageMe";
-    private final static String KEY_CALL = "callMe";
+    private final static String KEY_NAME = "name";
+    private final static String KEY_VAL = "allowed";
 
-    public boolean getRingPermissions() {
-        return getBoolean(KEY_RING);
+    public final static String TRACKING_NAME = "TrackMe";
+    public final static String RINGING_NAME = "RingMe";
+
+    public String getName() {
+        return getString(KEY_NAME);
     }
 
-    public void setRingPermissions(boolean permission) {
-        put(KEY_RING, permission);
+    public void setName(String name) {
+        put(KEY_NAME, name);
     }
 
-    public boolean geTrackPermissions() {
-        return getBoolean(KEY_TRACK);
+    public boolean getVal() {
+        return getBoolean(KEY_VAL);
     }
 
-    public void setTrackPermissions(boolean permission) {
-        put(KEY_TRACK, permission);
-    }
-
-    public boolean getMessagePermissions() {
-        return getBoolean(KEY_MESSAGE);
-    }
-
-    public void setMessagePermissions(boolean permission) {
-        put(KEY_MESSAGE, permission);
-    }
-
-    public boolean getCallPermissions() {
-        return getBoolean(KEY_CALL);
-    }
-
-    public void setCallPermissions(boolean permission) {
-        put(KEY_CALL, permission);
+    public void setVal(boolean val) {
+        setVal(val);
     }
 }
