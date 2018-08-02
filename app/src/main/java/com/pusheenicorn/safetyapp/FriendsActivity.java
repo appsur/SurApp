@@ -141,7 +141,6 @@ public class FriendsActivity extends BaseActivity {
     public void onSettings(View view) {
         //create intent to access the map activity and then toast the information
         Intent intent = new Intent(FriendsActivity.this, SettingsActivity.class);
-        Toast.makeText(FriendsActivity.this, "Settings Page Accessed", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 
@@ -157,6 +156,15 @@ public class FriendsActivity extends BaseActivity {
         // Do not allow the user to add themselves as a friend!
         if (username == currentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you cannot add yourself as a friend!",
+                    Toast.LENGTH_LONG).show();
+            ibAddFriend.setVisibility(View.VISIBLE);
+            ibSearch.setVisibility(View.INVISIBLE);
+            etUsername.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        if (currentUser.getFriendUserNames().contains(username)) {
+            Toast.makeText(this, "Sorry, this user is already your friend!",
                     Toast.LENGTH_LONG).show();
             ibAddFriend.setVisibility(View.VISIBLE);
             ibSearch.setVisibility(View.INVISIBLE);
@@ -210,6 +218,9 @@ public class FriendsActivity extends BaseActivity {
                                         // Add the new friend to the user's list of friends on Parse
                                         currentUser.addFriend(newFriend);
                                         currentUser.saveInBackground();
+                                        alertFriendsAdapter.clear();
+                                        safeFriendsAdapter.clear();
+                                        populateList();
                                     }
                                 });
                             } else {
