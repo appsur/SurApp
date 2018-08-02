@@ -140,6 +140,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 Intent i = new Intent(context, ChatActivity.class);
                 i.putExtra(Friend.class.getSimpleName(), Parcels.wrap(friend));
                 i.putExtra("number", friend.getUser().getPhonNumber());
+                i.putExtra("name", friend.getUser().getName());
 
                 //show activity
                 context.startActivity(i);

@@ -34,15 +34,12 @@ public class ChatActivity extends BaseActivity {
     EditText etTextMessage;
     IntentFilter intentFilter;
     TextView tvTextMessage;
+    TextView tbTitle;
 
     //initializing variables to populate the friend recycler view
     FriendsAdapter friendAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvChatFriendList;
-
-//    ChatAdapter chatAdapter;
-//    ArrayList<Friend> chats;
-//    RecyclerView rvChatList;
 
     //initializing the current user
     User currentUser;
@@ -68,19 +65,7 @@ public class ChatActivity extends BaseActivity {
 //            if (intent.equals("SMS_RECEIVED_ACTION")) {
             //set text view with the message and phone number from the reply
             tvTextMessage.setText(intent.getExtras().getString("message"));
-//            if (intent.getExtras().getString("body").equals("ISHANI")) {
-//                    AlarmController alarmController = new AlarmController(context);
-//                    alarmController.playSound();
-////                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
-////                    DataInputStream dataInputStream = new DataInputStream(inputStream);
-////                    NotificationCompat.Builder mBuilder =
-////                            new NotificationCompat.Builder(context);
-////                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-////                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-////                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-////                    r.play();
-//            }
-//            }
+//        }
         }
     };
 
@@ -88,7 +73,6 @@ public class ChatActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
         //set and populated the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_chat);
         setNavigationDestinations(ChatActivity.this, bottomNavigationView);
@@ -138,16 +122,14 @@ public class ChatActivity extends BaseActivity {
         rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvChatFriendList.setAdapter(friendAdapter);
 
-//        rvChatList = (RecyclerView) findViewById(R.id.rvChatList);
-//        chats = new ArrayList<>();
-//        chatAdapter = new ChatAdapter(friends);
-//        rvChatList.setLayoutManager(new LinearLayoutManager(this));
-//        rvChatList.setAdapter(chatAdapter);
-
         //initialize current user
         currentUser = (User) ParseUser.getCurrentUser();
         //populate the friends list
         populateFriendList();
+        tbTitle = findViewById(R.id.tbTitle);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
+        tbTitle.setText(name);
 
     }
 
@@ -155,10 +137,8 @@ public class ChatActivity extends BaseActivity {
         for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
             Friend newFriend = currentUser.getFriends().get(i);
             friends.add(newFriend);
-//            chats.add(newFriend);
             friendAdapter.notifyDataSetChanged();
         }
-//        chatAdapter.notifyDataSetChanged();
     }
 
     protected void sendMessage(String number, String message) {
