@@ -5,19 +5,16 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -30,7 +27,7 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.adapters.ChatAdapter;
-import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
+import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -59,7 +56,7 @@ public class ContactActivity extends BaseActivity {
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
     //initializing variables to populate the friend recycler view
-    SafeFriendsAdapter friendAdapter;
+    FriendsAdapter friendAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvChatFriendList;
 
@@ -134,7 +131,7 @@ public class ContactActivity extends BaseActivity {
         rvChatFriendList = (RecyclerView) findViewById(R.id.rvChatFriendList);
         friends = new ArrayList<>();
         // construct the adapter from this data source
-        friendAdapter = new SafeFriendsAdapter(friends);
+        friendAdapter = new FriendsAdapter(friends);
         // recycler view setup
         rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvChatFriendList.setAdapter(friendAdapter);

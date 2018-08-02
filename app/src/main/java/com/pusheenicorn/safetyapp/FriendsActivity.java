@@ -21,8 +21,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.pusheenicorn.safetyapp.adapters.friends.AlertFriendsAdapter;
-import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
+import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -43,12 +42,12 @@ public class FriendsActivity extends BaseActivity {
 
     ProgressBar progressBar;
 
-    SafeFriendsAdapter safeFriendsAdapter;
+    FriendsAdapter safeFriendsAdapter;
     ArrayList<Friend> safeFriends;
     //    ArrayList<Friend> friends;
     RecyclerView rvSafeFriendList;
 
-    AlertFriendsAdapter alertFriendsAdapter;
+    FriendsAdapter alertFriendsAdapter;
     ArrayList<Friend> alertFriends;
     RecyclerView rvAlertFriendList;
 
@@ -70,6 +69,7 @@ public class FriendsActivity extends BaseActivity {
         //set and populated the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_friends);
         setNavigationDestinations(FriendsActivity.this, bottomNavigationView);
+//        bottomNavigationView.setSelectedItemId(R.id.action_friends);
         initializeNavItems(mNavItems);
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -92,7 +92,7 @@ public class FriendsActivity extends BaseActivity {
         rvSafeFriendList = (RecyclerView) findViewById(R.id.rvSafe);
         safeFriends = new ArrayList<Friend>();
         // construct the adapter from this data source
-        safeFriendsAdapter = new SafeFriendsAdapter(safeFriends);
+        safeFriendsAdapter = new FriendsAdapter(safeFriends);
         // recycler view setup
         rvSafeFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvSafeFriendList.setAdapter(safeFriendsAdapter);
@@ -100,7 +100,7 @@ public class FriendsActivity extends BaseActivity {
 
         rvAlertFriendList = (RecyclerView) findViewById(R.id.rvFriendList);
         alertFriends = new ArrayList<>();
-        alertFriendsAdapter = new AlertFriendsAdapter(alertFriends);
+        alertFriendsAdapter = new FriendsAdapter(alertFriends);
         // recycler view setup
         rvAlertFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvAlertFriendList.setAdapter(alertFriendsAdapter);

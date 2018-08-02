@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -31,25 +30,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AlertFriendsAdapter extends RecyclerView.Adapter<AlertFriendsAdapter.ViewHolder> {
-
+public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHolder> {
     private List<Friend> mFriends;
     Context context;
 
     //pass in the Tweets array in the constructor
-    public AlertFriendsAdapter(List<Friend> friends) {
+    public FriendsAdapter(List<Friend> friends) {
         mFriends = friends;
     }
 
     //for each row, inflate the layout and cache references (only invoked if creating a new row)
     @NonNull
     @Override
-    public AlertFriendsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View friendView = inflater.inflate(R.layout.item_friend, parent, false);
-        AlertFriendsAdapter.ViewHolder viewHolder = new AlertFriendsAdapter.ViewHolder(friendView);
+        ViewHolder viewHolder = new ViewHolder(friendView);
         return viewHolder;
     }
 
@@ -65,7 +63,7 @@ public class AlertFriendsAdapter extends RecyclerView.Adapter<AlertFriendsAdapte
     //bind the values based on the position of the element
 
     @Override
-    public void onBindViewHolder(@NonNull final AlertFriendsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         //get the data according to position
         Friend friend = mFriends.get(position);
         String name = "";
@@ -90,7 +88,7 @@ public class AlertFriendsAdapter extends RecyclerView.Adapter<AlertFriendsAdapte
                 number.substring(3, 6) + "-" +
                 number.substring(6, 10);
         holder.tvPhoneNumber.setText(number);
-
+//
 //        // Get the friend's last checkin id
 //        Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
 
@@ -149,12 +147,12 @@ public class AlertFriendsAdapter extends RecyclerView.Adapter<AlertFriendsAdapte
                 Friend friend = mFriends.get(position);
                 Intent i = new Intent(context, MapActivity.class);
                 i.putExtra(Friend.class.getSimpleName(), Parcels.wrap(friend));
-
                 //show activity
                 context.startActivity(i);
             }
         }
     }
+
 
     public int timeUntilCheckin(Date prevDate, User user) {
         // Define format type.

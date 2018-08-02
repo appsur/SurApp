@@ -21,16 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.adapters.ChatAdapter;
-import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
+import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChatActivity extends BaseActivity {
     //declare necessary variables for fields on the screen
@@ -40,7 +36,7 @@ public class ChatActivity extends BaseActivity {
     TextView tvTextMessage;
 
     //initializing variables to populate the friend recycler view
-    SafeFriendsAdapter friendAdapter;
+    FriendsAdapter friendAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvChatFriendList;
 
@@ -137,7 +133,7 @@ public class ChatActivity extends BaseActivity {
         rvChatFriendList = (RecyclerView) findViewById(R.id.rvChatFriendList);
         friends = new ArrayList<>();
         // construct the adapter from this data source
-        friendAdapter = new SafeFriendsAdapter(friends);
+        friendAdapter = new FriendsAdapter(friends);
         // recycler view setup
         rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvChatFriendList.setAdapter(friendAdapter);
