@@ -571,15 +571,18 @@ public class MainActivity extends BaseActivity implements LocationListener {
                             // notify the adapter
                         }
                     }
-                    removeExpiredEvents(rawEvents);
-                    sortEvents(rawEvents);
-                    Toast.makeText(context, rawEvents.get(rawEvents.size() - 1).getObjectId(), Toast.LENGTH_LONG).show();
-                    events.clear();
 
-                    for (int i = 0; i < rawEvents.size(); i++)
+                    if (currentUser.getEvents() != null)
                     {
-                        events.add(rawEvents.get(i));
-                        eventAdapter.notifyDataSetChanged();
+                        removeExpiredEvents(rawEvents);
+                        sortEvents(rawEvents);
+                        events.clear();
+
+                        for (int i = 0; i < rawEvents.size(); i++)
+                        {
+                            events.add(rawEvents.get(i));
+                            eventAdapter.notifyDataSetChanged();
+                        }
                     }
                 } else {
                     e.printStackTrace();
