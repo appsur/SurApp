@@ -36,9 +36,8 @@ public class EventAlertReceiver extends BroadcastReceiver
 
     public void getNotifications()
     {
-        if (mCurrentUser != null)
+        if (mCurrentUser != null && mCurrentUser.getEvents() != null)
         {
-            Toast.makeText(mContext, "User is not null", Toast.LENGTH_LONG).show();
             ArrayList<Event> events = (ArrayList) mCurrentUser.getEvents();
             for (int i = 0; i < events.size(); i++)
             {

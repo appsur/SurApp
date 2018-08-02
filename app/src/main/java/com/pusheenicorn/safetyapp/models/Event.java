@@ -108,7 +108,8 @@ public class Event extends ParseObject implements Comparable<Event> {
         // If this event starts after the other, then the absolute time of this
         // event should be greater than that of the other, so we return > 0.
         // Otherwise, if the two are equal, we return 0.
-        return (getAbsoluteTime(thisStart) - getAbsoluteTime(otherStart));
+        // return (getAbsoluteTime(thisStart) - getAbsoluteTime(otherStart));
+        return getEnd().compareTo(otherEvent.getEnd());
     }
 
     public static class Query extends ParseQuery<Event> {
