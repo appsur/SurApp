@@ -2,12 +2,21 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
-public class HotlineActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class HotlineActivity extends BaseActivity {
+
+    //declare constants for the phone numbers for hotlines
     private static final String SUICIDE_NUMBER = "18008277571";
     private static final String DOMESTIC_NUMBER = "18007997233";
     private static final String SPANISH_NUMBER = "18009426908";
@@ -17,11 +26,43 @@ public class HotlineActivity extends AppCompatActivity {
     private static final String ALCOHOL_NUMBER = "18002526465";
     private static final String SOCIAL_SERVICES_NUMBER = "18003423720";
     private static final String TELEPHONE_KEY = "tel";
+    //declare bottom navigation bar
+    private BottomNavigationView bottomNavigationView;
+
+    //variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotline);
+        //set and populated the bottom navigation view
+        bottomNavigationView = findViewById(R.id.bottom_navigation_hotline);
+        setNavigationDestinations(HotlineActivity.this, bottomNavigationView);
+
+        initializeNavItems(mNavItems);
+        // DrawerLayout
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        // Populate the Navigtion Drawer with options
+        mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
+        mDrawerList.setAdapter(adapter);
+
+        // Drawer Item click listeners
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectItemFromDrawer(position, mDrawerList, mDrawerPane, mDrawerLayout,
+                        HotlineActivity.this, mNavItems);
+            }
+        });
+
     }
 
     public void onSettings(View view) {

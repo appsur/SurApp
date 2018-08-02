@@ -65,6 +65,7 @@ public class BaseActivity extends AppCompatActivity {
         mNavItems.add(new NavItem("Messages", "Contact your friends", R.drawable.ic_vector_messages));
         mNavItems.add(new NavItem("Chat", "Chat with your friends here", R.drawable.ic_vector_compose));
         mNavItems.add(new NavItem("Friends", "See your friends", R.drawable.ic_vector_person));
+        mNavItems.add(new NavItem("Hotlines", "Easy access to a list of hotlines that you can call", R.drawable.phoneicon));
         mNavItems.add(new NavItem("Log out", "Log out", R.drawable.logout));
     }
 
@@ -86,6 +87,9 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(activity, FriendsActivity.class));
                 break;
             case 4:
+                startActivity(new Intent(activity, HotlineActivity.class));
+                break;
+            case 5:
                 Intent logOut = new Intent(activity, HomeActivity.class);
                 ParseUser.logOut();
                 startActivity(logOut);
