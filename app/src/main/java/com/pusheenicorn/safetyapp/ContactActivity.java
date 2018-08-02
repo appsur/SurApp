@@ -40,7 +40,6 @@ public class ContactActivity extends BaseActivity {
     EditText etMessage; //text field that can be edited to include user's message
     EditText etPhoneNumber; //text field for the phone number that the user wishes to message or call
     String phonenumber; //phone number that should be contacted
-    Button btnChat; //button that leads to the chat activity
     TextView tvFriendsTitle; //title to display name of current activity
     ImageButton btnCall; //button that allows user to call given phone number
     // Define global current user.
@@ -71,15 +70,7 @@ public class ContactActivity extends BaseActivity {
         setContentView(R.layout.activity_contact);
         //check for permissions to allow user to call or message
         checkPermissionsPlease();
-        //initialize the chat button and intent to take user to the chat activity
-        btnChat = findViewById(R.id.btnChat);
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goChat = new Intent(ContactActivity.this, ChatActivity.class);
-                startActivity(goChat);
-            }
-        });
+
         //initialize the send button and intent to send a message
         btnSendMessage = findViewById(R.id.btnSendMessage);
         btnSendMessage.setOnClickListener(new View.OnClickListener() {

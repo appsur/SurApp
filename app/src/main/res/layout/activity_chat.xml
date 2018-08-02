@@ -152,16 +152,15 @@
         android:textColor="@color/black"
         android:textColorHint="@color/gray" />
 
-    <TextView
-        android:id="@+id/tvTextMessage"
-        android:layout_width="328dp"
-        android:layout_height="159dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="124dp"
-        android:fontFamily="@font/arimo"
-        android:text="TextView"
-        android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tvTextMessage"
+                android:layout_width="328dp"
+                android:layout_height="159dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="124dp"
+                android:fontFamily="@font/arimo"
+                android:textColor="@color/black" />
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout

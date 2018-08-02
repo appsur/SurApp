@@ -189,15 +189,6 @@
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"/>
 
-    <Button
-        android:id="@+id/btnChat"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignBottom="@+id/tvFriendsTitle"
-        android:layout_alignEnd="@+id/rvChatFriendList"
-        android:background="@color/coral"
-        android:text="CHAT" />
-
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
