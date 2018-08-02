@@ -226,13 +226,7 @@ public class User extends ParseUser {
             setLimit(20);
             return this;
         }
-
-        public Query withUser() {
-            include("user");
-            return this;
-        }
     }
-
 
     public List<String> getFriendUserNames() {
         List<Friend> friends = getFriends();
@@ -244,12 +238,10 @@ public class User extends ParseUser {
         }
         return names;
     }
-
-
+    
     public void setFriends(List<Friend> friends)
     {
         remove(KEY_FRIENDS);
         addAll(KEY_FRIENDS, friends);
     }
-
 }
