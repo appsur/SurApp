@@ -1,59 +1,50 @@
 package com.pusheenicorn.safetyapp.receivers;
 
 import android.app.IntentService;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.EventsActivity;
 import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class EventAlertReceiver extends BroadcastReceiver
-{
+public class EventEmergencyService extends IntentService {
+
     Event mCurrentEvent;
     User mCurrentUser;
-    Context mContext;
     NotificationUtil notificationUtil;
+    Context mContext;
 
-
-    public void onReceive(Context context, Intent intent)
-    {
-        mCurrentUser = (User) ParseUser.getCurrentUser();
-        notificationUtil = new NotificationUtil(context, mCurrentUser);
-        mContext = context;
-        getNotifications();
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     */
+    public EventEmergencyService() {
+        super("DisplayEmergencyAlert");
+        mContext = this;
     }
 
-    public void getNotifications()
-    {
-        if (mCurrentUser != null)
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        Toast.makeText(mContext, "Hello", Toast.LENGTH_LONG).show();
+        if (intent.getStringExtra(EventsActivity.SERVICE_KEY) == EventsActivity.ALERT_EVENT)
         {
-            Toast.makeText(mContext, "User is not null", Toast.LENGTH_LONG).show();
-            ArrayList<Event> events = (ArrayList) mCurrentUser.getEvents();
-            for (int i = 0; i < events.size(); i++)
-            {
-                Event event = events.get(i);
-                getEventNotifications(event);
-            }
-        }
-
-        else {
-            Toast.makeText(mContext, "User is null", Toast.LENGTH_LONG).show();
+            mCurrentEvent = intent.getParcelableExtra(EventsActivity.INTENT_EVENT_KEY);
+            mCurrentUser = intent.getParcelableExtra(EventsActivity.INTENT_USER_KEY);
+            notificationUtil = new NotificationUtil(mContext, mCurrentUser);
+            getEmergencyNotifications();
         }
     }
 
-    public void getEventNotifications(Event event) {
-        List<Alert> alerts = event.getAlerts();
+    public void getEmergencyNotifications() {
+        List<Alert> alerts = mCurrentEvent.getAlerts();
 
         if (alerts == null) {
             return;
@@ -64,10 +55,8 @@ public class EventAlertReceiver extends BroadcastReceiver
                         !curr.getSeenBy().contains(mCurrentUser.getObjectId())) {
                     // Schedule a notification for this alert
                     try {
-                        String message = mCurrentEvent.getName() + " alert: " + curr.getMessage()
-                                + "\n (from " +
-                                curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) + " )";
-
+                        String message = curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) +
+                                " says: " + curr.getMessage();
                         notificationUtil
                                 .scheduleNotification(notificationUtil
                                         .getAlertNotification(message), 0);
