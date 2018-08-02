@@ -44,7 +44,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:fontFamily="@font/arimo"
-        android:text="TIME ELAPSED:"
+        android:text="TIME TO CHECK-IN:"
         android:textAlignment="center"
         android:textColor="@android:color/black" />
 
@@ -74,19 +74,20 @@
 
     <ImageView
         android:id="@+id/ivTimerGoing"
-        android:layout_width="34dp"
-        android:layout_height="41dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/tvTimeElapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ivTimerEmpty"
+        android:layout_centerVertical="true"
         android:tint="@color/teal"
         app:srcCompat="@drawable/timer_sand" />
 
     <ImageView
         android:id="@+id/ivTimerEmpty"
-        android:layout_width="34dp"
-        android:layout_height="41dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/tvTimeElapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="107dp"
         android:tint="@color/coral"
         app:srcCompat="@drawable/timer_sand_empty" />
 

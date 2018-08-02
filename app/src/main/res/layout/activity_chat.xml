@@ -33,17 +33,8 @@
         android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvChatList"
-                android:layout_width="44dp"
-                android:layout_height="154dp"
-                android:layout_alignTop="@+id/rvChatFriendList"
-                android:layout_toEndOf="@+id/rvChatFriendList"
-                android:visibility="visible"
-                tools:listitem="@layout/item_chat" />
-
-            <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvChatFriendList"
-                android:layout_width="327dp"
+                android:layout_width="373dp"
                 android:layout_height="155dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/tvFriendsTitle"
