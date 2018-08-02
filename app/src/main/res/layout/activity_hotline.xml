@@ -17,18 +17,20 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tvSuicidePrevention"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="93dp"
-        android:onClick="onSuicidePrevention"
-        android:text="Suicide Prevention Hotline "
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvSuicidePrevention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="74dp"
+                android:fontFamily="@font/arimo"
+                android:onClick="onSuicidePrevention"
+                android:text="Suicide Prevention Hotline"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -95,89 +97,184 @@
                 app:itemTextColor="@color/black"
                 app:menu="@menu/menu" />
 
-    <TextView
-        android:id="@+id/tvBWC"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvDomesticAbuseSpanish"
-        android:layout_marginTop="30dp"
-        android:onClick="onBatteredWomenAndChildren"
-        android:text="Battered Women and Children Hotline"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvBWC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="284dp"
+                android:onClick="onBatteredWomenAndChildren"
+                android:text="Battered Women and Children Hotline"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvElderlyAbuse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvChildAbuse"
-        android:layout_marginTop="30dp"
-        android:onClick="onElderAbuse"
-        android:text="Elder Abuse Hotline"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvElderlyAbuse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="309dp"
+                android:onClick="onElderAbuse"
+                android:text="Elder Abuse Hotline"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvDrugAbuse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvAlcoholics"
-        android:layout_marginTop="30dp"
-        android:onClick="onDrugs"
-        android:text="Drug Abuse National Hotline"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvDrugAbuse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="176dp"
+                android:onClick="onDrugs"
+                android:text="Drug Abuse National Hotline"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvChildAbuse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvBWC"
-        android:layout_marginTop="30dp"
-        android:onClick="onSS"
-        android:text="Child Abuse Hotline/Social Services"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvChildAbuse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="349dp"
+                android:onClick="onSS"
+                android:text="Child Abuse Hotline/Social Services"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvAlcoholics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvElderlyAbuse"
-        android:layout_marginTop="30dp"
-        android:onClick="onAlcoholics"
-        android:text="Alcohol Treatment Referal Hotline"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvAlcoholics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="250dp"
+                android:onClick="onAlcoholics"
+                android:text="Alcohol Treatment Referral Hotline"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvDomesticAbuse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvSuicidePrevention"
-        android:layout_marginTop="30dp"
-        android:onClick="onDomesticAbuse"
-        android:text="National Domestic Abuse Hotline"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvDomesticAbuse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="132dp"
+                android:onClick="onDomesticAbuse"
+                android:text="National Domestic Abuse Hotline"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/tvDomesticAbuseSpanish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvSuicidePrevention"
-        android:layout_below="@+id/tvDomesticAbuse"
-        android:layout_marginTop="30dp"
-        android:onClick="onDomesticAbuseSpanish"
-        android:text="National Domestic Abuse Hotline (Spanish)"
-        android:textColor="@color/black"
-        android:textSize="22sp" />
+            <TextView
+                android:id="@+id/tvDomesticAbuseSpanish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="198dp"
+                android:onClick="onDomesticAbuseSpanish"
+                android:text="National Domestic Abuse Hotline (Spanish)"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="22sp" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="122dp"
+                android:background="@color/coral"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="180dp"
+                android:background="@color/teal"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="272dp"
+                android:background="@color/coral"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="327dp"
+                android:background="@color/teal"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="347dp"
+                android:background="@color/coral"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider7"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="292dp"
+                android:background="@color/teal"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider8"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="224dp"
+                android:background="@color/coral"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider9"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/toolbar"
+                android:background="@color/teal"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider10"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="145dp"
+                android:background="@color/teal"
+                android:visibility="visible" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->
