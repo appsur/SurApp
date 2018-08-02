@@ -107,6 +107,7 @@
 
         <receiver android:name=".NotificationPublisher" />
         <receiver android:name=".CheckinReceiver" />
+        <receiver android:name=".AlarmStopReceiver" />
 
         <activity android:name=".BaseActivity" />
         <activity android:name=".HotlineActivity"></activity>

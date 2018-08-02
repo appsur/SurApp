@@ -70,7 +70,6 @@ public class FriendsActivity extends BaseActivity {
         //set and populated the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_friends);
         setNavigationDestinations(FriendsActivity.this, bottomNavigationView);
-
         initializeNavItems(mNavItems);
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

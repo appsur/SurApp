@@ -39,7 +39,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
     private CamcorderProfile camcorderProfile;
     private Camera camera;
 
-    //booleans to keep track of whether or not the
+    //booleans to keep track of whether or not the video attributes should be shown
     boolean recording = false;
     boolean usecamera = true;
     boolean previewRunning = false;
@@ -58,15 +58,16 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-
+        //ask system to exclude title at the top of the screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //set the orientation of the screen to be portrait, avoiding the auto-adjust to landscape for the app
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //TODO- see if camcorder profile quality can be increased without crashing the application
+        //set the camera quality
         camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 
         setContentView(R.layout.activity_video);
@@ -94,12 +95,15 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
             }
         });
 
+        //initialize the surfaceview
         SurfaceView cameraView = (SurfaceView) findViewById(R.id.CameraView);
         holder = cameraView.getHolder();
         holder.addCallback(this);
+        //create buffers for the camera device
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 //        prepareRecorder();
 
+        //start and stop camera view
         cameraView.setClickable(true);
         cameraView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -115,6 +119,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                     // recorder.release();
                     recording = false;
                     Log.v(LOGTAG, "Recording Stopped");
+                    //finish recording and notify user, then return to main activity
                     Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
                     Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
                     startActivity(finishRecording);
@@ -135,18 +140,20 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
             recorder.setPreviewDisplay(holder.getSurface());
 
             if (usecamera) {
+                //set the camera to be portrait mode
                 camera.setDisplayOrientation(90); // use for set the orientation of the preview
                 recorder.setOrientationHint(90); // use for set the orientation of output video
                 camera.unlock();
                 recorder.setCamera(camera);
             }
 
+            //allow recorder to have audio and video
             recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
             recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
 
             recorder.setProfile(camcorderProfile);
 
-            // This is all very sloppy
+            //saving file based on the format
             if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
                 try {
                     File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
@@ -176,8 +183,6 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 }
 
             }
-            //recorder.setMaxDuration(50000); // 50 seconds
-            //recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
 
             try {
                 recorder.prepare();
