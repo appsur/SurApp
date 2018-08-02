@@ -44,9 +44,9 @@ public class ChatActivity extends BaseActivity {
     ArrayList<Friend> friends;
     RecyclerView rvChatFriendList;
 
-    ChatAdapter chatAdapter;
-    ArrayList<Friend> chats;
-    RecyclerView rvChatList;
+//    ChatAdapter chatAdapter;
+//    ArrayList<Friend> chats;
+//    RecyclerView rvChatList;
 
     //initializing the current user
     User currentUser;
@@ -142,11 +142,11 @@ public class ChatActivity extends BaseActivity {
         rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvChatFriendList.setAdapter(friendAdapter);
 
-        rvChatList = (RecyclerView) findViewById(R.id.rvChatList);
-        chats = new ArrayList<>();
-        chatAdapter = new ChatAdapter(friends);
-        rvChatList.setLayoutManager(new LinearLayoutManager(this));
-        rvChatList.setAdapter(chatAdapter);
+//        rvChatList = (RecyclerView) findViewById(R.id.rvChatList);
+//        chats = new ArrayList<>();
+//        chatAdapter = new ChatAdapter(friends);
+//        rvChatList.setLayoutManager(new LinearLayoutManager(this));
+//        rvChatList.setAdapter(chatAdapter);
 
         //initialize current user
         currentUser = (User) ParseUser.getCurrentUser();
@@ -159,10 +159,10 @@ public class ChatActivity extends BaseActivity {
         for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
             Friend newFriend = currentUser.getFriends().get(i);
             friends.add(newFriend);
-            chats.add(newFriend);
+//            chats.add(newFriend);
             friendAdapter.notifyDataSetChanged();
         }
-        chatAdapter.notifyDataSetChanged();
+//        chatAdapter.notifyDataSetChanged();
     }
 
     protected void sendMessage(String number, String message) {

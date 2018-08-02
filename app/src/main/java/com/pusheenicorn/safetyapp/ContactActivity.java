@@ -13,6 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.adapters.ChatAdapter;
+import com.pusheenicorn.safetyapp.adapters.friends.SafeFriendsAdapter;
+import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.util.ArrayList;
@@ -52,6 +57,15 @@ public class ContactActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+
+    //initializing variables to populate the friend recycler view
+    SafeFriendsAdapter friendAdapter;
+    ArrayList<Friend> friends;
+    RecyclerView rvChatFriendList;
+
+    ChatAdapter chatAdapter;
+    ArrayList<Friend> chats;
+    RecyclerView rvChatList;
 
 
     @Override
@@ -117,6 +131,22 @@ public class ContactActivity extends BaseActivity {
             }
         });
 
+        rvChatFriendList = (RecyclerView) findViewById(R.id.rvChatFriendList);
+        friends = new ArrayList<>();
+        // construct the adapter from this data source
+        friendAdapter = new SafeFriendsAdapter(friends);
+        // recycler view setup
+        rvChatFriendList.setLayoutManager(new LinearLayoutManager(this));
+        rvChatFriendList.setAdapter(friendAdapter);
+
+        rvChatList = (RecyclerView) findViewById(R.id.rvChatList);
+        chats = new ArrayList<>();
+        chatAdapter = new ChatAdapter(friends);
+        rvChatList.setLayoutManager(new LinearLayoutManager(this));
+        rvChatList.setAdapter(chatAdapter);
+
+        populateFriendList();
+
     }
 
     private void checkPermissionsPlease() {
@@ -151,5 +181,15 @@ public class ContactActivity extends BaseActivity {
     public void onSettings(View view) {
         Intent intent = new Intent(ContactActivity.this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    public void populateFriendList() {
+        for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
+            Friend newFriend = currentUser.getFriends().get(i);
+            friends.add(newFriend);
+            chats.add(newFriend);
+            friendAdapter.notifyDataSetChanged();
+        }
+        chatAdapter.notifyDataSetChanged();
     }
 }
