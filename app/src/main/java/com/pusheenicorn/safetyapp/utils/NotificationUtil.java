@@ -25,6 +25,8 @@ import com.pusheenicorn.safetyapp.models.User;
 
 import org.parceler.Parcels;
 
+import static com.pusheenicorn.safetyapp.AlarmStopReceiver.ACTION_STOP;
+
 public class NotificationUtil {
 
     Context mContext;
@@ -169,11 +171,12 @@ public class NotificationUtil {
     public Notification getAlarmNotification() {
         Intent intent = new Intent(mContext, AlarmStopReceiver.class);
         intent.putExtra("alarm", mAlarmController);
+        intent.setAction(ACTION_STOP);
 
 
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, AlarmStopReceiver.SERVICE_ID,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(mContext,
@@ -182,8 +185,8 @@ public class NotificationUtil {
                         .setSmallIcon(R.drawable.close_octagon_outline)
                         .setContentText("STOP ALARM")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .addAction(R.drawable.close_octagon_outline, AlarmStopReceiver.ACTION_STOP, pendingIntent)
-                        .setOngoing(true);
+                        .addAction(R.drawable.close_octagon_outline, ACTION_STOP, pendingIntent)
+                        .setOngoing(false);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
         return builder.build();
