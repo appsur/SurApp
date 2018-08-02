@@ -109,8 +109,9 @@ public class FriendAlert {
                             final Checkin checkin = objects.get(0);
                             Date date = checkin.getCreatedAt();
                             int cycle = (int) myFriend.getNumber("checkin");
+                            int missed = (int) myFriend.getNotificationThreshold();
                             int time = timeSinceLastCheckin(date,myFriend);
-                            if (time > (PLACEHOLDER * cycle) ){
+                            if (time > (missed * cycle) ){
                                 NotificationUtil notificationUtil = new NotificationUtil(context, currentUser, fr);
                                 notificationUtil.createNotificationChannel();
                                 notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);

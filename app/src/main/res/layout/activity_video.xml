@@ -24,9 +24,8 @@
                 android:id="@+id/CameraView"
                 android:layout_width="640dp"
                 android:layout_height="579dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="82dp" />
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

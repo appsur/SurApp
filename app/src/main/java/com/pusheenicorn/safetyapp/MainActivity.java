@@ -1,6 +1,8 @@
 package com.pusheenicorn.safetyapp;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -119,6 +121,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     // Notification channel for this class
     NotificationUtil notificationUtil;
     CheckinUtil checkinUtil;
+    AlarmManager alarmManager;
 
 
     // Variables for saving state between restarts
@@ -178,6 +181,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
+        //startBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -225,6 +229,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
         onResume();
+    }
+
+    private void startBackground() {
+        context = getApplicationContext();
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 600000,
+                        pendingIntent);
     }
 
     public void restoreState() {
@@ -480,9 +493,15 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
 
     public void friendsCheck(){
-        alert = new FriendAlert();
-        currentUser = (User) ParseUser.getCurrentUser();
-        alert.alertNeeded(context);
+//        alert = new FriendAlert();
+//        currentUser = (User) ParseUser.getCurrentUser();
+//        alert.alertNeeded(context);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        // execute a friend check every minute
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 60000,
+                pendingIntent);
     }
 
 
