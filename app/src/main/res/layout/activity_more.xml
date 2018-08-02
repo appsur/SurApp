@@ -207,6 +207,27 @@
                 android:layout_toEndOf="@+id/ibPhone"
                 app:srcCompat="@drawable/ic_unfriend" />
 
+            <ImageView
+                android:id="@+id/ivBlur"
+                android:layout_width="wrap_content"
+                android:layout_height="400dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/toolbar"
+                android:layout_marginTop="26dp"
+                app:srcCompat="@drawable/blur" />
+
+            <TextView
+                android:id="@+id/tvBlocked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivBlur"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="171dp"
+                android:elevation="3dp"
+                android:text="USER HAS DISABLED TRACKING"
+                android:textAppearance="@android:style/TextAppearance.Large"
+                android:textColor="@color/black" />
+
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
