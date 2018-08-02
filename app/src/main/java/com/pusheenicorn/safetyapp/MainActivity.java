@@ -23,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -155,6 +156,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
         checkPermissionsPlease();                           // Check for geotracking permissions.
         context = this;                                     // Store the context for ease of access.
         currentUser = (User) ParseUser.getCurrentUser();    // Get the current user.
@@ -241,8 +243,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 alarmIntent, 0);
         Calendar calendar = Calendar.getInstance();
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 10, pendingIntent);
-
+                60000, pendingIntent);
         onResume();
     }
 
@@ -562,16 +563,27 @@ public class MainActivity extends BaseActivity implements LocationListener {
             @Override
             public void done(List<Event> objects, com.parse.ParseException e) {
                 if (e == null) {
+                    ArrayList<Event> rawEvents = new ArrayList<Event>();
                     for (int i = objects.size() - 1; i > -1; i--) {
                         if (currentUser.getEvents() != null &&
                                 currentUser.getEventIds().contains(objects.get(i).getObjectId())) {
-                            events.add(objects.get(i));
+                            rawEvents.add(objects.get(i));
                             // notify the adapter
+                        }
+                    }
+
+                    if (currentUser.getEvents() != null)
+                    {
+                        removeExpiredEvents(rawEvents);
+                        sortEvents(rawEvents);
+                        events.clear();
+
+                        for (int i = 0; i < rawEvents.size(); i++)
+                        {
+                            events.add(rawEvents.get(i));
                             eventAdapter.notifyDataSetChanged();
                         }
                     }
-                    removeExpiredEvents();
-                    sortEvents();
                 } else {
                     e.printStackTrace();
                 }
@@ -978,12 +990,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
 
     // Once an event has expired, remove it from the list.
-    public void removeExpiredEvents() {
+    public void removeExpiredEvents(List<Event> rawEvents) {
         ArrayList<Event> eventsToRemove = new ArrayList<Event>();
 
-        for (int i = 0; i < events.size(); i++)
+        for (int i = 0; i < rawEvents.size(); i++)
         {
-            Event event = events.get(i);
+            Event event = rawEvents.get(i);
             if (isExpired(event))
             {
                 eventsToRemove.add(event);
@@ -992,10 +1004,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         while(!eventsToRemove.isEmpty())
         {
-            events.remove(eventsToRemove.get(0));
+            rawEvents.remove(eventsToRemove.get(0));
             eventsToRemove.remove(0);
         }
-        eventAdapter.notifyDataSetChanged();
     }
 
     public boolean isExpired(Event event)
@@ -1058,8 +1069,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         return false;
     }
 
-    public void sortEvents() {
-        Collections.sort(events);
+    public void sortEvents(List<Event> inputEvents) {
+        Collections.sort(inputEvents);
     }
 
     public int getValMonth(String month) {
