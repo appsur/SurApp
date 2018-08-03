@@ -559,8 +559,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         // Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
         // Make a new query.
         final Event.Query eventQuery = new Event.Query();
-        // Get only the top 20 events in the database.
-        eventQuery.getTop();
         //.whereEqualTo("usersAttending", currentUser);
         eventQuery.findInBackground(new FindCallback<Event>() {
             @Override
@@ -574,7 +572,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
                             // notify the adapter
                         }
                     }
-
                     if (currentUser.getEvents() != null)
                     {
                         removeExpiredEvents(rawEvents);
