@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +57,12 @@ public class BaseActivity extends AppCompatActivity {
                                 startActivity(friendsAction);
                                 return true;
                         }
+                        bottomNavigationView.setSelectedItemId(item.getItemId());
                         return true;
                     }
                 });
     }
+
 
     public void initializeNavItems(ArrayList<NavItem> mNavItems) {
         mNavItems.add(new NavItem("Home", "Main Screen", R.drawable.ic_vector_home));
@@ -101,6 +104,12 @@ public class BaseActivity extends AppCompatActivity {
 
         // Close the drawer
         mDrawerLayout.closeDrawer(mDrawerPane);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        item.setChecked(true);
+        return true;
     }
 
     class NavItem {

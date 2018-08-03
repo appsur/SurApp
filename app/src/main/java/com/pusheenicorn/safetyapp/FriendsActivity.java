@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -68,8 +69,8 @@ public class FriendsActivity extends BaseActivity {
         //setting the bottom navigation view
         //set and populated the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_friends);
+        bottomNavigationView.setSelectedItemId(R.id.action_friends);
         setNavigationDestinations(FriendsActivity.this, bottomNavigationView);
-//        bottomNavigationView.setSelectedItemId(R.id.action_friends);
         initializeNavItems(mNavItems);
         // DrawerLayout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -233,4 +234,10 @@ public class FriendsActivity extends BaseActivity {
             }
         });
     }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        bottomNavigationView.setSelectedItemId(R.id.action_friends);
+//    }
+
 }

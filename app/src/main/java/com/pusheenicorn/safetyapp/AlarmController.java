@@ -19,7 +19,7 @@ import java.io.InputStream;
 public class AlarmController implements Parcelable {
     Context context;
     MediaPlayer mp;
-    AudioManager mAudioManager;
+    private AudioManager mAudioManager;
     int userVolume;
 
 
@@ -66,20 +66,21 @@ public class AlarmController implements Parcelable {
         Uri alarmSound = null;
         //setting ringtone
         Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+//        mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 
 
-//        try{
-////            alarmSound = Uri.parse(soundURI);
-//            InputStream inputStream  = context.getResources().openRawResource(R.raw.policesiren);
-//            DataInputStream dataInputStream = new DataInputStream(inputStream);
-//        }catch(Exception e){
-//            alarmSound = ringtoneUri;
-//        }
-//        finally{
-//            if(alarmSound == null){
-//                alarmSound = ringtoneUri;
-//            }
-//        }
+        try{
+//            alarmSound = Uri.parse(soundURI);
+            InputStream inputStream  = context.getResources().openRawResource(R.raw.policesiren);
+            DataInputStream dataInputStream = new DataInputStream(inputStream);
+        }catch(Exception e){
+            alarmSound = ringtoneUri;
+        }
+        finally{
+            if(alarmSound == null){
+                alarmSound = ringtoneUri;
+            }
+        }
 
 
         try {
