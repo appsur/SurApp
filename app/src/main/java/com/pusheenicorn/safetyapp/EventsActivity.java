@@ -333,7 +333,8 @@ public class EventsActivity extends BaseActivity {
             public void done(List<User> objects, ParseException e) {
                 if (e == null) {
                     if (objects != null) {
-                        currentEvent.addUser(objects.get(0));
+                        final User newUser = objects.get(0);
+                        currentEvent.addUser(newUser);
                         currentEvent.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -343,6 +344,8 @@ public class EventsActivity extends BaseActivity {
                                 etUsername.setVisibility(View.INVISIBLE);
                                 ibAddMembers.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);
+                                newUser.addEvent(currentEvent);
+                                newUser.saveInBackground();
                             }
                         });
                     }
