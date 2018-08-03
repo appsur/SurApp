@@ -117,7 +117,12 @@ public class FriendsActivity extends BaseActivity {
 
     public void populateList() {
         for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
-            Friend newFriend = currentUser.getFriends().get(i);
+            Friend newFriend = null;
+            try {
+                newFriend = (Friend) currentUser.fetch().getList("friends").get(i);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             User userFriend;
             Boolean isSafe = true;
             try {
