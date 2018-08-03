@@ -54,6 +54,10 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
         // get the data according to position
         User user = mUsers.get(position);
 
+        if (user.getUsername().equals(mCurrentUser.getUsername())) {
+            holder.tvAddAsFriend.setText("ME");
+        }
+
         // populate the views according to this data
         // populate the views according to this data
         holder.tvName.setText(user.getName());
@@ -97,6 +101,8 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
         TextView tvPhoneNumber;
 
         @BindView(R.id.tvName) TextView tvName;
+
+        @BindView(R.id.tvAddAsFriend) TextView tvAddAsFriend;
 
         public ViewHolder(View itemView) {
 
