@@ -78,7 +78,7 @@ public class FriendAlert {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (friends.size() > 0) {
+        if (friends != null) {
 
             //iterate through friends and check each friend's check in status
             for (final Friend fr : friends) {
