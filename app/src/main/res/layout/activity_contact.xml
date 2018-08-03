@@ -14,199 +14,215 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvFriendsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rvChatFriendList"
-        android:layout_marginTop="87dp"
-        android:fontFamily="@font/arimo"
-        android:text="FRIENDS"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvChatList"
-                android:layout_width="44dp"
-                android:layout_height="228dp"
-                android:layout_alignTop="@+id/rvChatFriendList"
-                android:layout_toEndOf="@+id/rvChatFriendList"
-                android:visibility="visible"
-                tools:listitem="@layout/item_chat" />
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvChatFriendList"
-                android:layout_width="327dp"
-                android:layout_height="227dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="122dp"
-                android:visibility="visible"
-                tools:listitem="@layout/item_friend" />
-
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="295dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="146dp"
-        android:layout_marginEnd="19dp"
-        android:ems="10"
-        android:hint="Phone Number"
-        android:inputType="textPersonName"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray" />
-
-    <ImageButton
-        android:id="@+id/btnSendMessage"
-        android:layout_width="52dp"
-        android:layout_height="46dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/etMessage"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:elevation="24dp"
-        android:fontFamily="@font/arimo"
-        android:scaleType="fitStart"
-        android:src="@drawable/select_message"
-        android:text="TEXT"
-        android:textColor="@android:color/black"
-        android:tint="@color/teal"
-        android:visibility="visible" />
-
-    <ImageButton
-        android:id="@+id/btnCall"
-        android:layout_width="53dp"
-        android:layout_height="45dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/etPhoneNumber"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@color/coral"
-        android:fontFamily="@font/arimo"
-        android:scaleType="fitStart"
-        android:src="@drawable/phone"
-        android:text="CALL"
-        android:textColor="@android:color/black" />
-
-    <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="297dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/etPhoneNumber"
-        android:layout_marginBottom="81dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Enter message here."
-        android:inputType="textMultiLine"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        tools:ignore="Orientation">
-
-    </LinearLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/lightGray"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/black">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-
-            <ProgressBar
-                android:id="@+id/pbLoading"
+            <TextView
+                android:id="@+id/tvFriendsTitle"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/btnSendMessage"
+                android:layout_marginTop="87dp"
+                android:fontFamily="@font/arimo"
+                android:paddingLeft="5dp"
+                android:text="FRIENDS"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/nvMine"
+                android:layout_width="match_parent"
+                android:layout_height="471dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvChatList"
+                        android:layout_width="44dp"
+                        android:layout_height="330dp"
+                        android:layout_alignTop="@+id/rvChatFriendList"
+                        android:layout_toEndOf="@+id/rvChatFriendList"
+                        android:visibility="visible"
+                        tools:listitem="@layout/item_chat" />
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvChatFriendList"
+                        android:layout_width="327dp"
+                        android:layout_height="330dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginTop="122dp"
+                        android:visibility="visible"
+                        tools:listitem="@layout/item_friend" />
+                </RelativeLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+            <EditText
+                android:id="@+id/etPhoneNumber"
+                android:layout_width="295dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="184dp"
+                android:layout_marginEnd="19dp"
+                android:ems="10"
+                android:hint="Enter a phone number"
+                android:inputType="textPersonName"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray" />
+
+            <ImageButton
+                android:id="@+id/btnSendMessage"
+                android:layout_width="52dp"
+                android:layout_height="46dp"
+                android:layout_alignStart="@+id/btnCall"
+                android:layout_alignTop="@+id/etMessage"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:elevation="24dp"
+                android:fontFamily="@font/arimo"
+                android:paddingLeft="15dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/select_message"
+                android:text="TEXT"
+                android:textColor="@android:color/black"
+                android:tint="@color/teal"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/btnCall"
+                android:layout_width="53dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/etPhoneNumber"
+                android:layout_marginStart="18dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@color/coral"
+                android:fontFamily="@font/arimo"
+                android:paddingLeft="20dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/phone"
+                android:text="CALL"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_width="297dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignStart="@+id/etPhoneNumber"
+                android:layout_marginBottom="104dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Enter your message"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="99dp"
-                android:visibility="invisible" />
+                android:visibility="visible"
+                tools:ignore="Orientation">
 
-            <TextView
-                android:id="@+id/tbTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/arimo"
-                android:gravity="center"
-                android:linksClickable="true"
-                android:text="CONTACT"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/logo3" />
+                android:background="@color/lightGray"
+                android:minHeight="?attr/actionBarSize"
+                app:titleTextColor="@android:color/black">
 
-            <ImageButton
-                android:id="@+id/ibSettings"
-                android:layout_width="36dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="15dp"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/dots_vertical"
-                android:onClick="onSettings"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
 
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation_contact"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/menu"
-        android:background="@color/lightGray"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"/>
+                    <ProgressBar
+                        android:id="@+id/pbLoading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="99dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/tbTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/arimo"
+                        android:gravity="center"
+                        android:linksClickable="true"
+                        android:text="CONTACT"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivLogo"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        app:srcCompat="@drawable/logo3" />
+
+                    <ImageButton
+                        android:id="@+id/ibSettings"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginEnd="15dp"
+                        android:background="@android:color/transparent"
+                        android:onClick="onSettings"
+                        app:srcCompat="@drawable/dots_vertical" />
+
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/bottom_navigation_contact"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/lightGray"
+                app:itemIconTint="@color/black"
+                app:itemTextColor="@color/black"
+                app:menu="@menu/menu" />
 
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
+            android:id="@+id/drawerPane"
             android:layout_width="280dp"
             android:layout_height="match_parent"
-            android:id="@+id/drawerPane"
-            android:background="@color/coral"
-            android:layout_gravity="start">
+            android:layout_gravity="start"
+            android:background="@color/coral">
             <!-- List of Actions (pages) -->
             <ListView
                 android:id="@+id/navList"
                 android:layout_width="280dp"
                 android:layout_height="match_parent"
-                android:choiceMode="singleChoice"
-                android:background="@color/coral" />
+                android:background="@color/coral"
+                android:choiceMode="singleChoice" />
         </RelativeLayout>
-
-
 
 
     </android.support.v4.widget.DrawerLayout>
