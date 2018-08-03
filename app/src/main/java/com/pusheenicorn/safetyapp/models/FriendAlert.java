@@ -78,55 +78,55 @@ public class FriendAlert {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        if (friends.size() > 0) {
 
+            //iterate through friends and check each friend's check in status
+            for (final Friend fr : friends) {
+                try {
+                    myFriend = (User) fr.fetchIfNeeded().getParseUser("user");
+                    primary = (User) myFriend.fetchIfNeeded().getParseUser("primaryContact");
+                    their_id = primary.fetchIfNeeded().getObjectId();
 
-        //iterate through friends and check each friend's check in status
-        for (final Friend fr : friends) {
-            try {
-                myFriend = (User) fr.fetchIfNeeded().getParseUser("user");
-                primary = (User) myFriend.fetchIfNeeded().getParseUser("primaryContact");
-                their_id = primary.fetchIfNeeded().getObjectId();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+                //Toast.makeText(context, "My id is: " + my_id + "\n Their id is: " + their_id, Toast.LENGTH_LONG).show();
+                if (my_id.equals(their_id)) {
+                    Toast.makeText(context, "HELLLOOO", Toast.LENGTH_LONG).show();
+                    //assign friend's last checkin to a date object
+                    //Ishani----------------------------------------------------------------------------
+                    String checkinId = myFriend.getLastCheckin().getObjectId();
 
-            //Toast.makeText(context, "My id is: " + my_id + "\n Their id is: " + their_id, Toast.LENGTH_LONG).show();
-            if (my_id.equals(their_id)){
-                Toast.makeText(context, "HELLLOOO", Toast.LENGTH_LONG).show();
-                //assign friend's last checkin to a date object
-                //Ishani----------------------------------------------------------------------------
-                String checkinId = myFriend.getLastCheckin().getObjectId();
-
-                // Query by checkinId
-                final Checkin.Query checkinQuery = new Checkin.Query();
-                checkinQuery.getTop().whereEqualTo("objectId", checkinId);
-                checkinQuery.findInBackground(new FindCallback<Checkin>() {
-                    @Override
-                    public void done(List<Checkin> objects, ParseException e) {
-                        if (e == null) {
-                            // Get the checkin object and format its date
-                            final Checkin checkin = objects.get(0);
-                            Date date = checkin.getCreatedAt();
-                            int cycle = (int) myFriend.getNumber("checkin");
-                            int missed = (int) myFriend.getNotificationThreshold();
-                            int time = timeSinceLastCheckin(date,myFriend);
-                            if (time > (missed * cycle) ){
-                                NotificationUtil notificationUtil = new NotificationUtil(context, currentUser, fr);
-                                notificationUtil.createNotificationChannel();
-                                notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);
-                                //notif.notify(0, getNotification(currentUser , myFriend , context));
+                    // Query by checkinId
+                    final Checkin.Query checkinQuery = new Checkin.Query();
+                    checkinQuery.getTop().whereEqualTo("objectId", checkinId);
+                    checkinQuery.findInBackground(new FindCallback<Checkin>() {
+                        @Override
+                        public void done(List<Checkin> objects, ParseException e) {
+                            if (e == null) {
+                                // Get the checkin object and format its date
+                                final Checkin checkin = objects.get(0);
+                                Date date = checkin.getCreatedAt();
+                                int cycle = (int) myFriend.getNumber("checkin");
+                                int missed = (int) myFriend.getNotificationThreshold();
+                                int time = timeSinceLastCheckin(date, myFriend);
+                                if (time > (missed * cycle)) {
+                                    NotificationUtil notificationUtil = new NotificationUtil(context, currentUser, fr);
+                                    notificationUtil.createNotificationChannel();
+                                    notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);
+                                    //notif.notify(0, getNotification(currentUser , myFriend , context));
+                                }
+                            } else {
+                                e.printStackTrace();
                             }
-                        } else {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
+                }
             }
         }
+
     }
-
-
 
 
 
