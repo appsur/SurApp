@@ -23,8 +23,11 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context , Intent intent){
         //if (count < MAX) {
+
         mContext = context;
+        if (currentUser != null) {
             friendsCheck();
+        }
             //count += 1;
         //}
     }
