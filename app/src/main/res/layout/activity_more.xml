@@ -207,7 +207,7 @@
                 android:layout_marginEnd="21dp"
                 android:layout_toStartOf="@+id/ibAlert"
                 android:background="@color/white"
-                app:srcCompat="@drawable/ic_noFriend" />
+                app:srcCompat="@drawable/ic_minus" />
 
             <ImageView
                 android:id="@+id/ivBlur"
