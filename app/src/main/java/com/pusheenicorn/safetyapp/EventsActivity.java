@@ -325,6 +325,12 @@ public class EventsActivity extends BaseActivity {
             return;
         }
 
+        else if (currentEvent.getUserNames() != null && currentEvent.getUserNames().contains(username))
+        {
+            Toast.makeText(this, "Sorry this user is already part of this event!",
+                    Toast.LENGTH_LONG).show();
+        }
+
         // Allow them to enter other users as long as they can provide a valid username.
         final User.Query userQuery = new User.Query();
         userQuery.getTop().whereEqualTo(KEY_USERNAME, username);
