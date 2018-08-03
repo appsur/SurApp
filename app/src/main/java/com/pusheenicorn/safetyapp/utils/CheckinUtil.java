@@ -7,7 +7,6 @@ import com.parse.FindCallback;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
-import com.pusheenicorn.safetyapp.StatusHelper;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -121,7 +120,7 @@ public class CheckinUtil {
                                 user.saveInBackground();
 
                                 // If the main activity is already running, resume it.
-                                if (StatusHelper.isAppRunning(mContext,
+                                if (StatusUtil.isAppRunning(mContext,
                                         CheckinReceiver.PACKAGE_NAME)) {
                                     Intent i = new Intent();
                                     i.setClassName(CheckinReceiver.PACKAGE_NAME,
