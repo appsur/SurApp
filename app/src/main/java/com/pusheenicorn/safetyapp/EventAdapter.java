@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,6 +39,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     List<Event> mEvents;
     Context context;
     public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+    CalendarUtil calendarUtil;
 
     // constructor
     public EventAdapter(List<Event> events) {
@@ -48,6 +50,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     @Override
     public EventAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        calendarUtil = new CalendarUtil();
         LayoutInflater inflater = LayoutInflater.from(context);
         View eventView = inflater.inflate(R.layout.item_event, parent, false);
         ViewHolder viewHolder = new ViewHolder(eventView);
@@ -61,8 +64,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.tvEventName.setText(event.getName());
         holder.tvEventLocation.setText(event.getLocation());
 
-        String time = "STARTS: " + getRelativeTimeAgo(event.getStart()) + "       ENDS: "
-                + getRelativeTimeAgo(event.getEnd());
+        String time = "STARTS: " + calendarUtil.getRelativeTimeAgo(event.getStart()) + "       ENDS: "
+                + calendarUtil.getRelativeTimeAgo(event.getEnd());
         if (time == null)
         {
             holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
@@ -88,22 +91,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         mEvents.addAll(list);
         notifyDataSetChanged();
     }
-
-    public String getRelativeTimeAgo(String rawDate) {
-        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_FORMAT, Locale.ENGLISH);
-        sf.setLenient(true);
-
-        String relativeDate = "";
-        try {
-            long dateMillis = sf.parse(rawDate).getTime();
-            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return relativeDate;
-    }
-
     // create ViewHolder class
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

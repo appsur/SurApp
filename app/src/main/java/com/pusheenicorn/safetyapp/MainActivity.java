@@ -45,6 +45,7 @@ import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
 import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
+import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
@@ -127,7 +128,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     CheckinUtil checkinUtil;
     AlarmManager alarmManager;
 
-
     // Variables for saving state between restarts
     public static String startString;
     public static String endString;
@@ -151,11 +151,13 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     private PendingIntent pendingIntent;
     private AlarmManager manager;
+    private CalendarUtil calendarUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        calendarUtil = new CalendarUtil();
         rvEvents = (RecyclerView) findViewById(R.id.rvEvents);
         checkPermissionsPlease();                           // Check for geotracking permissions.
         context = this;                                     // Store the context for ease of access.
@@ -419,7 +421,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     checkin = objects.get(0);
                     Date date = checkin.getCreatedAt();                     // Get date of creation.
                     String formatedDate = DATE_FORMAT.format(date);
-                    String newString = getRelativeTimeAgo(formatedDate);    // Get relative time.
+                    String newString = calendarUtil.getRelativeTimeAgo(formatedDate);    // Get relative time.
                     formatedDate = getFormattedStringDate(formatedDate);    // Format nicely.
                     tvRelativeCheckinTime.setText(newString);               // Update TV's.
                     tvCheckinTime.setText(formatedDate);
@@ -604,27 +606,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         startActivity(intent);
     }
 
-    /**
-     * This function returns the relative time between the current time and a passed in date
-     *
-     * @param rawDate: a String date formatted as "EEE MMM dd HH:mm:ss ZZZZZ yyyy"
-     * @return relativeDate: the relative time between rawDate and present
-     */
-    public String getRelativeTimeAgo(String rawDate) {
-        SimpleDateFormat sf = new SimpleDateFormat(TWITTER_FORMAT, Locale.ENGLISH);
-        sf.setLenient(true);
-
-        String relativeDate = "";
-        try {
-            long dateMillis = sf.parse(rawDate).getTime();
-            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return relativeDate;
-    }
-
 
     /**
      * When the user clicks the checkin button, this function is called so that the user's
@@ -646,7 +627,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
 
     public void checkInUser() {
-
         // Create a new checkin object and save it in background
         final Checkin checkin = new Checkin();
         final Date newCheckinDate = new Date();
@@ -664,7 +644,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                                 user.saveInBackground();                // Save to Parse
                                 // Format the dates nicely.
                                 String formatedDate = DATE_FORMAT.format(newCheckinDate);
-                                String newString = getRelativeTimeAgo(formatedDate);
+                                String newString = calendarUtil.getRelativeTimeAgo(formatedDate);
                                 formatedDate = getFormattedStringDate(formatedDate);
                                 // Update the TV's
                                 tvRelativeCheckinTime.setText(newString);
@@ -905,11 +885,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
         String[] dateVals = date.split(" ");
         String[] dateRaw = dateVals[1].split("/");
         String ret = "";
-        ret = dateVals[0] + " " + getPrettyMonth(dateRaw[0]) + " "
-                + getPrettyDay(dateRaw[1]) + " "
+        ret = dateVals[0] + " " + calendarUtil.getPrettyMonth(dateRaw[0]) + " "
+                + calendarUtil.getPrettyDay(dateRaw[1]) + " "
                 + getMilitaryTime(time, startValue) + ":00 "
                 + dateVals[dateVals.length - 1] + " "
-                + getPrettyYear(dateRaw[2]) + " " ;
+                + calendarUtil.getPrettyYear(dateRaw[2]) + " " ;
         return ret;
     }
 
@@ -924,75 +904,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
         return milTime;
     }
 
-    public String getPrettyYear(String year)
-    {
-        String prettyYear = year;
-        if (year.length() < 4)
-        {
-           prettyYear = "20" + year;
-        }
-        return prettyYear;
-    }
-
-    public String getPrettyDay(String day)
-    {
-        String prettyDay = day;
-        if (day.length() < 2)
-        {
-            prettyDay = "0" + day;
-        }
-        return prettyDay;
-    }
-
-    public String getPrettyMonth(String month) {
-        String prettyMonth = month;
-        switch(month)
-        {
-            case "1":
-                month = "JAN";
-                break;
-            case "2":
-                month = "FEB";
-                break;
-            case "3":
-                month = "MAR";
-                break;
-            case "4":
-                month = "APR";
-                break;
-            case "5":
-                month = "MAY";
-                break;
-            case "6":
-                month = "JUN";
-                break;
-            case "7":
-                month = "JUL";
-                break;
-            case "8":
-                month = "AUG";
-                break;
-            case "9":
-                month = "SEP";
-                break;
-            case "10":
-                month = "OCT";
-                break;
-            case "11":
-                month = "NOV";
-                break;
-            case "12":
-                month = "DEC";
-                break;
-        }
-        return month;
-    }
-
-
     // Once an event has expired, remove it from the list.
     public void removeExpiredEvents(List<Event> rawEvents) {
         ArrayList<Event> eventsToRemove = new ArrayList<Event>();
-
         for (int i = 0; i < rawEvents.size(); i++)
         {
             Event event = rawEvents.get(i);
@@ -1001,7 +915,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 eventsToRemove.add(event);
             }
         }
-
         while(!eventsToRemove.isEmpty())
         {
             rawEvents.remove(eventsToRemove.get(0));
@@ -1013,7 +926,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     {
         String end = "";
         try {
-            end = getRelativeTimeAgo(event.fetchIfNeeded().getString(END_TIME_KEY));
+            end = calendarUtil.getRelativeTimeAgo(event.fetchIfNeeded().getString(END_TIME_KEY));
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
@@ -1021,7 +934,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         if (end.contains(PAST_ID) || isExpiredEvent(event)){
             return true;
         }
-
         return false;
     }
 
@@ -1044,7 +956,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         String year = endDatePreArr[7].substring(2, 4);
 
-        String month = getValMonth(endDatePreArr[1]) + "";
+        String month = calendarUtil.getValMonth(endDatePreArr[1]) + "";
 
         String[] endDateArr = {month, endDatePreArr[2], year,
                 endDatePreArr[3],
@@ -1071,37 +983,5 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     public void sortEvents(List<Event> inputEvents) {
         Collections.sort(inputEvents);
-    }
-
-    public int getValMonth(String month) {
-        int monthID = 0;
-        switch(month) {
-            case ("JAN"):
-                return 1;
-            case ("FEB"):
-                return 2;
-            case ("MAR"):
-                return 3;
-            case ("APR"):
-                return 4;
-            case ("MAY"):
-                return 5;
-            case ("JUN"):
-                return 6;
-            case ("JUL"):
-                return 7;
-            case ("AUG"):
-                return 8;
-            case ("SEP"):
-                return 9;
-            case ("OCT"):
-                return 10;
-            case ("NOV"):
-                return 11;
-            case ("DEC"):
-                return 12;
-        }
-
-        return monthID;
     }
 }

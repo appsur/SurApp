@@ -9,17 +9,20 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -63,6 +66,12 @@ public class ContactActivity extends BaseActivity {
     ArrayList<Friend> chats;
     RecyclerView rvChatList;
 
+    NestedScrollView nvMine;
+
+    private RecyclerView.OnScrollListener myScrollListener;
+    private RecyclerView.OnItemTouchListener myTouchListener;
+
+    int mTouchedRvTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +100,9 @@ public class ContactActivity extends BaseActivity {
                 dialContactPhone(etPhoneNumber.getText().toString());
             }
         });
+
+        nvMine = findViewById(R.id.nvMine);
+
         // Get the current user and cast appropriately.
         currentUser = (User) ParseUser.getCurrentUser();
         phonenumber = currentUser.getPhonNumber();
@@ -135,6 +147,54 @@ public class ContactActivity extends BaseActivity {
 
         populateFriendList();
 
+        rvChatFriendList.setTag(0);
+        rvChatList.setTag(1);
+
+       myScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if ((int) recyclerView.getTag() == mTouchedRvTag) {
+                    for (int noOfRecyclerView = 0; noOfRecyclerView < 2; noOfRecyclerView++) {
+                        if (noOfRecyclerView != (int) recyclerView.getTag()) {
+                            RecyclerView tempRecyclerView
+                                    = (RecyclerView) nvMine.findViewWithTag(noOfRecyclerView);
+                            tempRecyclerView.scrollBy(dx, dy);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        };
+
+
+        myTouchListener = new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                mTouchedRvTag = (int) rv.getTag();
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        };
+
+        rvChatFriendList.addOnScrollListener(myScrollListener);
+        rvChatList.addOnScrollListener(myScrollListener);
+
+        rvChatFriendList.addOnItemTouchListener(myTouchListener);
+        rvChatList.addOnItemTouchListener(myTouchListener);
     }
 
     private void checkPermissionsPlease() {

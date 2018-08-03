@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -9,7 +9,7 @@ import java.util.List;
  * This class is a helper class that determines whether a specific activity is currently running
  * in foreground.
  */
-public class StatusHelper {
+public class StatusUtil {
 
     /**
      * This function determines whether an activity is running in the foreground.
