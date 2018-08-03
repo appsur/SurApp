@@ -45,10 +45,6 @@ public class EventAlertReceiver extends BroadcastReceiver
                 getEventNotifications(event);
             }
         }
-
-        else {
-            Toast.makeText(mContext, "User is null", Toast.LENGTH_LONG).show();
-        }
     }
 
     public void getEventNotifications(Event event) {

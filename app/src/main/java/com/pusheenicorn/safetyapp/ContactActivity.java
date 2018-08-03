@@ -233,12 +233,15 @@ public class ContactActivity extends BaseActivity {
     }
 
     public void populateFriendList() {
-        for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
-            Friend newFriend = currentUser.getFriends().get(i);
-            friends.add(newFriend);
-            chats.add(newFriend);
-            friendAdapter.notifyDataSetChanged();
+        if (currentUser != null && currentUser.getFriends() != null)
+        {
+            for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
+                Friend newFriend = currentUser.getFriends().get(i);
+                friends.add(newFriend);
+                chats.add(newFriend);
+                friendAdapter.notifyDataSetChanged();
+            }
+            chatAdapter.notifyDataSetChanged();
         }
-        chatAdapter.notifyDataSetChanged();
     }
 }
