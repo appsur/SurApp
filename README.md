@@ -6,8 +6,16 @@
 
 The following functionality is completed:
 
-- [ ] ???
-
+- User can check in to mark themselves as OK.
+- The user receives checkin notifications (regardless of when the app is open) to remind them to check in.
+- If a user misses N checkins, their friends receive a notification (regardless of whether anyone's app is open).
+- User can modify the frequency of their checkins and the value of N through the Settings page. The user can also update their profile picture, name, username, phone number, and status (safe or unsafe) from this page.
+- User can add and view friends through the Friends page and events through the Main page.
+- The user can chat (message) with friends, call friends, and ring their friend's phones in case of emergency.
+- The user can emergency call in case of emergency. 
+- The user can easily access hotlines through the Hotlines page.
+- The user can track their friend's location if their friend's have allowed this functionality through the Friend Details page. 
+- The User can check in and stop alarms through push notifications on their device. 
 
 ## Video Walkthrough
 
