@@ -388,12 +388,6 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
-    public void onCalendar(View view) {
-        Intent intent = new Intent(EventsActivity.this, CalendarActivity.class);
-        intent.putExtra("starting", true);
-        startActivity(intent);
-    }
-
     public void onSettings(View view) {
         Intent intent = new Intent(EventsActivity.this, SettingsActivity.class);
         startActivity(intent);
