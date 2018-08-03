@@ -118,14 +118,14 @@
                 app:itemTextColor="@color/black"
                 app:menu="@menu/menu" />
 
-            <ImageButton
-                android:id="@+id/ibProfileImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentTop="true"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="115dp"
+                android:layout_height="111dp"
+                android:layout_above="@+id/tvName"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="64dp"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                android:layout_marginBottom="-172dp"
+                android:src="@drawable/account" />
 
             <TextView
                 android:id="@+id/tvName"
@@ -145,8 +145,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/tvLastCheckin"
                 android:layout_alignTop="@+id/ibConfirmEvent"
-                android:text="UPCOMING ACTIVITIES: "
                 android:onClick="onConfirmEvent"
+                android:text="UPCOMING ACTIVITIES: "
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -196,8 +196,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tvLastCheckin"
-                android:layout_marginBottom="3dp"
-                android:layout_toEndOf="@+id/ibProfileImage"
+                android:layout_toEndOf="@+id/tvUpcomingActivities"
                 android:text="10 hours ago"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
@@ -277,12 +276,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/etStartTime"
                 android:layout_below="@+id/etEventLocation"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
                 android:text="Select start date"
                 android:textColor="@color/gray"
                 android:textSize="16sp"
-                android:visibility="invisible"
-                android:layout_marginLeft="5dp"/>
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tvEndDate"
@@ -290,12 +289,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/etStartTime"
                 android:layout_below="@+id/tvStartDate"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
                 android:text="Select end date"
                 android:textColor="@color/gray"
                 android:textSize="16sp"
-                android:visibility="invisible"
-                android:layout_marginLeft="5dp"/>
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/btnSelectStart"
