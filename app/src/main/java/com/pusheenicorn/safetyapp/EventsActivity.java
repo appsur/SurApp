@@ -341,11 +341,15 @@ public class EventsActivity extends BaseActivity {
                                 eventFriendsAdapter.clear();
                                 eventUsersAdapter.clear();
                                 loadEventUsers();
-                                etUsername.setVisibility(View.INVISIBLE);
-                                ibAddMembers.setVisibility(View.VISIBLE);
-                                ibSearch.setVisibility(View.INVISIBLE);
                                 newUser.addEvent(currentEvent);
-                                newUser.saveInBackground();
+                                newUser.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        etUsername.setVisibility(View.INVISIBLE);
+                                        ibAddMembers.setVisibility(View.VISIBLE);
+                                        ibSearch.setVisibility(View.INVISIBLE);
+                                    }
+                                });
                             }
                         });
                     }
