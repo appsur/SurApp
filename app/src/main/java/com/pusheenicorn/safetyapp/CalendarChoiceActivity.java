@@ -10,10 +10,6 @@ import android.widget.CalendarView;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-/**
- * Created by ganesh on 6/10/2017.
- */
-
 public class CalendarChoiceActivity extends AppCompatActivity {
 
     private static final String TAG = "CalendarChoiceActivity";

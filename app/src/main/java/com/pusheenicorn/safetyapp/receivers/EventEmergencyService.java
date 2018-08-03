@@ -30,10 +30,9 @@ public class EventEmergencyService extends IntentService {
         super("DisplayEmergencyAlert");
         mContext = this;
     }
-
+    
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Toast.makeText(mContext, "Hello", Toast.LENGTH_LONG).show();
         if (intent.getStringExtra(EventsActivity.SERVICE_KEY) == EventsActivity.ALERT_EVENT)
         {
             mCurrentEvent = intent.getParcelableExtra(EventsActivity.INTENT_EVENT_KEY);

@@ -371,8 +371,14 @@ public class SettingsActivity extends BaseActivity {
             btnDaily.setVisibility(View.INVISIBLE);
             btnWeekly.setVisibility(View.INVISIBLE);
 
-            String newFrequency = etNum.getText().toString();
-            tvNum.setText(newFrequency);
+            final String newFrequency = etNum.getText().toString();
+            currentUser.setNotificationThreshold(Integer.parseInt(newFrequency));
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    tvNum.setText(newFrequency);
+                }
+            });
 
             etNum.setVisibility(View.INVISIBLE);
             tvNum.setVisibility(View.VISIBLE);
