@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.pusheenicorn.safetyapp.AlarmController;
 import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;
@@ -182,7 +183,7 @@ public class NotificationUtil {
                         .setContentText("STOP ALARM")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .addAction(R.drawable.close_octagon_outline, ACTION_STOP, pendingIntent)
-                        .setOngoing(false);
+                        .setOngoing(true);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
         return builder.build();
