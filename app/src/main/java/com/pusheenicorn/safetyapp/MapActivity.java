@@ -132,6 +132,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     @Override
                     public void onMapReady(GoogleMap map) {
                         loadMap(map);
+
+
                     }
                 });
             } else {
@@ -241,33 +243,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     startActivity(intent);
                 }
                 sendSMS();
-//                notif.scheduleNotification(notif.getNotification(), 0);
-//                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", friendUser.getPhonNumber(), null)));
-//                AudioManager audio = (AudioManager) MapActivity.this.getSystemService(Context.AUDIO_SERVICE);
-//                int currentVolume = audio.getStreamVolume(AudioManager.STREAM_RING);
-//                int max = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-//                audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-//                audio.setStreamVolume(AudioManager.STREAM_RING, max, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-//                int volume = myAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
-//                if(volume==0)
-//                    volume = myAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-//                myAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume,AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-//                ringtone = RingtoneManager.getRingtone(getApplicationContext(), Uri.parse(ringTonePath));
-//                if(ringtone!=null){
-//                    ringtone.setStreamType(AudioManager.STREAM_ALARM);
-//                    ringtone.play();
-//                    isRinging = true;
-//                }
-//                NotificationCompat.Builder mBuilder =
-//                        new NotificationCompat.Builder(MapActivity.this);
-//                mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//                r.play();
+
             }
         });
         notif = new NotificationUtil(MapActivity.this, currentUser);
         notif.createNotificationChannel();
+
     }
     @Override
     protected void onNewIntent(Intent intent){
@@ -289,31 +270,36 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         startActivity(intent);
     }
 
+
+
     protected void loadMap(GoogleMap googleMap) {
         loc = currentUser.getPlace();
         LatLng you = new LatLng(loc.getLatitude(), loc.getLongitude());
         lic = friendUser.getPlace();
         LatLng them = new LatLng(lic.getLatitude(), lic.getLongitude());
         map = googleMap;
-        //for now this probably isn't necessary
-        /*
-        if (you.latitude > them.latitude){
-            LatLngBounds two = new LatLngBounds( them,you);
-            map.setLatLngBoundsForCameraTarget(two);
-        }else{
-            LatLngBounds zwei = new LatLngBounds( you , them);
-            map.setLatLngBoundsForCameraTarget(zwei);
-        }
-        */
+
         if (map != null) {
-
-
             // Map is ready
             googleMap.addMarker(new MarkerOptions().position(them)
                     .title(friendUser.getName()));
             googleMap.addMarker(new MarkerOptions().position(you)
                     .title(currentUser.getName()));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
+
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(you , 18));
+
+            map.animateCamera(CameraUpdateFactory.zoomIn());
+
+            map.animateCamera(CameraUpdateFactory.zoomTo(10) , 10000 , null);
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(them)
+                    .zoom(18)
+                    .bearing(90)
+                    .tilt(30)
+                    .build();
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
             //Move camera instantly to chosen location
             //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
             //have the camera zoom in
@@ -321,16 +307,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
 
             //zoom out to zoom level 10, animating with a duration of 2 seconds
-            map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+            //map.animateCamera(CameraUpdateFactory.zoomTo(10), 6000, null);
 
 
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(them)      // Sets the center of the map to Mountain View
-                    .zoom(18)                   // Sets the zoom
-                    .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
-                    .build();                   // Creates a CameraPosition from the builder
-            map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
 
 
             Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
