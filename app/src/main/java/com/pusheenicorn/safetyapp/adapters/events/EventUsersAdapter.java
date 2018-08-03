@@ -54,10 +54,6 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
         // get the data according to position
         User user = mUsers.get(position);
 
-        if (user.getUsername().equals(mCurrentUser.getUsername())) {
-            holder.tvAddAsFriend.setText("ME");
-        }
-
         // populate the views according to this data
         // populate the views according to this data
         holder.tvName.setText(user.getName());
@@ -124,12 +120,12 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
             if (position != RecyclerView.NO_POSITION) {
-                Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
                 // get the tweet at the position, this won't work if the class is static
                 final User user = mUsers.get(position);
                 if (user.getUserName().equals(mCurrentUser.getUserName()))
                 {
-                    Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Sorry, you cannot add yourself as a friend!",
+                            Toast.LENGTH_LONG).show();
                     return;
                 }
                 final Friend newFriend = new Friend();
