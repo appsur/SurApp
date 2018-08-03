@@ -33,7 +33,7 @@ public class AlarmController implements Parcelable {
         userVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
 
         //used to play sounds
-        mp = new MediaPlayer();
+//        mp = new MediaPlayer();
     }
 
     protected AlarmController(android.os.Parcel in) {
@@ -64,6 +64,7 @@ public class AlarmController implements Parcelable {
 
     //    public void playSound(String soundURI){
     public void playSound() {
+        mp = new MediaPlayer();
         Uri alarmSound = null;
         //setting ringtone
         Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
