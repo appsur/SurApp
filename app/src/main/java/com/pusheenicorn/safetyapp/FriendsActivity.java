@@ -172,7 +172,7 @@ public class FriendsActivity extends BaseActivity {
             return;
         }
 
-        if (currentUser.getFriendUserNames().contains(username)) {
+        if (currentUser.getFriendUserNames() != null && currentUser.getFriendUserNames().contains(username)) {
             Toast.makeText(this, "Sorry, this user is already your friend!",
                     Toast.LENGTH_LONG).show();
             ibAddFriend.setVisibility(View.VISIBLE);

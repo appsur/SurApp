@@ -190,9 +190,13 @@ public class User extends ParseUser {
     public ArrayList<String> getFriendIds() {
         List<Friend> myFriends = getFriends();
         ArrayList<String> friendsIds = new ArrayList<String>();
-        for (int i = 0; i < myFriends.size(); i++)
+
+        if (getFriends() != null)
         {
-            friendsIds.add(myFriends.get(i).getObjectId());
+            for (int i = 0; i < myFriends.size(); i++)
+            {
+                friendsIds.add(myFriends.get(i).getObjectId());
+            }
         }
         return friendsIds;
     }
@@ -200,14 +204,18 @@ public class User extends ParseUser {
     public ArrayList<String> getFriendUsers() {
         List<Friend> myFriends = getFriends();
         ArrayList<String> myFriendsUserIds = new ArrayList<String>();
-        for (int i = 0; i < myFriends.size(); i++) {
-            Friend friend = myFriends.get(i);
-            try {
-                User user = (User) friend.fetchIfNeeded().getParseUser("user");
-                myFriendsUserIds.add(user.getObjectId());
-            }
-            catch (ParseException e) {
-                e.printStackTrace();
+
+        if (getFriends() != null)
+        {
+            for (int i = 0; i < myFriends.size(); i++) {
+                Friend friend = myFriends.get(i);
+                try {
+                    User user = (User) friend.fetchIfNeeded().getParseUser("user");
+                    myFriendsUserIds.add(user.getObjectId());
+                }
+                catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return myFriendsUserIds;
@@ -231,10 +239,13 @@ public class User extends ParseUser {
     public List<String> getFriendUserNames() {
         List<Friend> friends = getFriends();
         ArrayList<String> names = new ArrayList<String>();
-        for (int i = 0; i < friends.size(); i++)
+        if (getFriends() != null)
         {
-            Friend friend = friends.get(i);
-            names.add(friend.getUser().getUsername());
+            for (int i = 0; i < friends.size(); i++)
+            {
+                Friend friend = friends.get(i);
+                names.add(friend.getUser().getUsername());
+            }
         }
         return names;
     }
