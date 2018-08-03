@@ -51,7 +51,7 @@
                         android:fontFamily="@font/arimo"
                         android:gravity="center"
                         android:linksClickable="true"
-                        android:text="SETTINGS"
+                        android:text="EVENT"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="24sp"
