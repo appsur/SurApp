@@ -110,6 +110,7 @@ public class ContactActivity extends BaseActivity {
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         //initialize the bottom navigation view
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation_contact);
+        bottomNavigationView.setSelectedItemId(R.id.action_message);
         setNavigationDestinations(ContactActivity.this, bottomNavigationView);
 
         initializeNavItems(mNavItems);

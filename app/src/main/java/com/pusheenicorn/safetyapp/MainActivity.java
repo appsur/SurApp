@@ -182,6 +182,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
         // Set up the BNV.
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.action_person);
         setNavigationDestinations(MainActivity.this, bottomNavigationView);
         initializeViews();                                  // Initialize the views.
         populateEvents();                                   // Populate the events recycler view
