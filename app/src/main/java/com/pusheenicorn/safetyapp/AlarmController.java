@@ -21,6 +21,7 @@ public class AlarmController implements Parcelable {
     MediaPlayer mp;
     private AudioManager mAudioManager;
     int userVolume;
+    Uri alarmSound;
 
 
     public AlarmController(Context c) { // constructor for my alarm controller class
@@ -113,9 +114,22 @@ public class AlarmController implements Parcelable {
         if (mp != null && mp.isPlaying()) {
             //return to original user volume
             mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, userVolume, AudioManager.FLAG_PLAY_SOUND);
-            mp.stop();
-            mp.release();
-            mp = null;
+            releaseMediaPlayer();
+//            mp.stop();
+//            mp.release();
+        }
+    }
+
+    private void releaseMediaPlayer() {
+        try {
+            if (mp != null) {
+                if (mp.isPlaying())
+                    mp.stop();
+                mp.release();
+                mp.reset();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
