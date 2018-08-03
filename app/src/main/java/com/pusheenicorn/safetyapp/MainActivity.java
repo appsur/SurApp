@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     // Declare views
     private BottomNavigationView bottomNavigationView;
     private ImageButton ibEvents;
-    private ImageButton ibProfileImage;
+    private ImageView ivProfileImage;
     private ImageButton ibCheckin;
     private ImageButton ibAddEvent;
     private ImageButton ibConfirmEvent;
@@ -470,7 +471,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         tvRelativeCheckinTime = (TextView) findViewById(R.id.tvRelativeCheckinTime);
         tvUsername = (TextView) findViewById(R.id.tvUsername);
         tvName = (TextView) findViewById(R.id.tvName);
-        ibProfileImage = (ImageButton) findViewById(R.id.ibProfileImage);
+        ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         ibCheckin = (ImageButton) findViewById(R.id.ibCheckin);
         etEndTime = (EditText) findViewById(R.id.etEndTime);
         etStartTime = (EditText) findViewById(R.id.etStartTime);
@@ -491,7 +492,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         btnPM2 = (Button) findViewById(R.id.btnPM2);
 
         // Load the profile image.
-        Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ibProfileImage);
+        Glide.with(context).load(currentUser.getProfileImage().getUrl()).into(ivProfileImage);
     }
 
     /**
