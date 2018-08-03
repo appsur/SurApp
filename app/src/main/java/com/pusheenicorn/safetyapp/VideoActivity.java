@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -38,6 +40,8 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
     //provides preset qualities
     private CamcorderProfile camcorderProfile;
     private Camera camera;
+    ImageButton ibRecord;
+    TextView tvStop;
 
     //booleans to keep track of whether or not the video attributes should be shown
     boolean recording = false;
@@ -107,6 +111,39 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         cameraView.setClickable(true);
         cameraView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if (recording) {
+                    recorder.stop();
+                    if (usecamera) {
+                        try {
+                            camera.reconnect();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    // recorder.release();
+                    recording = false;
+                    Log.v(LOGTAG, "Recording Stopped");
+                    //finish recording and notify user, then return to main activity
+                    Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+                    Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+                    startActivity(finishRecording);
+                    // Let's prepareRecorder so we can record again
+//                    prepareRecorder();
+                } else {
+                    recording = true;
+                    recorder.start();
+                    Log.v(LOGTAG, "Recording Started");
+                }
+            }
+        });
+        tvStop = findViewById(R.id.tvStop);
+        tvStop.setVisibility(View.INVISIBLE);
+
+        ibRecord = findViewById(R.id.ibRecord);
+        ibRecord.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                tvStop.setVisibility(View.VISIBLE);
                 if (recording) {
                     recorder.stop();
                     if (usecamera) {
