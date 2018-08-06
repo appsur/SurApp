@@ -568,9 +568,14 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     ArrayList<Event> rawEvents = new ArrayList<Event>();
                     for (int i = objects.size() - 1; i > -1; i--) {
                         if (currentUser.getEvents() != null &&
-                                currentUser.getEventIds().contains(objects.get(i).getObjectId())) {
+                                (currentUser.getEventIds().contains(objects.get(i).getObjectId()) ||
+                                objects.get(i).getUsersIds().contains(currentUser.getObjectId()))
+                                ) {
                             rawEvents.add(objects.get(i));
-                            // notify the adapter
+                            if (!currentUser.getEventIds().contains(objects.get(i).getObjectId()))
+                            {
+                                currentUser.addEvent(objects.get(i));
+                            }
                         }
                     }
                     if (currentUser.getEvents() != null)
