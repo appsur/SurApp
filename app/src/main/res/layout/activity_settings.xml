@@ -421,10 +421,10 @@
 
             <EditText
                 android:id="@+id/etNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="160dp"
-                android:layout_marginTop="525dp"
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:layout_above="@+id/tvCheckinFrequency"
+                android:layout_alignStart="@+id/tvName"
                 android:hint="Enter a number"
                 android:text="3"
                 android:textColor="@color/black"
@@ -437,8 +437,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tvNotify"
-                android:layout_toEndOf="@id/etNum"
-                android:layout_toStartOf="@+id/ibEdit"
+                android:layout_toEndOf="@+id/tvName"
                 android:text="missed check ins "
                 android:textColor="@color/black" />
 
