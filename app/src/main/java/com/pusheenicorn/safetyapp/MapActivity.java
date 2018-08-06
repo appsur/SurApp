@@ -134,7 +134,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     }
                 });
             } else {
-                Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+
             }
             ivBlur = (ImageView) findViewById(R.id.ivBlur);
             tvBlocked = (TextView) findViewById(R.id.tvBlocked);
@@ -196,8 +196,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 }
                 friendList.removeAll(toRemove);
 
-                //boolean f =friendList.remove(friend);
-                //Toast.makeText(context ,f + " " , Toast.LENGTH_SHORT).show();
+
                 currentUser.setFriends(friendList);
                 currentUser.saveInBackground(new SaveCallback() {
                     @Override
@@ -314,24 +313,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     .tilt(30)
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
-            //Move camera instantly to chosen location
-            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
-            //have the camera zoom in
-            //map.animateCamera(CameraUpdateFactory.zoomIn());
 
-
-            //zoom out to zoom level 10, animating with a duration of 2 seconds
-            //map.animateCamera(CameraUpdateFactory.zoomTo(10), 6000, null);
-
-
-
-
-
-            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
 
         } else {
-            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+
         }
     }
 
