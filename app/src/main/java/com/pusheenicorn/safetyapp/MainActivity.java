@@ -21,9 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -33,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -51,14 +48,12 @@ import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends BaseActivity implements LocationListener {
 
@@ -563,6 +558,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
         // Make a new query.
         final Event.Query eventQuery = new Event.Query();
         //.whereEqualTo("usersAttending", currentUser);
+        try {
+            currentUser.fetch();
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
         eventQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, com.parse.ParseException e) {
