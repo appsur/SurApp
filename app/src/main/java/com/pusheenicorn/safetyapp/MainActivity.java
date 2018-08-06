@@ -388,8 +388,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         double latitude = loc.getLatitude();
         //store the user's location
         final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
-//        Toast.makeText(MainActivity.this, latitude + ":"
-//                + longitude, Toast.LENGTH_LONG).show();
+
         currentUser.setPlace(point);
 
         currentUser.saveInBackground(new SaveCallback() {
@@ -554,7 +553,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * This function populates the events adapter.
      */
     public void populateEvents() {
-        // Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
         // Make a new query.
         final Event.Query eventQuery = new Event.Query();
         //.whereEqualTo("usersAttending", currentUser);
@@ -603,7 +601,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      */
     public void onSettings(View view) {
         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-        // Toast.makeText(MainActivity.this, "Settings Page Accessed", Toast.LENGTH_LONG).show();
+
         startActivity(intent);
     }
 
@@ -706,35 +704,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location loc) {
 
-//            //remove location callback:
-//            locationManager.removeUpdates(this);
-//
-//
-//            latitude = loc.getLatitude();
-//            longitude = loc.getLongitude();
-//            //Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:"
-// + longitude, Toast.LENGTH_SHORT).show();
-//
-//        /*------- To get city name from coordinates -------- */
-//            String cityName = null;
-//            Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-//            List<Address> addresses;
-//            try {
-//                addresses = gcd.getFromLocation(loc.getLatitude(),
-//                        loc.getLongitude(), 1);
-//                if (addresses.size() > 0) {
-//                    System.out.println(addresses.get(0).getLocality());
-//                    cityName = addresses.get(0).getLocality();
-//                }
-//            }
-//            catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            String s = longitude + "\n" + latitude + "\n\nMy Current City is: "
-//                    + cityName;
-//            Toast.makeText(MainActivity.this, s , Toast.LENGTH_SHORT).show();
-//
-//            //editLocation.setText(s);
     }
 
     @Override
