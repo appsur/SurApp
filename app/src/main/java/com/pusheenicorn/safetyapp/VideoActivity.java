@@ -142,13 +142,20 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         tvStop.setVisibility(View.INVISIBLE);
 
         ibRecord = findViewById(R.id.ibRecord);
-        ibRecord.setOnClickListener(new View.OnClickListener(){
+        ibRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                tvStop.setVisibility(View.VISIBLE);
                 if (recording) {
-                    recorder.stop();
-                    recording = false;
+                   if (duration != 0) {
+                        recorder.stop();
+                        releaseMediaRecorder();
+                        recording = false;
+                        //finish recording and notify user, then return to main activity
+                        Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+                        Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+                        startActivity(finishRecording);
+                    }
                     if (usecamera) {
                         try {
                             camera.reconnect();
@@ -156,7 +163,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                             e.printStackTrace();
                         }
                     }
-                     recorder.release();
+//                     recorder.release();
 //                    camera.release();
 //                    recording = false;
                     Log.v(LOGTAG, "Recording Stopped");
@@ -166,97 +173,104 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                     startActivity(finishRecording);
                     // Let's prepareRecorder so we can record again
 //                    prepareRecorder();
-                } else {
-                    recording = true;
-                    tvStop.setVisibility(View.VISIBLE);
-                    recorder.start();
-                    Log.v(LOGTAG, "Recording Started");
+                } else if (!recording){
+                    if (duration == 0) {
+                        ibRecord.setVisibility(View.INVISIBLE);
+                        recorder.start();
+                        tvStop.setVisibility(View.VISIBLE);
+                        ibRecord.setVisibility(View.VISIBLE);
+                        Log.v(LOGTAG, "Recording Started");
+                        recording = true;
+                    }
                 }
             }
         });
 
     }
 
-        private void prepareRecorder() {
-            recorder = new MediaRecorder();
-            recorder.setPreviewDisplay(holder.getSurface());
+    private void prepareRecorder() {
+        recorder = new MediaRecorder();
+        recorder.setPreviewDisplay(holder.getSurface());
 
-            if (usecamera) {
-                //set the camera to be portrait mode
-                camera.setDisplayOrientation(90); // use for set the orientation of the preview
-                recorder.setOrientationHint(90); // use for set the orientation of output video
-                camera.unlock();
-                recorder.setCamera(camera);
-            }
-
-            //allow recorder to have audio and video
-            recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-            recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
-
-            recorder.setProfile(camcorderProfile);
-
-            //saving file based on the format
-            if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP ) {
-                try {
-                    File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
-                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
-                } catch (IOException e) {
-                    Log.v(LOGTAG,"Couldn't create file");
-                    e.printStackTrace();
-                    finish();
-                }
-            } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
-                try {
-                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
-                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
-                } catch (IOException e) {
-                    Log.v(LOGTAG,"Couldn't create file");
-                    e.printStackTrace();
-                    finish();
-                }
-            } else {
-                try {
-                    File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
-                    recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
-                } catch (IOException e) {
-                    Log.v(LOGTAG,"Couldn't create file");
-                    e.printStackTrace();
-                    finish();
-                }
-
-            }
-
-            try {
-                recorder.prepare();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-                finish();
-            } catch (IOException e) {
-                e.printStackTrace();
-                finish();
-            }
+        if (usecamera) {
+            //set the camera to be portrait mode
+            camera.setDisplayOrientation(90); // use for set the orientation of the preview
+            recorder.setOrientationHint(90); // use for set the orientation of output video
+            camera.unlock();
+            recorder.setCamera(camera);
         }
+
+        //allow recorder to have audio and video
+        recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+
+        recorder.setProfile(camcorderProfile);
+
+        //saving file based on the format
+        if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
+            try {
+                File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
+                duration = newFile.length();
+                recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
+            } catch (IOException e) {
+                Log.v(LOGTAG, "Couldn't create file");
+                e.printStackTrace();
+                finish();
+            }
+        } else if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.MPEG_4) {
+            try {
+                File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
+                duration = newFile.length();
+                recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
+            } catch (IOException e) {
+                Log.v(LOGTAG, "Couldn't create file");
+                e.printStackTrace();
+                finish();
+            }
+        } else {
+            try {
+                File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
+                duration = newFile.length();
+                recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
+            } catch (IOException e) {
+                Log.v(LOGTAG, "Couldn't create file");
+                e.printStackTrace();
+                finish();
+            }
+
+        }
+
+        try {
+            recorder.prepare();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+            finish();
+        }
+    }
 
     public void surfaceCreated(SurfaceHolder holder) {
         Log.v(LOGTAG, "surfaceCreated");
@@ -268,9 +282,8 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
                 previewRunning = true;
-            }
-            catch (IOException e) {
-                Log.e(LOGTAG,e.getMessage());
+            } catch (IOException e) {
+                Log.e(LOGTAG, e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -282,7 +295,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         Log.v(LOGTAG, "surfaceChanged");
 
         if (!recording && usecamera) {
-            if (previewRunning){
+            if (previewRunning) {
                 camera.stopPreview();
             }
 
@@ -297,9 +310,8 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
                 previewRunning = true;
-            }
-            catch (IOException e) {
-                Log.e(LOGTAG,e.getMessage());
+            } catch (IOException e) {
+                Log.e(LOGTAG, e.getMessage());
                 e.printStackTrace();
             }
 
@@ -317,7 +329,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         recorder.release();
         if (usecamera) {
             previewRunning = false;
-            //camera.lock();
+            camera.lock();
             camera.release();
         }
         finish();
@@ -325,6 +337,15 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
+
+    }
+
+    private void releaseMediaRecorder() {
+        if (recorder != null) {
+            recorder.reset();   // clear recorder configuration
+            recorder.release(); // release the recorder object
+            recorder = null;
+        }
 
     }
 
