@@ -151,6 +151,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         }
         // Logic for bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_more);
+        bottomNavigationView.setSelectedItemId(R.id.action_friends);
         setNavigationDestinations(MapActivity.this, bottomNavigationView);
 
         initializeNavItems(mNavItems);
