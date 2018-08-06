@@ -1,16 +1,13 @@
 package com.pusheenicorn.safetyapp.models;
 
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.pusheenicorn.safetyapp.MainActivity;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
-import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +135,11 @@ public class Event extends ParseObject implements Comparable<Event> {
         if (getUsers() != null) {
             for (int i = 0; i < getUsers().size(); i++)
             {
-                userNames.add(getUsers().get(i).getUsername());
+                try {
+                    userNames.add(getUsers().get(i).fetchIfNeeded().getString("username"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return userNames;
