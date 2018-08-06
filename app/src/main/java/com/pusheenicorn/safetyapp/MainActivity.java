@@ -575,10 +575,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
                             if (!currentUser.getEventIds().contains(objects.get(i).getObjectId()))
                             {
                                 currentUser.addEvent(objects.get(i));
+                                currentUser.saveInBackground();
                             }
                         }
                     }
-                    if (currentUser.getEvents() != null)
+                    if (rawEvents != null)
                     {
                         removeExpiredEvents(rawEvents);
                         sortEvents(rawEvents);
