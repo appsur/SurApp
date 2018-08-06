@@ -7,6 +7,15 @@
     android:background="@drawable/loginbackground"
     tools:context=".SignupActivity">
 
+    <TextView
+        android:id="@+id/tvClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ibProfileImage"
+        android:layout_marginStart="115dp"
+        android:text="Upload a Profile Picture" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -72,36 +81,34 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="237dp"
-        android:textColorHint="@color/white"
+        android:layout_marginTop="300dp"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:textColorHint="@color/white" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="230dp"
-        android:textColorHint="@color/white"
+        android:layout_centerVertical="true"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:textColorHint="@color/white" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="172dp"
+        android:layout_below="@+id/etPassword"
         android:ems="10"
         android:hint="Email"
-        android:textColorHint="@color/white"
         android:inputType="textMultiLine"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/white" />
 
     <Button
         android:id="@+id/btnSignUp"
@@ -110,8 +117,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="184dp"
+        android:layout_marginEnd="21dp"
         android:background="@color/lightGray"
         android:onClick="signUpOnClick"
         android:text="Sign Up"
@@ -123,12 +130,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="118dp"
+        android:layout_marginBottom="256dp"
         android:layout_weight="1"
         android:ems="10"
         android:hint="Phone Number"
         android:inputType="textPersonName"
         android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:visibility="visible" />
 
     <ImageButton
