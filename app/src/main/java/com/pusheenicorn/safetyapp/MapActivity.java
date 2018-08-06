@@ -6,29 +6,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,7 +30,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -51,8 +43,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.android.gms.maps.CameraUpdateFactory.zoomTo;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     // Declare views
@@ -95,6 +85,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     TextView tvPhone;
     TextView toolbar_title;
     AudioManager myAudioManager;
+    ToggleButton tbGPS;
+    ToggleButton tbMike;
 
     NotificationUtil notif;
 
@@ -248,8 +240,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
         notif = new NotificationUtil(MapActivity.this, currentUser);
         notif.createNotificationChannel();
-
     }
+
+
+
     @Override
     protected void onNewIntent(Intent intent){
         super.onNewIntent(intent);
