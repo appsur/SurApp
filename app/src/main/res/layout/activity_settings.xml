@@ -103,8 +103,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/tbSafe"
-                android:layout_toStartOf="@+id/tvName"
-                android:text="I'M SAFE"
+                android:layout_alignEnd="@+id/btnDaily"
+                android:text="MARK MYSELF AS SAFE"
                 android:textColor="@color/black" />
 
             <TextView
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/tbLocation"
                 android:layout_alignStart="@+id/tvOnAlert"
-                android:text="ALLOW GPS TRACKING"
+                android:text="ALLOW FRIENDS TO TRACK ME"
                 android:textColor="@color/black" />
 
             <TextView
@@ -124,7 +124,7 @@
                 android:layout_alignLeft="@id/tvOnAlert"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="87dp"
-                android:text="ALLOW ACCESS TO MICROPHONE"
+                android:text="ALLOW FRIENDS TO RING MY PHONE"
                 android:textColor="@color/black" />
 
             <TextView
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/btnEditFrequency"
                 android:layout_alignStart="@+id/tvOnAlert"
-                android:text="CHECK IN SETTINGS"
+                android:text="MY CHECK IN SETTINGS"
                 android:textColor="@color/black" />
 
             <Button
@@ -420,10 +420,10 @@
 
             <EditText
                 android:id="@+id/etNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="160dp"
-                android:layout_marginTop="525dp"
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:layout_above="@+id/tvCheckinFrequency"
+                android:layout_alignStart="@+id/tvName"
                 android:hint="Enter a number"
                 android:text="3"
                 android:textColor="@color/black"
@@ -436,8 +436,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tvNotify"
-                android:layout_toEndOf="@id/etNum"
-                android:layout_toStartOf="@+id/ibEdit"
+                android:layout_toEndOf="@+id/tvName"
                 android:text="missed check ins "
                 android:textColor="@color/black" />
 

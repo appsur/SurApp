@@ -74,6 +74,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private TextView tvCheckinTime;
     private TextView tvRelativeCheckinTime;
     private TextView tvUpcomingActivities;
+    private TextView tvCheckIn;
     private EditText etStartTime;
     private EditText etEndTime;
     private EditText etEventName;
@@ -313,6 +314,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         // Switch from icon for adding event to confirming event
         ibAddEvent.setVisibility(View.INVISIBLE);
         ibConfirmEvent.setVisibility(View.VISIBLE);
+
         // Hide rv
         rvEvents.setVisibility(View.INVISIBLE);
         btnSelectStart.setVisibility(View.VISIBLE);

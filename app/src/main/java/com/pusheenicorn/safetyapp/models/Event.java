@@ -131,10 +131,16 @@ public class Event extends ParseObject implements Comparable<Event> {
             setLimit(20);
             return this;
         }
+    }
 
-        public Query withUser() {
-            include("user");
-            return this;
+    public List<String> getUserNames() {
+        ArrayList<String> userNames = new ArrayList<String>();
+        if (getUsers() != null) {
+            for (int i = 0; i < getUsers().size(); i++)
+            {
+                userNames.add(getUsers().get(i).getUsername());
+            }
         }
+        return userNames;
     }
 }
