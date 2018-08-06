@@ -21,10 +21,12 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Random;
 
 import static com.parse.Parse.getApplicationContext;
 
 public class MessagesReceiver extends WakefulBroadcastReceiver {
+    public static final int MAX_LENGTH = 16;
     @Override
     public void onReceive(Context context, Intent intent) {
         //get message passed in
@@ -32,6 +34,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
         SmsMessage[] messages;
         String str = "";
         String messageBody = "";
+        String keyWord = "";
 
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
@@ -58,17 +61,10 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 str += messages[i].getMessageBody();
                 str += "\n";
             }
-            if (messageBody.equals("SUR")) {
+            keyWord = random();
+            if (messageBody.equals(keyWord)) {
                 AlarmController alarmController = new AlarmController(context);
                 alarmController.playSound();
-//                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
-//                    DataInputStream dataInputStream = new DataInputStream(inputStream);
-//                    NotificationCompat.Builder mBuilder =
-//                            new NotificationCompat.Builder(context);
-//                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//                    r.play();
                 NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
                 notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
             }
@@ -82,5 +78,16 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             broadcastIntent.putExtra("body", messageBody);
             context.sendBroadcast(broadcastIntent);
         }
+    }
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(MAX_LENGTH);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
     }
 }

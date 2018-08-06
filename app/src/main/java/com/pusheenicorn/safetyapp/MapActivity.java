@@ -69,8 +69,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private LocationRequest mLocationRequest;
-    User friendUser;
-    Friend friend;
+    static User friendUser;
+    static Friend friend;
     User currentUser;
     User unFriendUser;
     boolean trackable;
@@ -90,7 +90,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ToggleButton tbMike;
 
     NotificationUtil notif;
-
+    String userNum;
+    boolean ringable;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -105,20 +106,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         context = getApplicationContext();
 
         boolean isNotif = getIntent().getBooleanExtra("notif", false);
-        if (isNotif) {
+        if (isNotif && (getIntent().getParcelableExtra("friend") != null)) {
             friend = getIntent().getParcelableExtra("friend");
         }
-        else {
+        else if (Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName())) != null) {
             friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         }
 
-        try {
-            friendUser = (User) friend.fetch().getParseUser("user");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        friendUser = (User) friend.getUser();
+        userNum = friendUser.getPhonNumber();
         trackable = friendUser.getCheckMe();
+        ringable = friendUser.getRingable();
 
         if (trackable) {
 
@@ -232,12 +230,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         alarm_text = findViewById(R.id.alarm_text);
         ibAlert.setVisibility(View.INVISIBLE);
         alarm_text.setVisibility(View.INVISIBLE);
-        try {
-            friendUser.fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (friendUser.getRingable()) {
+//        try {
+//            friendUser.fetch();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        if (ringable) {
             ibAlert.setVisibility(View.VISIBLE);
             alarm_text.setVisibility(View.VISIBLE);
         } else {
@@ -341,13 +339,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void sendSMS() {
-        PendingIntent pi = PendingIntent.getActivity(this, 0,
-                new Intent(this, MapActivity.class), 0);
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra("friend", friend);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(friendUser.getPhonNumber(), null, "SUR", pi, null);
-        //check to see if the length is above the maximum character length, and if so, to divide message
-            sms.sendTextMessage(friendUser.getPhonNumber(), null, "SUR", pi, null);
+        sms.sendTextMessage(userNum, null, "Emergency Sound Playing", pi, null);
     }
-
 
 }
