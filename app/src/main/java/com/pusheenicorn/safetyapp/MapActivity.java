@@ -64,6 +64,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ImageButton ibUnfriend;
     Boolean isRinging;
     Context context;
+    TextView alarm_text;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -111,7 +112,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         }
 
-        friendUser = (User) friend.getUser();
+        try {
+            friendUser = (User) friend.fetch().getParseUser("user");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         trackable = friendUser.getCheckMe();
 
@@ -129,7 +134,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     }
                 });
             } else {
-                Toast.makeText(this, "Error - Map Fragment was null!!", Toast.LENGTH_SHORT).show();
+
             }
             ivBlur = (ImageView) findViewById(R.id.ivBlur);
             tvBlocked = (TextView) findViewById(R.id.tvBlocked);
@@ -191,8 +196,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 }
                 friendList.removeAll(toRemove);
 
-                //boolean f =friendList.remove(friend);
-                //Toast.makeText(context ,f + " " , Toast.LENGTH_SHORT).show();
+
                 currentUser.setFriends(friendList);
                 currentUser.saveInBackground(new SaveCallback() {
                     @Override
@@ -225,16 +229,31 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
 
         ibAlert = findViewById(R.id.ibAlert);
+        alarm_text = findViewById(R.id.alarm_text);
+        ibAlert.setVisibility(View.INVISIBLE);
+        alarm_text.setVisibility(View.INVISIBLE);
+        try {
+            friendUser.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (friendUser.getRingable()) {
+            ibAlert.setVisibility(View.VISIBLE);
+            alarm_text.setVisibility(View.VISIBLE);
+        } else {
+            ibAlert.setVisibility(View.INVISIBLE);
+            alarm_text.setVisibility(View.INVISIBLE);
+        }
         ibAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-                // Check if the notification policy access has been granted for the app.
-                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivity(intent);
-                }
+//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+//                // Check if the notification policy access has been granted for the app.
+//                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
+//                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+//                    startActivity(intent);
+//                }
                 sendSMS();
 
             }
@@ -294,24 +313,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     .tilt(30)
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLng(you));
-            //Move camera instantly to chosen location
-            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(home , 18));
-            //have the camera zoom in
-            //map.animateCamera(CameraUpdateFactory.zoomIn());
 
-
-            //zoom out to zoom level 10, animating with a duration of 2 seconds
-            //map.animateCamera(CameraUpdateFactory.zoomTo(10), 6000, null);
-
-
-
-
-
-            Toast.makeText(this, "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
 
         } else {
-            Toast.makeText(this, "Error - Map was null!!", Toast.LENGTH_SHORT).show();
+
         }
     }
 

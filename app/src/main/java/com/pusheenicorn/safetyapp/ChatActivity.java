@@ -151,7 +151,7 @@ public class ChatActivity extends BaseActivity {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
         //toast if the text is successfully made
-        Toast.makeText(ChatActivity.this, "YOU SENT A MESSAGE!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ChatActivity.this, "Message Delivered", Toast.LENGTH_SHORT).show();
     }
 
     protected void onResume() {

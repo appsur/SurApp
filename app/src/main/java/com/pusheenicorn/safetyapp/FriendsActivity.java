@@ -63,7 +63,7 @@ public class FriendsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-//        Toast.makeText(this, "Recreating", Toast.LENGTH_LONG).show();
+
         // Set the context.
         context = this;
         //setting the bottom navigation view
@@ -193,7 +193,7 @@ public class FriendsActivity extends BaseActivity {
                         user = objects.get(0);
                     }
 
-                    // Otherwise, tell the user to try again.
+                    // Otherwise, tell the userf to try again.
                     else {
                         Toast.makeText(context, "Sorry, that user doesn't exist",
                                 Toast.LENGTH_LONG).show();

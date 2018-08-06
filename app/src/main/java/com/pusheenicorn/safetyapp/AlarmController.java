@@ -102,7 +102,7 @@ public class AlarmController implements Parcelable {
 
 
         } catch (IOException e) {
-            Toast.makeText(context, "Your alarm sound was unavailable.", Toast.LENGTH_LONG).show();
+
 
         }
         // set the volume to max volume
