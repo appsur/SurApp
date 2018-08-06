@@ -64,6 +64,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ImageButton ibUnfriend;
     Boolean isRinging;
     Context context;
+    TextView alarm_text;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -225,16 +226,31 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
 
         ibAlert = findViewById(R.id.ibAlert);
+        alarm_text = findViewById(R.id.alarm_text);
+        ibAlert.setVisibility(View.INVISIBLE);
+        alarm_text.setVisibility(View.INVISIBLE);
+        try {
+            friendUser.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (friendUser.getRingable()) {
+            ibAlert.setVisibility(View.VISIBLE);
+            alarm_text.setVisibility(View.VISIBLE);
+        } else {
+            ibAlert.setVisibility(View.INVISIBLE);
+            alarm_text.setVisibility(View.INVISIBLE);
+        }
         ibAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-                // Check if the notification policy access has been granted for the app.
-                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                    startActivity(intent);
-                }
+//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
+//                // Check if the notification policy access has been granted for the app.
+//                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
+//                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+//                    startActivity(intent);
+//                }
                 sendSMS();
 
             }
