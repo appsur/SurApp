@@ -210,9 +210,10 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvEvents"
                 android:layout_width="334dp"
-                android:layout_height="309dp"
+                android:layout_height="303dp"
                 android:layout_above="@+id/bottom_navigation"
                 android:layout_alignStart="@+id/etStartTime"
+                android:layout_marginBottom="6dp"
                 android:background="@color/white"
                 tools:listitem="@layout/item_event" />
 
