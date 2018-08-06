@@ -80,7 +80,8 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".ContactActivity" />
+        <activity android:name=".ContactActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".CalendarChoiceActivity" />
 
         <receiver android:name=".MessagesReceiver">

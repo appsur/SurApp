@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.design.widget.BottomNavigationView;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -59,6 +61,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
+    long duration;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,6 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         //set the orientation of the screen to be portrait, avoiding the auto-adjust to landscape for the app
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        //TODO- see if camcorder profile quality can be increased without crashing the application
         //set the camera quality
         camcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 
@@ -108,34 +110,34 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 //        prepareRecorder();
 
         //start and stop camera view
-        cameraView.setClickable(true);
-        cameraView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (recording) {
-                    recorder.stop();
-                    if (usecamera) {
-                        try {
-                            camera.reconnect();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    // recorder.release();
-                    recording = false;
-                    Log.v(LOGTAG, "Recording Stopped");
-                    //finish recording and notify user, then return to main activity
-                    Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
-                    Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
-                    startActivity(finishRecording);
-                    // Let's prepareRecorder so we can record again
-//                    prepareRecorder();
-                } else {
-                    recording = true;
-                    recorder.start();
-                    Log.v(LOGTAG, "Recording Started");
-                }
-            }
-        });
+//        cameraView.setClickable(true);
+//        cameraView.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                if (recording) {
+//                    recorder.stop();
+//                    recording = false;
+//                    if (usecamera) {
+//                        try {
+//                            camera.reconnect();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    // recorder.release();
+//                    Log.v(LOGTAG, "Recording Stopped");
+//                    //finish recording and notify user, then return to main activity
+//                    Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+//                    Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+//                    startActivity(finishRecording);
+//                    // Let's prepareRecorder so we can record again
+////                    prepareRecorder();
+//                } else {
+//                    recording = true;
+//                    recorder.start();
+//                    Log.v(LOGTAG, "Recording Started");
+//                }
+//            }
+//        });
         tvStop = findViewById(R.id.tvStop);
         tvStop.setVisibility(View.INVISIBLE);
 
@@ -143,9 +145,10 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         ibRecord.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                tvStop.setVisibility(View.VISIBLE);
+//                tvStop.setVisibility(View.VISIBLE);
                 if (recording) {
                     recorder.stop();
+                    recording = false;
                     if (usecamera) {
                         try {
                             camera.reconnect();
@@ -153,8 +156,9 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                             e.printStackTrace();
                         }
                     }
-                    // recorder.release();
-                    recording = false;
+                     recorder.release();
+//                    camera.release();
+//                    recording = false;
                     Log.v(LOGTAG, "Recording Stopped");
                     //finish recording and notify user, then return to main activity
                     Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
@@ -164,6 +168,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 //                    prepareRecorder();
                 } else {
                     recording = true;
+                    tvStop.setVisibility(View.VISIBLE);
                     recorder.start();
                     Log.v(LOGTAG, "Recording Started");
                 }
@@ -191,10 +196,17 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
             recorder.setProfile(camcorderProfile);
 
             //saving file based on the format
-            if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
+            if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP ) {
                 try {
                     File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
                     recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
                 } catch (IOException e) {
                     Log.v(LOGTAG,"Couldn't create file");
                     e.printStackTrace();
@@ -204,6 +216,13 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 try {
                     File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
                     recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
                 } catch (IOException e) {
                     Log.v(LOGTAG,"Couldn't create file");
                     e.printStackTrace();
@@ -213,6 +232,13 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 try {
                     File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
                     recorder.setOutputFile(newFile.getAbsolutePath());
+//                    MediaPlayer mp = new MediaPlayer();
+//                    FileInputStream stream = new FileInputStream(newFile);
+//                    mp.setDataSource(stream.getFD());
+//                    stream.close();
+//                    mp.prepare();
+//                    duration = mp.getDuration();
+//                    mp.release();
                 } catch (IOException e) {
                     Log.v(LOGTAG,"Couldn't create file");
                     e.printStackTrace();
@@ -301,4 +327,5 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
     public void onClick(DialogInterface dialog, int which) {
 
     }
+
 }
