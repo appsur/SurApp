@@ -112,7 +112,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         }
 
-        friendUser = (User) friend.getUser();
+        try {
+            friendUser = (User) friend.fetch().getParseUser("user");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         trackable = friendUser.getCheckMe();
 
