@@ -112,7 +112,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 //        }
 //    };
 
-    String KEYWORD;
+//    String KEYWORD = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,15 +358,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void sendSMS() {
-        KEYWORD = random();
+        String keyword = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
-        Intent sendKeyword = new Intent("my.action.string");
-        sendKeyword.putExtra("keyword", KEYWORD);
-        sendBroadcast(sendKeyword);
+        friendUser.setKeyword(keyword);
+        friendUser.saveInBackground();
+//        Intent sendKeyword = new Intent("my.action.string");
+//        sendKeyword.putExtra("keyword", KEYWORD);
+//        sendBroadcast(sendKeyword);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(userNum, null, KEYWORD, pi, null);
+        sms.sendTextMessage(userNum, null, keyword, pi, null);
     }
 
     public static String random() {
