@@ -1,5 +1,6 @@
 package com.pusheenicorn.safetyapp.models;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.parse.ParseClassName;
@@ -8,6 +9,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
+import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,12 @@ public class Event extends ParseObject implements Comparable<Event> {
     }
 
     public String getName() {
-        return getString(KEY_NAME);
+        try {
+            return fetchIfNeeded().getString(KEY_NAME);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "saddnesss";
+        }
     }
 
     public void setName(String name) {
@@ -143,5 +150,33 @@ public class Event extends ParseObject implements Comparable<Event> {
             }
         }
         return userNames;
+    }
+
+    public void sendNotifications(String id, NotificationUtil notificationUtil, Context context, int notifId) {
+        ArrayList<Alert> alerts = (ArrayList) getAlerts();
+        if (alerts == null || alerts.isEmpty())
+        {
+            return;
+        }
+        else {
+            for (int i = 0; i < alerts.size(); i++)
+            {
+                Alert alert = alerts.get(i);
+                if (alert.getSeenBy() == null || alert.getSeenBy().isEmpty() ||
+                        alert.getSeenBy().contains(id))
+                {
+                    String message = getName() + " alert: " + alert.getMessage()
+                            + "\n (from " +
+                            alert.getUsername() + " )";
+
+                    notificationUtil
+                            .scheduleNotification(notificationUtil
+                                    .getAlertNotification(message), notifId, 0);
+
+                    alert.addSeenBy(id);
+                    alert.saveInBackground();
+                }
+            }
+        }
     }
 }
