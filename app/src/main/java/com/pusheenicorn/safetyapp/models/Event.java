@@ -171,10 +171,7 @@ public class Event extends ParseObject implements Comparable<Event> {
 
                     notificationUtil
                             .scheduleNotification(notificationUtil
-                                    .getAlertNotification(message), notifId, 0);
-
-                    alert.addSeenBy(id);
-                    alert.saveInBackground();
+                                    .getAlertNotification(message), notifId * (i + 1), 0);
                 }
             }
         }
