@@ -26,7 +26,6 @@ import java.util.Random;
 import static com.parse.Parse.getApplicationContext;
 
 public class MessagesReceiver extends WakefulBroadcastReceiver {
-    public static final int MAX_LENGTH = 16;
     @Override
     public void onReceive(Context context, Intent intent) {
         //get message passed in
@@ -61,12 +60,15 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 str += messages[i].getMessageBody();
                 str += "\n";
             }
-            keyWord = random();
-            if (messageBody.equals(keyWord)) {
-                AlarmController alarmController = new AlarmController(context);
-                alarmController.playSound();
-                NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-                notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
+            String gettingKeyword = intent.getAction();
+            if (gettingKeyword.equals("sendingKeyword")) {
+                if (messageBody.equals(intent.getExtras().getString("keyword"))) {
+//            if (messageBody.equals(keyWord)) {
+                    AlarmController alarmController = new AlarmController(context);
+                    alarmController.playSound();
+                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
+                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
+                }
             }
             //display message
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
@@ -76,18 +78,8 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             broadcastIntent.setAction("SMS_RECEIVED_ACTION");
             broadcastIntent.putExtra("message", str);
             broadcastIntent.putExtra("body", messageBody);
+//            broadcastIntent.putExtra("keyword", keyWord);
             context.sendBroadcast(broadcastIntent);
         }
-    }
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(MAX_LENGTH);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
     }
 }

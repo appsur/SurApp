@@ -2,8 +2,10 @@ package com.pusheenicorn.safetyapp;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -43,8 +45,12 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+    public static final int MAX_LENGTH = 16;
+//    public static String KEYWORD;
     // Declare views
     BottomNavigationView bottomNavigationView;
 
@@ -53,6 +59,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
+//    String keyword;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
     List<Friend> friendList;
@@ -95,11 +102,28 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
+//    IntentFilter intentFilter;
+//
+//    private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            keyword = intent.getExtras().getString("keyword");
+////        }
+//        }
+//    };
+
+    String KEYWORD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
+
+//        KEYWORD = random();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("SMS_RECEIVED_ACTION");
+
         myAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         currentUser = (User) ParseUser.getCurrentUser();
@@ -258,6 +282,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         });
         notif = new NotificationUtil(MapActivity.this, currentUser);
         notif.createNotificationChannel();
+        //intent filter allows activity to know what the broadcast receiver can respond to
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("SMS_RECEIVED_ACTION");
     }
 
 
@@ -339,11 +366,28 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void sendSMS() {
+        KEYWORD = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
+        Intent sendKeyword = new Intent("sendingKeyword");
+        sendKeyword.putExtra("keyword", KEYWORD);
+        sendBroadcast(sendKeyword);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(userNum, null, "Emergency Sound Playing", pi, null);
+        sms.sendTextMessage(userNum, null, KEYWORD, pi, null);
     }
+
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(MAX_LENGTH);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
 
 }
