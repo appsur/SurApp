@@ -31,14 +31,14 @@ public class User extends ParseUser {
     private final static String KEY_CHECKME = "checkMe";
     private final static String KEY_NOTIFY = "notify";
     private final static String KEY_ID = "objectId";
-    private final static String KEYWORD = "keyword";
+//    private final static String KEYWORD = "keyword";
 
-    public String getKeyword() {
-        return getString(KEYWORD);
-    }
-    public void setKeyword(String keyword) {
-        put(KEYWORD, keyword);
-    }
+//    public String getKeyword() {
+//        return getString(KEYWORD);
+//    }
+//    public void setKeyword(String keyword) {
+//        put(KEYWORD, keyword);
+//    }
 
     public Number getNotificationThreshold() {
         return getNumber(KEY_NOTIFY);
