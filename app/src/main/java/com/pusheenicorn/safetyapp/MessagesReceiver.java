@@ -56,7 +56,8 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             //give friend a keyword that can be updated through parse
 //                String key = intent.getExtras().getString("keyword");
 //                }
-                if (messageBody.equals(mCurrentUser.get("keyword"))) {
+            Toast.makeText(context, messageBody, Toast.LENGTH_SHORT).show();
+                if (messageBody.equals(mCurrentUser.getKeyword())) {
                     AlarmController alarmController = new AlarmController(context);
                     alarmController.playSound();
                     NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
