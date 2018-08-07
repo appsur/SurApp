@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
-        //startBackground();
+        startBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -236,14 +236,23 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
 
-        // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
-        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(this, EventAlertReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0,
-                alarmIntent, 0);
-        Calendar calendar = Calendar.getInstance();
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                60000, pendingIntent);
+//        // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
+//        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        Intent alarmIntent = new Intent(this, EventAlertReceiver.class);
+//        pendingIntent = PendingIntent.getBroadcast(this, 0,
+//                alarmIntent, 0);
+//        Calendar calendar = Calendar.getInstance();
+//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                60000, pendingIntent);
+
+        context = getApplicationContext();
+        AlarmManager newalarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , EventAlertReceiver.class);
+        PendingIntent newpendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        newalarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
+                newpendingIntent);
+
+
         onResume();
     }
 
@@ -252,7 +261,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context , FriendCheckReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 600000,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
                         pendingIntent);
     }
 

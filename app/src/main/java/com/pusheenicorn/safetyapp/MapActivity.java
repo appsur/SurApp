@@ -119,20 +119,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         ringable = friendUser.getRingable();
 
         if (trackable) {
-
             mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-            //mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
             if (mapFragment != null) {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap map) {
                         loadMap(map);
-
-
                     }
                 });
-            } else {
-
             }
             ivBlur = (ImageView) findViewById(R.id.ivBlur);
             tvBlocked = (TextView) findViewById(R.id.tvBlocked);
@@ -181,30 +175,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
             @Override
             public void onClick(View view) {
-                List<Friend> friendList = currentUser.getFriends();
-                List<Friend> toRemove = new ArrayList<Friend>();
-
-                String id_B = friendUser.getObjectId();
-                for (Friend frnd : friendList){
-                    unFriendUser = (User) frnd.getUser();
-                    String id_A = unFriendUser.getObjectId();
-                    if(id_A.equals(id_B)){
-                        toRemove.add(frnd);
-                    }
-                }
-                friendList.removeAll(toRemove);
-
-
-                currentUser.setFriends(friendList);
-                currentUser.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Intent back = new Intent(MapActivity.this,
-                                FriendsActivity.class);
-                        startActivity(back);
-                        finish();
-                    }
-                });
+                unfriend(currentUser);
             }
         });
 
@@ -230,11 +201,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         alarm_text = findViewById(R.id.alarm_text);
         ibAlert.setVisibility(View.INVISIBLE);
         alarm_text.setVisibility(View.INVISIBLE);
-//        try {
-//            friendUser.fetch();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        
         if (ringable) {
             ibAlert.setVisibility(View.VISIBLE);
             alarm_text.setVisibility(View.VISIBLE);
@@ -275,7 +242,32 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
 
+    public void unfriend(User currentUser){
+        List<Friend> friendList = currentUser.getFriends();
+        List<Friend> toRemove = new ArrayList<Friend>();
 
+        String id_B = friendUser.getObjectId();
+        for (Friend frnd : friendList){
+            unFriendUser = (User) frnd.getUser();
+            String id_A = unFriendUser.getObjectId();
+            if(id_A.equals(id_B)){
+                toRemove.add(frnd);
+            }
+        }
+        friendList.removeAll(toRemove);
+
+
+        currentUser.setFriends(friendList);
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                Intent back = new Intent(MapActivity.this,
+                        FriendsActivity.class);
+                startActivity(back);
+                finish();
+            }
+        });
+    }
 
     public void onSettings(View view) {
         Intent intent = new Intent(MapActivity.this, SettingsActivity.class);

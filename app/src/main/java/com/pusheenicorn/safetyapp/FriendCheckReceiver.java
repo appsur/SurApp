@@ -3,6 +3,7 @@ package com.pusheenicorn.safetyapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
@@ -23,7 +24,6 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context , Intent intent){
         //if (count < MAX) {
-
         mContext = context;
         if (currentUser != null) {
             friendsCheck();
