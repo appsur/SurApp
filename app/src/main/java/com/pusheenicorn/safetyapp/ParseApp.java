@@ -8,6 +8,7 @@ import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.Keyword;
 import com.pusheenicorn.safetyapp.models.Perm;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -30,6 +31,7 @@ public class ParseApp extends Application{
         ParseObject.registerSubclass(Event.class);
         ParseObject.registerSubclass(Perm.class);
         ParseObject.registerSubclass(Alert.class);
+        ParseObject.registerSubclass(Keyword.class);
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();

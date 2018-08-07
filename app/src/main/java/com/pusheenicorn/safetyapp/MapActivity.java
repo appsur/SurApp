@@ -38,6 +38,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.Keyword;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
@@ -50,7 +51,7 @@ import java.util.Random;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     public static final int MAX_LENGTH = 16;
-//    public static String KEYWORD;
+    //    public static String KEYWORD;
     // Declare views
     BottomNavigationView bottomNavigationView;
 
@@ -132,8 +133,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         boolean isNotif = getIntent().getBooleanExtra("notif", false);
         if (isNotif && (getIntent().getParcelableExtra("friend") != null)) {
             friend = getIntent().getParcelableExtra("friend");
-        }
-        else if (Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName())) != null) {
+        } else if (Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName())) != null) {
             friend = (Friend) Parcels.unwrap(getIntent().getParcelableExtra(Friend.class.getSimpleName()));
         }
 
@@ -157,8 +157,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             ivBlur.setVisibility(View.INVISIBLE);
             tvBlocked.setVisibility(View.INVISIBLE);
 
-        }
-        else{
+        } else {
             mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
             if (mapFragment != null) {
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -225,7 +224,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         alarm_text = findViewById(R.id.alarm_text);
         ibAlert.setVisibility(View.INVISIBLE);
         alarm_text.setVisibility(View.INVISIBLE);
-        
+
         if (ringable) {
             ibAlert.setVisibility(View.VISIBLE);
             alarm_text.setVisibility(View.VISIBLE);
@@ -255,9 +254,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
 
-
     @Override
-    protected void onNewIntent(Intent intent){
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
     }
@@ -269,15 +267,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
 
-    public void unfriend(User currentUser){
+    public void unfriend(User currentUser) {
         List<Friend> friendList = currentUser.getFriends();
         List<Friend> toRemove = new ArrayList<Friend>();
 
         String id_B = friendUser.getObjectId();
-        for (Friend frnd : friendList){
+        for (Friend frnd : friendList) {
             unFriendUser = (User) frnd.getUser();
             String id_A = unFriendUser.getObjectId();
-            if(id_A.equals(id_B)){
+            if (id_A.equals(id_B)) {
                 toRemove.add(frnd);
             }
         }
@@ -302,7 +300,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
 
-
     protected void loadMap(GoogleMap googleMap) {
         loc = currentUser.getPlace();
         LatLng you = new LatLng(loc.getLatitude(), loc.getLongitude());
@@ -317,11 +314,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             googleMap.addMarker(new MarkerOptions().position(you)
                     .title(currentUser.getName()));
 
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(you , 18));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(you, 18));
 
             map.animateCamera(CameraUpdateFactory.zoomIn());
 
-            map.animateCamera(CameraUpdateFactory.zoomTo(10) , 10000 , null);
+            map.animateCamera(CameraUpdateFactory.zoomTo(10), 10000, null);
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(them)
@@ -358,17 +355,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void sendSMS() {
-        String keyword = random();
+        String tempKey = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
-        friendUser.setKeyword(keyword);
-        friendUser.saveInBackground();
-//        Intent sendKeyword = new Intent("my.action.string");
-//        sendKeyword.putExtra("keyword", KEYWORD);
-//        sendBroadcast(sendKeyword);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+
+        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(userNum, null, keyword, pi, null);
+        sms.sendTextMessage(userNum, null, tempKey, pi, null);
+        final Keyword keyword = new Keyword();
+        keyword.setKeyword(tempKey);
+        keyword.saveInBackground();
     }
 
     public static String random() {
@@ -376,7 +372,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         StringBuilder randomStringBuilder = new StringBuilder();
         int randomLength = generator.nextInt(MAX_LENGTH);
         char tempChar;
-        for (int i = 0; i < randomLength; i++){
+        for (int i = 0; i < randomLength; i++) {
             tempChar = (char) (generator.nextInt(96) + 32);
             randomStringBuilder.append(tempChar);
         }
