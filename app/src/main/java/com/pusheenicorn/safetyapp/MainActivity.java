@@ -42,7 +42,6 @@ import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
-import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
@@ -147,6 +146,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     private PendingIntent pendingIntent;
     private AlarmManager manager;
+    private PendingIntent eventPendingIntent;
+    private AlarmManager eventManager;
     private CalendarUtil calendarUtil;
 
     @Override
@@ -235,13 +236,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
 
-        // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
-        AlarmManager alarmMgr1 = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(context, EventAlertReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0,
-                alarmIntent, 0);
-        alarmMgr1.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-                10000, pendingIntent);
         onResume();
     }
 

@@ -24,7 +24,6 @@ public class User extends ParseUser {
     private final static String KEY_RINGABLE = "ringable";
     private final static String KEY_FREQUENCY = "checkin";
     private final static String KEY_LAST_CHECKIN = "lastCheckin";
-    //private final static ParseGeoPoint point = new ParseGeoPoint(0,0);
     private final static String GEO_LOCATION = "place";
     private final static String KEY_CONTACT = "primaryContact";
     private final static String KEY_FRIENDS = "friends";
@@ -96,14 +95,6 @@ public class User extends ParseUser {
 
     public void setSafe(boolean safe) {
         put(KEY_SAFE, safe);
-    }
-
-    public String getLocation() {
-        return getString(KEY_LOCATION);
-    }
-
-    public void setLocation(String location) {
-        put(KEY_LOCATION, location);
     }
 
     public boolean getRingable() {

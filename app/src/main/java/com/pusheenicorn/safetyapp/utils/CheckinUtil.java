@@ -100,8 +100,7 @@ public class CheckinUtil {
      * This function performs the task of checking in if the user is not
      * already checked in.
      */
-    public void nowCheckin()
-    {
+    public void nowCheckin() {
         // Create a new checkin.
         final Checkin checkin = new Checkin();
         checkin.saveInBackground(new SaveCallback() {
@@ -118,7 +117,6 @@ public class CheckinUtil {
                                 final User user = (User) ParseUser.getCurrentUser();
                                 user.setLastCheckin(checkin);
                                 user.saveInBackground();
-
                                 // If the main activity is already running, resume it.
                                 if (StatusUtil.isAppRunning(mContext,
                                         CheckinReceiver.PACKAGE_NAME)) {
@@ -133,7 +131,6 @@ public class CheckinUtil {
                             }
                         }
                     });
-
                 } else {
                     e.printStackTrace();
                 }

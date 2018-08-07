@@ -31,22 +31,12 @@ public class FriendAlert {
     User primary;
     String their_id;
     String my_id;
-    int PLACEHOLDER = 1;
-
-    private static final String CHANNEL_ID = "checkin";
-
-
-
 
     private int timeSinceLastCheckin (Date prevDate, User user) {
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
-
         // Get current Date.
         Date currDate = new Date();
-
-
-
         // Split by regex "/" convert to int array and find time difference.
         String[] currDateArr = df.format(currDate).split("/");
         String[] prevDateArr = df.format(prevDate).split("/");
@@ -63,7 +53,6 @@ public class FriendAlert {
         int truePrev = (prevDateInts[0] * MONTHS_TO_SECONDS) + (prevDateInts[1] * DAYS_TO_SECONDS)
                 + (prevDateInts[2] * YEARS_TO_SECONDS) + (prevDateInts[3] * MINS_TO_SECONDS) + prevDateInts[4];
         // threshold is the length of a user's checkin cycle
-        //int threshold = (int) user.getNumber("checkin");
 
         return (trueCurr - truePrev);
     }
@@ -90,14 +79,9 @@ public class FriendAlert {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-                //Toast.makeText(context, "My id is: " + my_id + "\n Their id is: " + their_id, Toast.LENGTH_LONG).show();
                 if (my_id.equals(their_id)) {
-                    Toast.makeText(context, "HELLLOOO", Toast.LENGTH_LONG).show();
                     //assign friend's last checkin to a date object
-                    //Ishani----------------------------------------------------------------------------
                     String checkinId = myFriend.getLastCheckin().getObjectId();
-
                     // Query by checkinId
                     final Checkin.Query checkinQuery = new Checkin.Query();
                     checkinQuery.getTop().whereEqualTo("objectId", checkinId);
@@ -125,10 +109,5 @@ public class FriendAlert {
                 }
             }
         }
-
     }
-
-
-
-
 }

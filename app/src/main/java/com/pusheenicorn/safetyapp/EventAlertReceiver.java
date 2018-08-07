@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp.receivers;
+package com.pusheenicorn.safetyapp;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +16,6 @@ import java.util.List;
 
 public class EventAlertReceiver extends BroadcastReceiver
 {
-    Event mCurrentEvent;
     User mCurrentUser;
     Context mContext;
     NotificationUtil notificationUtil;
@@ -24,7 +23,6 @@ public class EventAlertReceiver extends BroadcastReceiver
 
     public void onReceive(Context context, Intent intent)
     {
-        // Toast.makeText(context, "running", Toast.LENGTH_SHORT).show();
         mCurrentUser = (User) ParseUser.getCurrentUser();
         notificationUtil = new NotificationUtil(context, mCurrentUser);
         mContext = context;
@@ -56,7 +54,7 @@ public class EventAlertReceiver extends BroadcastReceiver
                         !curr.getSeenBy().contains(mCurrentUser.getObjectId())) {
                     // Schedule a notification for this alert
                     try {
-                        String message = mCurrentEvent.getName() + " alert: " + curr.getMessage()
+                        String message = event.getName() + " alert: " + curr.getMessage()
                                 + "\n (from " +
                                 curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) + " )";
 
