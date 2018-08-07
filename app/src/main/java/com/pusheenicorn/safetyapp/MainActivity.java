@@ -82,8 +82,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private Button btnPM;
     private Button btnAM2;
     private Button btnPM2;
-    private Button btnSelectStart;
-    private Button btnSelectEnd;
+    private ImageButton btnSelectStart;
+    private ImageButton btnSelectEnd;
     ImageButton ibVideo;
 
     //variables for the draw out menu
@@ -480,8 +480,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         tvName.setText(currentUser.getName());
         tvStartDate = (TextView) findViewById(R.id.tvStartDate);
         tvEndDate = (TextView) findViewById(R.id.tvEndDate);
-        btnSelectStart = (Button) findViewById(R.id.btnSelectStart);
-        btnSelectEnd = (Button) findViewById(R.id.btnSelectEnd);
+        btnSelectStart = (ImageButton) findViewById(R.id.btnSelectStart);
+        btnSelectEnd = (ImageButton) findViewById(R.id.btnSelectEnd);
         btnAM = (Button) findViewById(R.id.btnAM);
         btnPM = (Button) findViewById(R.id.btnPM);
         btnAM2 = (Button) findViewById(R.id.btnAM2);
