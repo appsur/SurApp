@@ -1,18 +1,16 @@
 package com.pusheenicorn.safetyapp;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +36,6 @@ import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
-import com.pusheenicorn.safetyapp.receivers.EventEmergencyService;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -392,9 +389,10 @@ public class EventsActivity extends BaseActivity {
                 currentEvent.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
+                        Toast.makeText(context, "hello", Toast.LENGTH_LONG).show();
                         tvMessage.setVisibility(View.INVISIBLE);
                         btnSend.setVisibility(View.INVISIBLE);
-                        getEmergencyNotifications();
+                        // getEmergencyNotifications();
                     }
                 });
             }
