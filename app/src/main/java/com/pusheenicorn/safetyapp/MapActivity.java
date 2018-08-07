@@ -369,7 +369,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         KEYWORD = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
-        Intent sendKeyword = new Intent("sendingKeyword");
+        Intent sendKeyword = new Intent("my.action.string");
         sendKeyword.putExtra("keyword", KEYWORD);
         sendBroadcast(sendKeyword);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);

@@ -33,7 +33,6 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
         SmsMessage[] messages;
         String str = "";
         String messageBody = "";
-        String keyWord = "";
 
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
@@ -60,16 +59,21 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 str += messages[i].getMessageBody();
                 str += "\n";
             }
-            String gettingKeyword = intent.getAction();
-            if (gettingKeyword.equals("sendingKeyword")) {
+//            String gettingKeyword = intent.getAction();
+//            if (gettingKeyword.equals("my.action.string")) {
+//
+//                //TODO MESSAGEBODY IS NULL
+                if (messageBody == "") {
+                    Toast.makeText(context, "MESSAGE NULL", Toast.LENGTH_SHORT).show();
+                }
                 if (messageBody.equals(intent.getExtras().getString("keyword"))) {
-//            if (messageBody.equals(keyWord)) {
                     AlarmController alarmController = new AlarmController(context);
                     alarmController.playSound();
                     NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
                     notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
+                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
                 }
-            }
+//            }
             //display message
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
 
@@ -78,7 +82,6 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             broadcastIntent.setAction("SMS_RECEIVED_ACTION");
             broadcastIntent.putExtra("message", str);
             broadcastIntent.putExtra("body", messageBody);
-//            broadcastIntent.putExtra("keyword", keyWord);
             context.sendBroadcast(broadcastIntent);
         }
     }
