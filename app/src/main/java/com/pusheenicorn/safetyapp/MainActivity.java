@@ -189,7 +189,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
         startBackground();
-        // startEventBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -238,15 +237,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
 
         onResume();
-    }
-
-    private void startEventBackground() {
-        context = getApplicationContext();
-        eventManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context , EventAlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
-                pendingIntent);
     }
 
     private void startBackground() {

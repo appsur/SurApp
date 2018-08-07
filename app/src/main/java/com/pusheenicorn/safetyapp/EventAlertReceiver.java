@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.parse.ParseException;
+import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
@@ -15,7 +16,6 @@ import java.util.List;
 
 public class EventAlertReceiver extends BroadcastReceiver
 {
-    Event mCurrentEvent;
     User mCurrentUser;
     Context mContext;
     NotificationUtil notificationUtil;
@@ -23,10 +23,10 @@ public class EventAlertReceiver extends BroadcastReceiver
 
     public void onReceive(Context context, Intent intent)
     {
-//        mCurrentUser = (User) ParseUser.getCurrentUser();
-//        notificationUtil = new NotificationUtil(context, mCurrentUser);
-//        mContext = context;
-//        getNotifications();
+        mCurrentUser = (User) ParseUser.getCurrentUser();
+        notificationUtil = new NotificationUtil(context, mCurrentUser);
+        mContext = context;
+        getNotifications();
     }
 
     public void getNotifications()
@@ -54,7 +54,7 @@ public class EventAlertReceiver extends BroadcastReceiver
                         !curr.getSeenBy().contains(mCurrentUser.getObjectId())) {
                     // Schedule a notification for this alert
                     try {
-                        String message = mCurrentEvent.getName() + " alert: " + curr.getMessage()
+                        String message = event.getName() + " alert: " + curr.getMessage()
                                 + "\n (from " +
                                 curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) + " )";
 
