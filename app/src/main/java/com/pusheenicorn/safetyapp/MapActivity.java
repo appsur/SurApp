@@ -358,11 +358,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         String tempKey = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
-//        final Keyword keyword = new Keyword();
-//        keyword.setKeyword(tempKey);
-//        friendUser.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
 
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
         SmsManager sms = SmsManager.getDefault();
@@ -370,14 +365,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         final Keyword keyword = new Keyword();
         keyword.setKeyword(tempKey);
         keyword.saveInBackground();
-//            }
-//        });
-//        Intent sendKeyword = new Intent("my.action.string");
-//        sendKeyword.putExtra("keyword", KEYWORD);
-//        sendBroadcast(sendKeyword);
-//        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
-//        SmsManager sms = SmsManager.getDefault();
-//        sms.sendTextMessage(userNum, null, keyword, pi, null);
     }
 
     public static String random() {

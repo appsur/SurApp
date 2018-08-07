@@ -50,32 +50,8 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 str += messages[i].getMessageBody();
                 str += "\n";
             }
-//            String gettingKeyword = intent.getAction();
-//            if (gettingKeyword.equals("my.action.string")) {
-//                Toast.makeText(context, intent.getExtras().getString("keyword"), Toast.LENGTH_SHORT).show();
-////                //TODO MESSAGEBODY IS NULL
-//                if (messageBody == null) {
-//                    Toast.makeText(context, "NULL", Toast.LENGTH_SHORT).show();
-//                }
-//                if (messageBody.equals(intent.getExtras().getString("keyword"))) {
-
-//                    Toast.makeText(context, "2", Toast.LENGTH_SHORT).show();
-            //give friend a keyword that can be updated through parse
-//                String key = intent.getExtras().getString("keyword");
-//                }
-
-//            Toast.makeText(context, messageBody, Toast.LENGTH_SHORT).show();
-//                if (messageBody.equals(mCurrentUser.getKeyword())) {
-//                    AlarmController alarmController = new AlarmController(context);
-//                    alarmController.playSound();
-//                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-//                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
-//                    Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
-//                }
-//            }
             //display message
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
-//            final Keyword messageComp;
             final Keyword.Query keywordQuery = new Keyword.Query();
             keywordQuery.findInBackground(new FindCallback<Keyword>() {
                 @Override
@@ -96,13 +72,6 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 }
             });
 
-//            if (messageBody.equals(messageComp.getKeyword())) {
-//                AlarmController alarmController = new AlarmController(context);
-//                alarmController.playSound();
-//                NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-//                notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
-//                Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
-//            }
 
             //send a broadcast intent to update the Sms received in a TextView
             Intent broadcastIntent = new Intent();
