@@ -28,39 +28,44 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     NotificationUtil notificationUtil;
     public int count = 0;
     public int MAX = 10;
+    ArrayList<Event> events;
 
 
     @Override
     public void onReceive(Context context , Intent intent){
         //if (count < MAX) {
-        Toast.makeText(context, "hello", Toast.LENGTH_LONG).show();
         mCurrentUser = (User) ParseUser.getCurrentUser();
         notificationUtil = new NotificationUtil(context, mCurrentUser);
+        notificationUtil.createNotificationChannel();
         mContext = context;
         if (mCurrentUser != null) {
             friendsCheck();
+            try {
+                events = (ArrayList) mCurrentUser.fetchIfNeeded().getList("events");
+                if (events != null && !events.isEmpty())
+                {
+                    receiveNotification();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        getNotifications();
+    }
+
+    public void receiveNotification() {
+        for (int i = 0; i < events.size(); i++)
+        {
+            Event event = events.get(i);
+            event.sendNotifications(mCurrentUser.getObjectId(), notificationUtil, mContext,
+                    (i * 7));
+            Toast.makeText(mContext, "hello " + i + " " + event.getName(), Toast.LENGTH_LONG).show();
+        }
     }
 
     public void friendsCheck(){
         alert = new FriendAlert();
         mCurrentUser = (User) ParseUser.getCurrentUser();
         alert.alertNeeded(mContext);
-    }
-
-    public void getNotifications()
-    {
-        if (mCurrentUser != null && mCurrentUser.getEvents() != null
-                && !mCurrentUser.getEvents().isEmpty())
-        {
-            ArrayList<Event> events = (ArrayList) mCurrentUser.getEvents();
-            for (int i = 0; i < events.size(); i++)
-            {
-                Event event = events.get(i);
-                getEventNotifications(event);
-            }
-        }
     }
 
     public void getEventNotifications(Event event) {

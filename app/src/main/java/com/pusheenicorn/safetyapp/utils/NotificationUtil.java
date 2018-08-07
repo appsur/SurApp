@@ -10,17 +10,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.pusheenicorn.safetyapp.AlarmController;
-import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;
-import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
 import com.pusheenicorn.safetyapp.MainActivity;
 import com.pusheenicorn.safetyapp.MapActivity;
 import com.pusheenicorn.safetyapp.NotificationPublisher;
 import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
+import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;
+import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
 
 import static com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver.ACTION_STOP;
 
@@ -69,6 +68,8 @@ public class NotificationUtil {
         }
     }
 
+
+
     /**
      * This function takes a notification and delay and schedules the notification at current
      * time + delay.
@@ -82,6 +83,19 @@ public class NotificationUtil {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
                 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+
+    public void scheduleNotification(Notification notification, int id, int delay) {
+        Intent notificationIntent = new Intent(mContext, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, id);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
+                id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);

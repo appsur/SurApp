@@ -1,6 +1,7 @@
 package com.pusheenicorn.safetyapp.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -14,7 +15,11 @@ public class Alert extends ParseObject {
     private static final String KEY_SEEN = "seenBy";
 
     public String getMessage() {
-        return getString(KEY_MESSAGE);
+        try {
+            return fetchIfNeeded().getString("message");
+        } catch (ParseException e) {
+            return "error retrieving the message";
+        }
     }
     public void setMessage(String message) {
         put(KEY_MESSAGE, message);

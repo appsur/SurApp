@@ -4,7 +4,9 @@
     <string name="app_name">SafetyApp</string>
     <string name="google_maps_api_key">AIzaSyAwL41hE4yMdykhmjG0AEjPtzslBnSLA-A</string>
     <string name="channel_name">NotificationChannel</string>
+    <string name="another_channel_name">AnotherNotificationChannel</string>
     <string name="channel_description">A channel to send Sur App notifications.</string>
+    <string name="another_channel_description">Another channel to send Sur App notifications.</string>
     <string name="vertical_ellipsis">&#8942;</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
