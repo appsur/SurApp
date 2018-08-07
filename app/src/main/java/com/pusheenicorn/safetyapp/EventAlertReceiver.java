@@ -1,12 +1,10 @@
-package com.pusheenicorn.safetyapp.receivers;
+package com.pusheenicorn.safetyapp;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.parse.ParseException;
-import com.parse.ParseUser;
 import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.User;
@@ -25,11 +23,10 @@ public class EventAlertReceiver extends BroadcastReceiver
 
     public void onReceive(Context context, Intent intent)
     {
-        Toast.makeText(context , " hello" , Toast.LENGTH_LONG).show();
-        mCurrentUser = (User) ParseUser.getCurrentUser();
-        notificationUtil = new NotificationUtil(context, mCurrentUser);
-        mContext = context;
-        getNotifications();
+//        mCurrentUser = (User) ParseUser.getCurrentUser();
+//        notificationUtil = new NotificationUtil(context, mCurrentUser);
+//        mContext = context;
+//        getNotifications();
     }
 
     public void getNotifications()

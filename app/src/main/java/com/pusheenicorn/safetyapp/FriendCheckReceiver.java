@@ -24,6 +24,8 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context , Intent intent){
         //if (count < MAX) {
+
+        Toast.makeText(context, "hello", Toast.LENGTH_LONG).show();
         mContext = context;
         if (currentUser != null) {
             friendsCheck();

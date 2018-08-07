@@ -42,7 +42,6 @@ import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
-import com.pusheenicorn.safetyapp.receivers.EventAlertReceiver;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
@@ -50,7 +49,6 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -82,8 +80,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private Button btnPM;
     private Button btnAM2;
     private Button btnPM2;
-    private Button btnSelectStart;
-    private Button btnSelectEnd;
+    private ImageButton btnSelectStart;
+    private ImageButton btnSelectEnd;
     ImageButton ibVideo;
 
     //variables for the draw out menu
@@ -148,6 +146,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
     private PendingIntent pendingIntent;
     private AlarmManager manager;
+    private PendingIntent eventPendingIntent;
+    private AlarmManager eventManager;
     private CalendarUtil calendarUtil;
 
     @Override
@@ -189,6 +189,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
         startBackground();
+        // startEventBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -236,24 +237,16 @@ public class MainActivity extends BaseActivity implements LocationListener {
             }
         }
 
-//        // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
-//        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-//        Intent alarmIntent = new Intent(this, EventAlertReceiver.class);
-//        pendingIntent = PendingIntent.getBroadcast(this, 0,
-//                alarmIntent, 0);
-//        Calendar calendar = Calendar.getInstance();
-//        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                60000, pendingIntent);
-
-        context = getApplicationContext();
-        AlarmManager newalarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context , EventAlertReceiver.class);
-        PendingIntent newpendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        newalarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
-                newpendingIntent);
-
-
         onResume();
+    }
+
+    private void startEventBackground() {
+        context = getApplicationContext();
+        eventManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context , EventAlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
+                pendingIntent);
     }
 
     private void startBackground() {
@@ -489,8 +482,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         tvName.setText(currentUser.getName());
         tvStartDate = (TextView) findViewById(R.id.tvStartDate);
         tvEndDate = (TextView) findViewById(R.id.tvEndDate);
-        btnSelectStart = (Button) findViewById(R.id.btnSelectStart);
-        btnSelectEnd = (Button) findViewById(R.id.btnSelectEnd);
+        btnSelectStart = (ImageButton) findViewById(R.id.btnSelectStart);
+        btnSelectEnd = (ImageButton) findViewById(R.id.btnSelectEnd);
         btnAM = (Button) findViewById(R.id.btnAM);
         btnPM = (Button) findViewById(R.id.btnPM);
         btnAM2 = (Button) findViewById(R.id.btnAM2);
