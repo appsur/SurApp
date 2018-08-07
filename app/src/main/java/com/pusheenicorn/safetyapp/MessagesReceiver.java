@@ -16,16 +16,13 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.models.Friend;
+import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.util.Random;
-
-import static com.parse.Parse.getApplicationContext;
-
 public class MessagesReceiver extends WakefulBroadcastReceiver {
+    User mCurrentUser;
     @Override
     public void onReceive(Context context, Intent intent) {
         //get message passed in
@@ -33,6 +30,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
         SmsMessage[] messages;
         String str = "";
         String messageBody = "";
+        mCurrentUser = (User) ParseUser.getCurrentUser();
 
         if (bundle != null) {
             Object[] pdus = (Object[]) bundle.get("pdus");
@@ -40,20 +38,6 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             for (int i = 0; i < messages.length; i++) {
                 messages[i] = SmsMessage.createFromPdu((byte[]) (pdus != null ? pdus[i] : null));
                 messageBody += messages[i].getMessageBody();
-//                if (messageBody.equals("SUR")) {
-//                    AlarmController alarmController = new AlarmController(context);
-//                    alarmController.playSound();
-////                    InputStream inputStream  = context.getResources().openRawResource(R.drawable);
-////                    DataInputStream dataInputStream = new DataInputStream(inputStream);
-////                    NotificationCompat.Builder mBuilder =
-////                            new NotificationCompat.Builder(context);
-////                    mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-////                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-////                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-////                    r.play();
-//                    NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-//                    notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
-//                }
                 str += messages[i].getOriginatingAddress();
                 str += ": ";
                 str += messages[i].getMessageBody();
@@ -61,12 +45,18 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
             }
 //            String gettingKeyword = intent.getAction();
 //            if (gettingKeyword.equals("my.action.string")) {
-//
-//                //TODO MESSAGEBODY IS NULL
-                if (messageBody == "") {
-                    Toast.makeText(context, "MESSAGE NULL", Toast.LENGTH_SHORT).show();
-                }
-                if (messageBody.equals(intent.getExtras().getString("keyword"))) {
+//                Toast.makeText(context, intent.getExtras().getString("keyword"), Toast.LENGTH_SHORT).show();
+////                //TODO MESSAGEBODY IS NULL
+//                if (messageBody == null) {
+//                    Toast.makeText(context, "NULL", Toast.LENGTH_SHORT).show();
+//                }
+//                if (messageBody.equals(intent.getExtras().getString("keyword"))) {
+
+//                    Toast.makeText(context, "2", Toast.LENGTH_SHORT).show();
+            //give friend a keyword that can be updated through parse
+//                String key = intent.getExtras().getString("keyword");
+//                }
+                if (messageBody.equals(mCurrentUser.get("keyword"))) {
                     AlarmController alarmController = new AlarmController(context);
                     alarmController.playSound();
                     NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
