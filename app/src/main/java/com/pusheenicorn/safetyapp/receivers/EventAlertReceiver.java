@@ -24,6 +24,7 @@ public class EventAlertReceiver extends BroadcastReceiver
 
     public void onReceive(Context context, Intent intent)
     {
+        // Toast.makeText(context, "running", Toast.LENGTH_SHORT).show();
         mCurrentUser = (User) ParseUser.getCurrentUser();
         notificationUtil = new NotificationUtil(context, mCurrentUser);
         mContext = context;

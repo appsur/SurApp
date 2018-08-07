@@ -111,8 +111,8 @@
         <receiver android:name=".receivers.EventAlertReceiver"></receiver>
 
         <activity android:name=".BaseActivity" />
-        <activity android:name=".HotlineActivity"></activity>
-        <activity android:name=".VideoActivity"></activity>
+        <activity android:name=".HotlineActivity"/>
+        <activity android:name=".VideoActivity"/>
     </application>
 
 </manifest>

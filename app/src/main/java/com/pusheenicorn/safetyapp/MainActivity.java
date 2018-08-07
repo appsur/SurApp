@@ -50,7 +50,6 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -188,7 +187,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         setUpDrawerLayout();                                // Set up the pull-out menu.
         friendsCheck();                                     // Check if friends need to check-in
         setNewInvisible();                                  // Hide all edit views
-        //startBackground();
+        startBackground();
 
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
@@ -237,13 +236,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
         }
 
         // Retrieve a PendingIntent that will perform a broadcast to the event alert receiver
-        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(this, EventAlertReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0,
+        AlarmManager alarmMgr1 = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent = new Intent(context, EventAlertReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, 0,
                 alarmIntent, 0);
-        Calendar calendar = Calendar.getInstance();
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                60000, pendingIntent);
+        alarmMgr1.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                10000, pendingIntent);
         onResume();
     }
 
@@ -252,7 +250,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context , FriendCheckReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 600000,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
                         pendingIntent);
     }
 
