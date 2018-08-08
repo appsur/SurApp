@@ -2,10 +2,10 @@ package com.pusheenicorn.safetyapp.receivers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.pusheenicorn.safetyapp.AlarmController;
+import com.pusheenicorn.safetyapp.MessagesReceiver;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 public class AlarmStopReceiver extends WakefulBroadcastReceiver{
@@ -24,7 +24,7 @@ public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         mContext = context;
 
-            alarmController = (AlarmController) intent.getParcelableExtra("alarm");
+            alarmController = MessagesReceiver.alarmController;
             alarmController.stopSound();
             Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             context.sendBroadcast(it);

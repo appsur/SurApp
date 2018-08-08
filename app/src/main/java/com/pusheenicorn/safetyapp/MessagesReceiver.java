@@ -1,17 +1,8 @@
 package com.pusheenicorn.safetyapp;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.AudioTrack;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
@@ -19,7 +10,6 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.Keyword;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;
@@ -30,6 +20,8 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
     User mCurrentUser;
     Keyword messageComp;
     String messageBody = "";
+    public static AlarmController alarmController;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         //get message passed in
@@ -61,11 +53,13 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                             messageComp = objects.get(objects.size() - 1);
                             String keyword = messageComp.getKeyword();
                             if (messageBody.equals(keyword)) {
-                                AlarmController alarmController = new AlarmController(context);
+                                alarmController = new AlarmController(context);
                                 alarmController.playSound();
-                                NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
+                                NotificationUtil notificationUtil = new NotificationUtil(context,
+                                        alarmController);
 //                                notificationUtil.cancelAlarmNotification();
-                                notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
+                                notificationUtil.scheduleNotification(
+                                        notificationUtil.getAlarmNotification(), 0);
                                 Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
                             }
                         }
