@@ -2,13 +2,12 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -219,6 +218,7 @@ public class FriendsActivity extends BaseActivity {
                                 ibAddFriend.setVisibility(View.VISIBLE);
                                 ibSearch.setVisibility(View.INVISIBLE);
                                 etUsername.setVisibility(View.INVISIBLE);
+                                etUsername.setText("");
                                 // Update the current user's friends list
                                 final User currentUser = (User) ParseUser.getCurrentUser();
                                 currentUser.saveInBackground(new SaveCallback() {
