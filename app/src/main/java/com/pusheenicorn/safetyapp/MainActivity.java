@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
@@ -757,6 +758,21 @@ public class MainActivity extends BaseActivity implements LocationListener {
         // Set the event attributes and save in background
         event.setName(etEventName.getText().toString());
         event.setLocation(etEventLocation.getText().toString());
+
+        String startTime = etStartTime.getText().toString();
+        String endTime = etEndTime.getText().toString();
+        if (!startTime.contains(":") || startTime.length() < 4)
+        {
+            Toast.makeText(context, "Please enter a valid start time XX:XX",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        else if (!endTime.contains(":") || endTime.length() < 4)
+        {
+            Toast.makeText(context, "Please enter a valid start time XX:XX",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
 
         String startTotalTime = retrievePrettyDate(tvStartDate.getText().toString(),
                 etStartTime.getText().toString(), true);
