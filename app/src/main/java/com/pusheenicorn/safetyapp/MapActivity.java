@@ -17,6 +17,7 @@ import android.telephony.SmsManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -69,6 +70,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ImageView ivBlur;
     ImageButton ibPhone;
     ImageButton ibAlert;
+    ImageButton ibSMS;
+    EditText etMessage;
     ImageButton ibUnfriend;
     Boolean isRinging;
     Context context;
@@ -244,6 +247,20 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 //                }
                 sendSMS();
 
+            }
+        });
+        ibSMS = findViewById(R.id.ibSMS);
+        etMessage = findViewById(R.id.etMessage);
+        ibSMS.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String SENT = "Message Sent!!";
+                String DELIVERED = "Message Delivered!";
+                PendingIntent sentPI = PendingIntent.getBroadcast(context, 0, new Intent(SENT), 0);
+                PendingIntent delieveredPI = PendingIntent.getBroadcast(context, 0, new Intent(DELIVERED), 0);
+                SmsManager sms = SmsManager.getDefault();
+                sms.sendTextMessage(friendUser.getPhonNumber(), null, String.valueOf(etMessage.getText()), sentPI, delieveredPI);
             }
         });
         notif = new NotificationUtil(MapActivity.this, currentUser);
