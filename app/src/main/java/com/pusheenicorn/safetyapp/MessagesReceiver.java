@@ -64,7 +64,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                                 AlarmController alarmController = new AlarmController(context);
                                 alarmController.playSound();
                                 NotificationUtil notificationUtil = new NotificationUtil(context, alarmController);
-                                notificationUtil.cancelAlarmNotification();
+//                                notificationUtil.cancelAlarmNotification();
                                 notificationUtil.scheduleNotification(notificationUtil.getAlarmNotification(), 0);
                                 Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
                             }
