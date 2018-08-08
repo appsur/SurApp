@@ -356,6 +356,7 @@ public class EventsActivity extends BaseActivity {
                             }
                         });
                     }
+
                     // If the username is invalid, toast a message to this effect.
                     else {
                         Toast.makeText(context, "Sorry, you entered an invalid username.",
@@ -404,4 +405,3 @@ public class EventsActivity extends BaseActivity {
         startActivity(intent);
     }
 }
-

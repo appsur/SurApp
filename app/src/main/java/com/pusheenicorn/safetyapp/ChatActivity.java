@@ -112,7 +112,6 @@ public class ChatActivity extends BaseActivity {
                 Intent intent = getIntent();
                 String number = intent.getStringExtra("number");
                 sendMessage(number, message);
-                etTextMessage.setText("");
             }
         });
 
@@ -154,6 +153,7 @@ public class ChatActivity extends BaseActivity {
         sms.sendTextMessage(number, null, message, sentPI, delieveredPI);
         //toast if the text is successfully made
         Toast.makeText(ChatActivity.this, "Message Delivered", Toast.LENGTH_SHORT).show();
+        etTextMessage.setText(" ");
     }
 
     protected void onResume() {
