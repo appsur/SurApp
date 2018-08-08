@@ -97,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
         user.put("phonenumber", phoneNumber);
         user.put("trackable", false);
         user.put("ringable", false);
+        user.put("primaryContact", "WIfsetxLFu");
         int three = 3;
         Number num = (Number) three;
         user.put("notify", num);

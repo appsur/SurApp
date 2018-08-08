@@ -2,7 +2,6 @@ package com.pusheenicorn.safetyapp.models;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -67,7 +66,7 @@ public class FriendAlert {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (friends != null) {
+        if (friends != null && !friends.isEmpty()) {
 
             //iterate through friends and check each friend's check in status
             for (final Friend fr : friends) {
@@ -75,7 +74,6 @@ public class FriendAlert {
                     myFriend = (User) fr.fetchIfNeeded().getParseUser("user");
                     primary = (User) myFriend.fetchIfNeeded().getParseUser("primaryContact");
                     their_id = primary.fetchIfNeeded().getObjectId();
-
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
