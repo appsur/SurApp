@@ -184,7 +184,6 @@ public class NotificationUtil {
         intent.putExtra("alarm", mAlarmController);
         intent.setAction(ACTION_STOP);
 
-
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, AlarmStopReceiver.SERVICE_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);

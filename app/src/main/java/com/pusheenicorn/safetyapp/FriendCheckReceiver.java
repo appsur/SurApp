@@ -3,7 +3,6 @@ package com.pusheenicorn.safetyapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -58,7 +57,7 @@ public class FriendCheckReceiver extends BroadcastReceiver {
             Event event = events.get(i);
             event.sendNotifications(mCurrentUser.getObjectId(), notificationUtil, mContext,
                     (i * 7));
-            Toast.makeText(mContext, "Notification from: " + event.getName(), Toast.LENGTH_LONG).show();
+            String name = event.getName();
         }
     }
 
