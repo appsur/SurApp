@@ -151,8 +151,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="124dp"
-                android:fontFamily="@font/arimo"
-                android:textColor="@color/black" />
+                android:fontFamily="sans-serif"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
         </RelativeLayout>
         <!-- The navigation drawer -->
         <RelativeLayout
