@@ -25,6 +25,7 @@ public class HotlineActivity extends BaseActivity {
     private static final String DRUG_NUMBER = "18006624357";
     private static final String ALCOHOL_NUMBER = "18002526465";
     private static final String SOCIAL_SERVICES_NUMBER = "18003423720";
+    private static final String SEXUAL_ABUSE_NUMBER = "18006564673";
     private static final String TELEPHONE_KEY = "tel";
     //declare bottom navigation bar
     private BottomNavigationView bottomNavigationView;
@@ -108,6 +109,11 @@ public class HotlineActivity extends BaseActivity {
     public void onAlcoholics(View view) {
         // Call: 1-800-252-6465
         dialContactPhone(ALCOHOL_NUMBER);
+    }
+
+    public void onSexualAssault (View view) {
+        // Call: 1-800-252-6465
+        dialContactPhone(SEXUAL_ABUSE_NUMBER);
     }
 
     //method for dialing the contact number provided
