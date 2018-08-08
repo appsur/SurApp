@@ -187,7 +187,7 @@ public class NotificationUtil {
 
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, AlarmStopReceiver.SERVICE_ID,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(mContext,
@@ -195,12 +195,21 @@ public class NotificationUtil {
                         .setContentTitle(CheckinReceiver.APP_NAME)
                         .setSmallIcon(R.drawable.close_octagon_outline)
                         .setContentText("STOP ALARM")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .addAction(R.drawable.close_octagon_outline, ACTION_STOP, pendingIntent)
                         .setOngoing(true);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
         return builder.build();
+    }
+
+    public void cancelAlarmNotification() {
+        AlarmManager alarmManager =
+                (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        Intent cancelServiceIntent = new Intent(mContext, AlarmStopReceiver.class);
+        PendingIntent cancelServicePendingIntent = PendingIntent.getBroadcast(mContext,
+                AlarmStopReceiver.SERVICE_ID, cancelServiceIntent,0);
+        alarmManager.cancel(cancelServicePendingIntent);
     }
 
     public void cancelCheckinNotification() {
