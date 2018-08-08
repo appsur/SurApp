@@ -66,6 +66,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         //get the data according to position
         Friend friend = mFriends.get(position);
+        try {
+            friend.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         String name = "";
         User userFriend;
         try {
