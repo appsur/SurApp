@@ -65,7 +65,6 @@ public class ChatActivity extends BaseActivity {
 //            if (intent.equals("SMS_RECEIVED_ACTION")) {
             //set text view with the message and phone number from the reply
             tvTextMessage.setText(intent.getExtras().getString("message"));
-            etTextMessage.setText("");
 //        }
         }
     };
@@ -113,6 +112,7 @@ public class ChatActivity extends BaseActivity {
                 Intent intent = getIntent();
                 String number = intent.getStringExtra("number");
                 sendMessage(number, message);
+                etTextMessage.setText("");
             }
         });
 
