@@ -58,6 +58,7 @@ public class FriendCheckReceiver extends BroadcastReceiver {
             event.sendNotifications(mCurrentUser.getObjectId(), notificationUtil, mContext,
                     (i * 7));
             String name = event.getName();
+            // Toast.makeText(mContext, "hello " + i + event.getName(), Toast.LENGTH_LONG).show();
         }
     }
 
