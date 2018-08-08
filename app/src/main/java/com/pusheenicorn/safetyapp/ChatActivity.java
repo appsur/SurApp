@@ -65,6 +65,7 @@ public class ChatActivity extends BaseActivity {
 //            if (intent.equals("SMS_RECEIVED_ACTION")) {
             //set text view with the message and phone number from the reply
             tvTextMessage.setText(intent.getExtras().getString("message"));
+            etTextMessage.setText("");
 //        }
         }
     };
@@ -75,6 +76,7 @@ public class ChatActivity extends BaseActivity {
         setContentView(R.layout.activity_chat);
         //set and populated the bottom navigation view
         bottomNavigationView = findViewById(R.id.bottom_navigation_chat);
+        bottomNavigationView.setSelectedItemId(R.id.action_message);
         setNavigationDestinations(ChatActivity.this, bottomNavigationView);
 
         initializeNavItems(mNavItems);
