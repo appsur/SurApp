@@ -30,6 +30,7 @@ public class FriendAlert {
     User primary;
     String their_id;
     String my_id;
+    int cycle;
 
     private int timeSinceLastCheckin (Date prevDate, User user) {
         // Define format type.
@@ -90,7 +91,7 @@ public class FriendAlert {
                                 // Get the checkin object and format its date
                                 final Checkin checkin = objects.get(0);
                                 Date date = checkin.getCreatedAt();
-                                int cycle = (int) myFriend.getNumber("checkin");
+                                cycle = (int) myFriend.getNumber("checkin");
                                 int missed = (int) myFriend.getNotificationThreshold();
                                 int time = timeSinceLastCheckin(date, myFriend);
                                 if (time > (missed * cycle)) {

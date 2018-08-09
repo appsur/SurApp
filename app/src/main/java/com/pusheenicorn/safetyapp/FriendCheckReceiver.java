@@ -3,6 +3,7 @@ package com.pusheenicorn.safetyapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -31,11 +32,13 @@ public class FriendCheckReceiver extends BroadcastReceiver {
 
 
     @Override
-    public void onReceive(Context context , Intent intent){
+    public void onReceive(Context context , Intent intent ) {
         //if (count < MAX) {
         mCurrentUser = (User) ParseUser.getCurrentUser();
         notificationUtil = new NotificationUtil(context, mCurrentUser);
         notificationUtil.createNotificationChannel();
+
+        //Toast.makeText(context, "hello" + mCurrentUser, Toast.LENGTH_LONG).show();
         mContext = context;
         if (mCurrentUser != null) {
             friendsCheck();
@@ -49,7 +52,12 @@ public class FriendCheckReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
         }
+        mCurrentUser = (User) ParseUser.getCurrentUser();
+        if (mCurrentUser != null) {
+            friendsCheck();
+        }
     }
+
 
     public void receiveNotification() {
         for (int i = 0; i < events.size(); i++)
@@ -61,6 +69,8 @@ public class FriendCheckReceiver extends BroadcastReceiver {
             // Toast.makeText(mContext, "hello " + i + event.getName(), Toast.LENGTH_LONG).show();
         }
     }
+
+
 
     public void friendsCheck(){
         alert = new FriendAlert();
@@ -103,3 +113,4 @@ public class FriendCheckReceiver extends BroadcastReceiver {
         }
     }
 }
+

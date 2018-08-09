@@ -245,8 +245,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context , FriendCheckReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 10000,
-                        pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 30000,
+                pendingIntent);
     }
 
     public void restoreState() {
@@ -562,7 +562,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     for (int i = objects.size() - 1; i > -1; i--) {
                         if (currentUser.getEvents() != null &&
                                 (currentUser.getEventIds().contains(objects.get(i).getObjectId()) ||
-                                objects.get(i).getUsersIds().contains(currentUser.getObjectId()))
+                                        objects.get(i).getUsersIds().contains(currentUser.getObjectId()))
                                 ) {
                             rawEvents.add(objects.get(i));
                             if (!currentUser.getEventIds().contains(objects.get(i).getObjectId()))
@@ -652,7 +652,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                                 int mins = (int) currentUser.getNumber("checkin");
                                 notificationUtil.scheduleNotification(
                                         notificationUtil.getNotification(), mins *
-                                        CheckinReceiver.SECOND_TO_MILLIS);
+                                                CheckinReceiver.SECOND_TO_MILLIS);
                             } else {
                                 e.printStackTrace();
                             }
@@ -777,7 +777,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         String startTotalTime = retrievePrettyDate(tvStartDate.getText().toString(),
                 etStartTime.getText().toString(), true);
         String endTotalTime = retrievePrettyDate(tvEndDate.getText().toString(),
-               etEndTime.getText().toString(), false);
+                etEndTime.getText().toString(), false);
         event.setStart(startTotalTime);
         event.setEnd(endTotalTime);
         event.addUser(currentUser);
