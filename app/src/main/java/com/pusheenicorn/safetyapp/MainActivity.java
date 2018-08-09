@@ -144,8 +144,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private PendingIntent pendingIntent;
     private AlarmManager manager;
     private PendingIntent eventPendingIntent;
-    private AlarmManager eventManager;
     private CalendarUtil calendarUtil;
+    public static final int YEAR_CONVERSION = 525600;
+    public static final int MONTH_CONVERSION = 43800;
+    public static final int DAY_CONVERSION = 1440;
+    public static final int HOUR_CONVERSION = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -353,11 +356,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
-    /**
-     * TODO -- ADD JAVADOC
-     *
-     * @param loc
-     */
     public void saveLocation(Location loc) {
         //retrieve location from best existing source
         double longitude = loc.getLongitude();
@@ -499,7 +497,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
 
     /**
-     * TODO -- ADD JAVADOC
      */
     // this will open a prompt to let the user know that gps is not enabled on their phone and will
     // allow the user to turn it on
@@ -904,11 +901,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
         String[] currDateArr = df.format(currDate).split("/");
         String[] endDatePreArr = new String[8];
         try {
-            endDatePreArr = event.fetchIfNeeded().getString("endTime").split(" |:");
+            endDatePreArr = event.fetchIfNeeded().getString(END_TIME_KEY).split(" |:");
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
-
         String year = endDatePreArr[7].substring(2, 4);
 
         String month = calendarUtil.getValMonth(endDatePreArr[1]) + "";
@@ -923,10 +919,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
             endDateInts[i] = Integer.parseInt(endDateArr[i]);
         }
 
-        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
-                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
-        int trueEnd = (endDateInts[0] * 43800) + (endDateInts[1] * 1440)
-                + (endDateInts[2] * 525600) + (endDateInts[3] * 60) + endDateInts[4];
+        int trueCurr = (currDateInts[0] * MONTH_CONVERSION) + (currDateInts[1] * DAY_CONVERSION)
+                + (currDateInts[2] * YEAR_CONVERSION) + (currDateInts[3] * HOUR_CONVERSION) +
+                currDateInts[4];
+        int trueEnd = (endDateInts[0] * MONTH_CONVERSION) + (endDateInts[1] * DAY_CONVERSION)
+                + (endDateInts[2] * YEAR_CONVERSION) + (endDateInts[3] * HOUR_CONVERSION) +
+                endDateInts[4];
 
         // If the current time is greater than the end time, the event has expired.
         if (trueCurr > trueEnd) {
@@ -935,7 +933,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         return false;
     }
-
     public void sortEvents(List<Event> inputEvents) {
         Collections.sort(inputEvents);
     }

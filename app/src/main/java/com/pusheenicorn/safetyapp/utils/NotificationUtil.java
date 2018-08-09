@@ -33,9 +33,8 @@ public class NotificationUtil {
     public static String KEY_ALERT = "alert";
     public static String KEY_USER = "user";
 
-    public NotificationUtil(Context context, AlarmController alarmController) {
+    public NotificationUtil(Context context) {
         mContext = context;
-        mAlarmController = alarmController;
     }
     public NotificationUtil(Context context, User currentUser) {
         mContext = context;
@@ -112,7 +111,8 @@ public class NotificationUtil {
         intent.putExtra(KEY_USER, mCurrentUser);
 
         // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, CheckinReceiver.SERVICE_ID,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
+                CheckinReceiver.SERVICE_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =
@@ -122,7 +122,8 @@ public class NotificationUtil {
                         .setSmallIcon(R.drawable.check)
                         .setContentText(CheckinReceiver.NOTIFICATION_MESSAGE)
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .addAction(R.drawable.check_outline, CheckinReceiver.ACTION_MESSAGE, pendingIntent)
+                        .addAction(R.drawable.check_outline,
+                                CheckinReceiver.ACTION_MESSAGE, pendingIntent)
                         .setOngoing(true);
         // builder.setContentIntent(pendingIntent);
         // builder.setAutoCancel(true);
