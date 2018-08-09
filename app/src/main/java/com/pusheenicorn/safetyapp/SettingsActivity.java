@@ -11,12 +11,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,9 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
@@ -37,13 +33,11 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SignUpCallback;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -379,7 +373,8 @@ public class SettingsActivity extends BaseActivity {
                     tvNum.setText(newFrequency);
                 }
             });
-
+            etNum.setText(etNum.getText().toString());
+            tvNum.setText(etNum.getText().toString());
             etNum.setVisibility(View.INVISIBLE);
             tvNum.setVisibility(View.VISIBLE);
         }
@@ -392,7 +387,7 @@ public class SettingsActivity extends BaseActivity {
      * @param view: the hourly button view
      */
     public void onHourly(View view) {
-
+        final String num = etNum.getText().toString();
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -401,6 +396,7 @@ public class SettingsActivity extends BaseActivity {
                     user.setFrequency("Hourly");
                     user.saveInBackground();
                     tvCheckinFrequency.setText("Every hour");
+                    tvNum.setText(num);
                     isClock = !isClock;
                 } else {
                     e.printStackTrace();
@@ -416,6 +412,7 @@ public class SettingsActivity extends BaseActivity {
      * @param view: the weekly button view
      */
     public void onWeekly(View view) {
+        final String num = etNum.getText().toString();
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -424,6 +421,7 @@ public class SettingsActivity extends BaseActivity {
                     user.setFrequency("Weekly");
                     user.saveInBackground();
                     tvCheckinFrequency.setText(user.getFrequency());
+                    tvNum.setText(num);
                     isClock = !isClock;
                 } else {
                     e.printStackTrace();
@@ -439,6 +437,7 @@ public class SettingsActivity extends BaseActivity {
      * @param view: the daily button view
      */
     public void onDaily(View view) {
+        final String num = etNum.getText().toString();
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -447,6 +446,7 @@ public class SettingsActivity extends BaseActivity {
                     user.setFrequency("Daily");
                     user.saveInBackground();
                     tvCheckinFrequency.setText(user.getFrequency());
+                    tvNum.setText(num);
                     isClock = !isClock;
                 } else {
                     e.printStackTrace();
