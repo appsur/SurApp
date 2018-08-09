@@ -32,11 +32,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class VideoActivity extends BaseActivity implements DialogInterface.OnClickListener, SurfaceHolder.Callback {
-
     public static final String LOGTAG = "VIDEOCAPTURE";
 
     //declare variable for media recorder (used to record video from app directly)
-    private MediaRecorder recorder;
+    private MediaRecorder mRecorder;
     //interface for someone holding a display surface
     private SurfaceHolder holder;
     //provides preset qualities
@@ -61,6 +60,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
 
+    //variable for checking the length of the video
     long duration;
 
     @Override
@@ -107,48 +107,19 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         holder.addCallback(this);
         //create buffers for the camera device
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-//        prepareRecorder();
-
-        //start and stop camera view
-//        cameraView.setClickable(true);
-//        cameraView.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                if (recording) {
-//                    recorder.stop();
-//                    recording = false;
-//                    if (usecamera) {
-//                        try {
-//                            camera.reconnect();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    // recorder.release();
-//                    Log.v(LOGTAG, "Recording Stopped");
-//                    //finish recording and notify user, then return to main activity
-//                    Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
-//                    Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
-//                    startActivity(finishRecording);
-//                    // Let's prepareRecorder so we can record again
-////                    prepareRecorder();
-//                } else {
-//                    recording = true;
-//                    recorder.start();
-//                    Log.v(LOGTAG, "Recording Started");
-//                }
-//            }
-//        });
         tvStop = findViewById(R.id.tvStop);
         tvStop.setVisibility(View.INVISIBLE);
 
+        //initialize and set the button that starts and ends recorder
         ibRecord = findViewById(R.id.ibRecord);
         ibRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                tvStop.setVisibility(View.VISIBLE);
+                //if the recorder is recording, then the recorder should be stopped on click
                 if (recording) {
-                   if (duration != 0) {
-                        recorder.stop();
+                    //check to make sure that the video is not too short
+                    if (duration != 0) {
+                        mRecorder.stop();
                         releaseMediaRecorder();
                         recording = false;
                         //finish recording and notify user, then return to main activity
@@ -163,20 +134,15 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                             e.printStackTrace();
                         }
                     }
-//                     recorder.release();
-//                    camera.release();
-//                    recording = false;
                     Log.v(LOGTAG, "Recording Stopped");
                     //finish recording and notify user, then return to main activity
                     Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
                     Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
                     startActivity(finishRecording);
-                    // Let's prepareRecorder so we can record again
-//                    prepareRecorder();
-                } else if (!recording){
+                } else if (!recording) {
                     if (duration == 0) {
                         ibRecord.setVisibility(View.INVISIBLE);
-                        recorder.start();
+                        mRecorder.start();
                         tvStop.setVisibility(View.VISIBLE);
                         ibRecord.setVisibility(View.VISIBLE);
                         Log.v(LOGTAG, "Recording Started");
@@ -188,37 +154,33 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     }
 
+    /**
+     * set up the recorder and the place to save the recorder to based on file format
+     */
     private void prepareRecorder() {
-        recorder = new MediaRecorder();
-        recorder.setPreviewDisplay(holder.getSurface());
+        mRecorder = new MediaRecorder();
+        mRecorder.setPreviewDisplay(holder.getSurface());
 
         if (usecamera) {
             //set the camera to be portrait mode
             camera.setDisplayOrientation(90); // use for set the orientation of the preview
-            recorder.setOrientationHint(90); // use for set the orientation of output video
+            mRecorder.setOrientationHint(90); // use for set the orientation of output video
             camera.unlock();
-            recorder.setCamera(camera);
+            mRecorder.setCamera(camera);
         }
 
         //allow recorder to have audio and video
-        recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        mRecorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
 
-        recorder.setProfile(camcorderProfile);
+        mRecorder.setProfile(camcorderProfile);
 
         //saving file based on the format
         if (camcorderProfile.fileFormat == MediaRecorder.OutputFormat.THREE_GPP) {
             try {
                 File newFile = File.createTempFile("videocapture", ".3gp", Environment.getExternalStorageDirectory());
                 duration = newFile.length();
-                recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
+                mRecorder.setOutputFile(newFile.getAbsolutePath());
             } catch (IOException e) {
                 Log.v(LOGTAG, "Couldn't create file");
                 e.printStackTrace();
@@ -228,14 +190,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
             try {
                 File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
                 duration = newFile.length();
-                recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
+                mRecorder.setOutputFile(newFile.getAbsolutePath());
             } catch (IOException e) {
                 Log.v(LOGTAG, "Couldn't create file");
                 e.printStackTrace();
@@ -245,14 +200,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
             try {
                 File newFile = File.createTempFile("videocapture", ".mp4", Environment.getExternalStorageDirectory());
                 duration = newFile.length();
-                recorder.setOutputFile(newFile.getAbsolutePath());
-//                    MediaPlayer mp = new MediaPlayer();
-//                    FileInputStream stream = new FileInputStream(newFile);
-//                    mp.setDataSource(stream.getFD());
-//                    stream.close();
-//                    mp.prepare();
-//                    duration = mp.getDuration();
-//                    mp.release();
+                mRecorder.setOutputFile(newFile.getAbsolutePath());
             } catch (IOException e) {
                 Log.v(LOGTAG, "Couldn't create file");
                 e.printStackTrace();
@@ -262,7 +210,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         }
 
         try {
-            recorder.prepare();
+            mRecorder.prepare();
         } catch (IllegalStateException e) {
             e.printStackTrace();
             finish();
@@ -272,6 +220,10 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         }
     }
 
+    /**
+     * function for discovering when the surface is created (called after surface is first created)
+     * @param holder pass in the interface for the surface
+     */
     public void surfaceCreated(SurfaceHolder holder) {
         Log.v(LOGTAG, "surfaceCreated");
 
@@ -290,7 +242,13 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
 
     }
 
-
+    /**
+     * called after a structural change has been made
+     * @param holder surfaceholder that has a holder changed
+     * @param format new pixelformat of the screen
+     * @param width new width
+     * @param height new height
+     */
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.v(LOGTAG, "surfaceChanged");
 
@@ -320,13 +278,17 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
     }
 
 
+    /**
+     * function for destorying the surface as the window is hidden
+     * @param holder pass in the interface for the surface
+     */
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.v(LOGTAG, "surfaceDestroyed");
         if (recording) {
-            recorder.stop();
+            mRecorder.stop();
             recording = false;
         }
-        recorder.release();
+        mRecorder.release();
         if (usecamera) {
             previewRunning = false;
             camera.lock();
@@ -335,16 +297,24 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
         finish();
     }
 
+    /**
+     * default function that is necessary to the class
+     * @param dialog
+     * @param which
+     */
     @Override
     public void onClick(DialogInterface dialog, int which) {
 
     }
 
+    /**
+     * function to release the media recorder after a video has finished recording
+     */
     private void releaseMediaRecorder() {
-        if (recorder != null) {
-            recorder.reset();   // clear recorder configuration
-            recorder.release(); // release the recorder object
-            recorder = null;
+        if (mRecorder != null) {
+            mRecorder.reset();   // clear recorder configuration
+            mRecorder.release(); // release the recorder object
+            mRecorder = null;
         }
 
     }
