@@ -29,28 +29,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FriendsActivity extends BaseActivity {
-    //declared variables
+    Context mContext;
+    User mUser;
+    User mCurrentUser;
+    //declared the navigation view
     BottomNavigationView bottomNavigationView;
+
     //variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
-    ProgressBar progressBar;
+
+    //declare adapter and associated variables for both safe and alert friends
     FriendsAdapter safeFriendsAdapter;
     ArrayList<Friend> safeFriends;
-    //    ArrayList<Friend> friends;
     RecyclerView rvSafeFriendList;
     FriendsAdapter alertFriendsAdapter;
     ArrayList<Friend> alertFriends;
     RecyclerView rvAlertFriendList;
+
+    //declare views on the page
     EditText etUsername;
     ImageButton ibAddFriend;
     ImageButton ibSearch;
-    Context context;
-    User user;
-    User currentUser;
 
     /**
      * This function is executed upon creation. It calls various methods to
@@ -62,7 +65,7 @@ public class FriendsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         // Set the context.
-        context = this;
+        mContext = this;
         setNavigationViews();
         initializeViews();
         populateList();
@@ -72,18 +75,18 @@ public class FriendsActivity extends BaseActivity {
      * This function sets the bottom navigation view.
      */
     public void setNavigationViews(){
+        //initialize the bottom navigation view and the destinations
         bottomNavigationView = findViewById(R.id.bottom_navigation_friends);
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
         setNavigationDestinations(FriendsActivity.this, bottomNavigationView);
         initializeNavItems(mNavItems);
-        // DrawerLayout
+        //initialize the drawer layout
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // Populate the Navigtion Drawer with options
+        //populate the Navigtion Drawer with options
         mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
         mDrawerList = (ListView) findViewById(R.id.navList);
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
-        // Drawer Item click listeners
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -110,23 +113,25 @@ public class FriendsActivity extends BaseActivity {
         // recycler view setup
         rvAlertFriendList.setLayoutManager(new LinearLayoutManager(this));
         rvAlertFriendList.setAdapter(alertFriendsAdapter);
-        // declare username
+        // initialize the views that were preset
         etUsername = (EditText) findViewById(R.id.etUsername);
         ibAddFriend = (ImageButton) findViewById(R.id.ibAddFriend);
         ibSearch = (ImageButton) findViewById(R.id.ibSearch);
-        currentUser = (User) ParseUser.getCurrentUser();
+        // set current user
+        mCurrentUser = (User) ParseUser.getCurrentUser();
     }
 
     /**
-     * This function populates the recycler view.
+     * This function populates the safe and alert recycler views depending on the user's settings
      */
     public void populateList() {
-        if (currentUser != null && currentUser.getFriends() != null)
+        //check to make sure that the current user isn't null
+        if (mCurrentUser != null && mCurrentUser.getFriends() != null)
         {
-            for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
+            for (int i = 0; i < mCurrentUser.getFriendUsers().size(); i++) {
                 Friend newFriend = null;
                 try {
-                    newFriend = (Friend) currentUser.fetch().getList("friends").get(i);
+                    newFriend = (Friend) mCurrentUser.fetch().getList("friends").get(i);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -138,10 +143,11 @@ public class FriendsActivity extends BaseActivity {
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
-
+                //if the user is safe, add them to the safe friends recycler view
                 if (isSafe) {
                     safeFriends.add(newFriend);
                     safeFriendsAdapter.notifyDataSetChanged();
+                    //else add the user to the alert friends recycler view
                 } else {
                     alertFriends.add(newFriend);
                     alertFriendsAdapter.notifyDataSetChanged();
@@ -177,7 +183,7 @@ public class FriendsActivity extends BaseActivity {
     public void onSearch(View view) {
         String username = etUsername.getText().toString();
         // Do not allow the user to add themselves as a friend!
-        if (username == currentUser.getUsername()) {
+        if (username == mCurrentUser.getUsername()) {
             Toast.makeText(this, "Sorry, you cannot add yourself as a friend!",
                     Toast.LENGTH_LONG).show();
             ibAddFriend.setVisibility(View.VISIBLE);
@@ -185,7 +191,7 @@ public class FriendsActivity extends BaseActivity {
             etUsername.setVisibility(View.INVISIBLE);
             return;
         }
-        if (currentUser.getFriendUserNames() != null && currentUser.getFriendUserNames()
+        if (mCurrentUser.getFriendUserNames() != null && mCurrentUser.getFriendUserNames()
                 .contains(username)) {
             Toast.makeText(this, "Sorry, this user is already your friend!",
                     Toast.LENGTH_LONG).show();
@@ -203,11 +209,11 @@ public class FriendsActivity extends BaseActivity {
                 if (e == null) {
                     // Get the user that matches this name, if one exists.
                     if (objects != null && objects.size() > 0) {
-                        user = objects.get(0);
+                        mUser = objects.get(0);
                     }
                     // Otherwise, tell the userf to try again.
                     else {
-                        Toast.makeText(context, "Sorry, that user doesn't exist",
+                        Toast.makeText(mContext, "Sorry, that user doesn't exist",
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -219,8 +225,8 @@ public class FriendsActivity extends BaseActivity {
                             if (e == null) {
                                 // Set the name and user according to the User's input and
                                 // save in background.
-                                newFriend.setUser(user);
-                                newFriend.setName(user.getName());
+                                newFriend.setUser(mUser);
+                                newFriend.setName(mUser.getName());
                                 newFriend.saveInBackground();
                                 // Repopulate the friends list.
                                 safeFriendsAdapter.clear();
