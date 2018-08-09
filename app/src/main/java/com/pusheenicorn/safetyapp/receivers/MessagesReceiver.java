@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.classes.AlarmController;
+import com.pusheenicorn.safetyapp.AlarmController;
 import com.pusheenicorn.safetyapp.models.Keyword;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;

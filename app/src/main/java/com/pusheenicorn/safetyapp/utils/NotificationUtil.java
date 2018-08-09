@@ -11,11 +11,11 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
-import com.pusheenicorn.safetyapp.classes.AlarmController;
+import com.pusheenicorn.safetyapp.AlarmController;
 import com.pusheenicorn.safetyapp.activities.MainActivity;
 import com.pusheenicorn.safetyapp.activities.MapActivity;
 import com.pusheenicorn.safetyapp.R;
-import com.pusheenicorn.safetyapp.classes.NotificationPublisher;
+import com.pusheenicorn.safetyapp.NotificationPublisher;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;
@@ -125,8 +125,6 @@ public class NotificationUtil {
                         .addAction(R.drawable.check_outline,
                                 CheckinReceiver.ACTION_MESSAGE, pendingIntent)
                         .setOngoing(true);
-        // builder.setContentIntent(pendingIntent);
-        // builder.setAutoCancel(true);
         return builder.build();
     }
 
@@ -161,13 +159,6 @@ public class NotificationUtil {
      * @return: the generated notification.
      */
     public Notification getAlertNotification(String message) {
-//        Intent intent = new Intent(mContext, CheckinReceiver.class);
-//        intent.putExtra("actionName", KEY_ALERT);
-//        intent.putExtra(KEY_USER, mCurrentUser);
-//
-//        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, CheckinReceiver.SERVICE_ID,
-//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(mContext,
@@ -185,7 +176,6 @@ public class NotificationUtil {
         intent.putExtra("alarm", mAlarmController);
         intent.setAction(ACTION_STOP);
 
-        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, AlarmStopReceiver.SERVICE_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -198,18 +188,7 @@ public class NotificationUtil {
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .addAction(R.drawable.close_octagon_outline, ACTION_STOP, pendingIntent)
                         .setOngoing(true);
-        // builder.setContentIntent(pendingIntent);
-        // builder.setAutoCancel(true);
         return builder.build();
-    }
-
-    public void cancelAlarmNotification() {
-        AlarmManager alarmManager =
-                (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-        Intent cancelServiceIntent = new Intent(mContext, AlarmStopReceiver.class);
-        PendingIntent cancelServicePendingIntent = PendingIntent.getBroadcast(mContext,
-                AlarmStopReceiver.SERVICE_ID, cancelServiceIntent,0);
-        alarmManager.cancel(cancelServicePendingIntent);
     }
 
     public void cancelCheckinNotification() {
