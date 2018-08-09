@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MessagesReceiver extends WakefulBroadcastReceiver {
     //declare a static alarm controller that will be used to start and stop ringing a friend
-    public static AlarmController alarmController;
+    public static AlarmController ALARM_CONTROLELR;
     //declare the unique idea for the notification that is sent when the user receives a trigger word
     public static final int ID = 2027;
     //declare class variables
@@ -59,11 +59,10 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                             //check to see if the body of the message has the most recently created keyword
                             if (messageBody.equals(keyword)) {
                                 //create an alarm controller that will play a sound
-                                alarmController = new AlarmController(context);
-                                alarmController.playSound();
+                                ALARM_CONTROLELR = new AlarmController(context);
+                                ALARM_CONTROLELR.playSound();
                                 //create a notification that allows the user to stop the alarm from the push notification button
-                                NotificationUtil notificationUtil = new NotificationUtil(context,
-                                        alarmController);
+                                NotificationUtil notificationUtil = new NotificationUtil(context);
                                 notificationUtil.scheduleNotification(
                                         notificationUtil.getAlarmNotification(), ID,0);
                             }

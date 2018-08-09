@@ -40,6 +40,7 @@ public class HotlineActivity extends BaseActivity {
 
     /**
      * On creation, the buttons are found, context is set, and listeners are set.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -122,7 +123,7 @@ public class HotlineActivity extends BaseActivity {
         dialContactPhone(ALCOHOL_NUMBER);
     }
 
-    public void onSexualAssault (View view) {
+    public void onSexualAssault(View view) {
         // Call: 1-800-252-6465
         dialContactPhone(SEXUAL_ABUSE_NUMBER);
     }

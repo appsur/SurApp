@@ -31,14 +31,12 @@ public class User extends ParseUser {
     private final static String KEY_CHECKME = "checkMe";
     private final static String KEY_NOTIFY = "notify";
     private final static String KEY_ID = "objectId";
-//    private final static String KEYWORD = "keyword";
-
-//    public String getKeyword() {
-//        return getString(KEYWORD);
-//    }
-//    public void setKeyword(String keyword) {
-//        put(KEYWORD, keyword);
-//    }
+    private final static String KEY_HOUR = "Hourly";
+    private final static String KEY_DAY = "Daily";
+    private final static String KEY_WEEK = "Weekly";
+    private final static String KEY_EVERY_HOUR = "Every hour";
+    private final static String KEY_EVERY_DAY = "Every day";
+    private final static String KEY_EVERY_WEEK = "Every week";
 
     public Number getNotificationThreshold() {
         return getNumber(KEY_NOTIFY);
@@ -131,26 +129,26 @@ public class User extends ParseUser {
         int num = (int) getNumber(KEY_FREQUENCY);
         switch (num) {
             case 10080:
-                return "Every week";
+                return KEY_EVERY_WEEK;
             case 1440:
-                return "Every day";
+                return KEY_EVERY_DAY;
             case 60:
-                return "Every hour";
+                return KEY_EVERY_HOUR;
             default:
                 return "Error";
         }
     }
 
     public void setFrequency(String frequency) {
-        if (frequency.equals("Daily")) {
+        if (frequency.equals(KEY_DAY)) {
             put(KEY_FREQUENCY, 1440);
         }
 
-        else if (frequency.equals("Hourly")) {
+        else if (frequency.equals(KEY_HOUR)) {
             put(KEY_FREQUENCY, 60);
         }
 
-        else if (frequency.equals("Weekly")) {
+        else if (frequency.equals(KEY_WEEK)) {
             put(KEY_FREQUENCY, 10080);
         }
     }

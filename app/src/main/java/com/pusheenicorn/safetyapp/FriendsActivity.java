@@ -55,7 +55,7 @@ public class FriendsActivity extends BaseActivity {
     /**
      * This function is executed upon creation. It calls various methods to
      * set up the UI and populate adapters.
-     * @param savedInstanceState
+     * @param- savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

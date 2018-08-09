@@ -6,16 +6,11 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.pusheenicorn.safetyapp.AlarmController;
 import com.pusheenicorn.safetyapp.MessagesReceiver;
-import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     Context mContext;
-    public static final String PACKAGE_NAME = "com.pusheenicorn.safetyapp";
-    public static final String MAIN_CLASS_NAME = "com.pusheenicorn.safetyapp.MainActivity";
-    public static final String ACTION_STOP = "stop";
     public static final int SERVICE_ID = 20;
-    public static final String APP_NAME = "Sûr";
-    private NotificationUtil notificationUtil;
+    public static final String ACTION_STOP = "stop";
     AlarmController alarmController;
 
 
@@ -23,10 +18,9 @@ public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-
-            alarmController = MessagesReceiver.alarmController;
-            alarmController.stopSound();
-            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            context.sendBroadcast(it);
+        alarmController = MessagesReceiver.ALARM_CONTROLELR;
+        alarmController.stopSound();
+        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        context.sendBroadcast(it);
     }
 }

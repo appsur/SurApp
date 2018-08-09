@@ -3,7 +3,6 @@ package com.pusheenicorn.safetyapp.models;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -47,11 +46,6 @@ public class Friend extends ParseObject{
 
         public Friend.Query getTop() {
             setLimit(20);
-            return this;
-        }
-
-        public Query withUser() {
-            include("user");
             return this;
         }
     }

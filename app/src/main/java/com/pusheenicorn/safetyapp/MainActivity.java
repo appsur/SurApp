@@ -144,8 +144,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private PendingIntent pendingIntent;
     private AlarmManager manager;
     private PendingIntent eventPendingIntent;
-    private AlarmManager eventManager;
     private CalendarUtil calendarUtil;
+    public static final int YEAR_CONVERSION = 525600;
+    public static final int MONTH_CONVERSION = 43800;
+    public static final int DAY_CONVERSION = 1440;
+    public static final int HOUR_CONVERSION = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,14 +193,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
         Intent incoming = getIntent();
         boolean fromCalendar = incoming.getBooleanExtra(FROM_CALENDAR, false);
 
-        if (fromCalendar)
-        {
+        if (fromCalendar) {
             boolean start = incoming.getBooleanExtra(START_KEY, false);
             boolean end = incoming.getBooleanExtra(END_KEY, false);
 
             String date = incoming.getStringExtra(DATE_KEY);
-            if (start)
-            {
+            if (start) {
                 tvStartDate.setTextColor(Color.parseColor(BLACK));
                 tvStartDate.setText(date);
                 startString = date;
@@ -205,16 +206,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 monthStart = Integer.parseInt(dateArr[1].split("/")[0]);
                 setNewVisible();
                 // Restore previous state
-                if (endString != null)
-                {
+                if (endString != null) {
                     tvEndDate.setTextColor(Color.parseColor(BLACK));
                     tvEndDate.setText(endString);
                 }
                 restoreState();
-            }
-
-            else if (end)
-            {
+            } else if (end) {
                 tvEndDate.setTextColor(Color.parseColor("#000000"));
                 tvEndDate.setText(date);
                 endString = date;
@@ -222,8 +219,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 monthEnd = Integer.parseInt(dateArr[1].split("/")[0]);
                 setNewVisible();
                 // Restore previous state
-                if (startString != null)
-                {
+                if (startString != null) {
                     tvStartDate.setTextColor(Color.parseColor("#000000"));
                     tvStartDate.setText(startString);
                 }
@@ -239,47 +235,39 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private void startBackground() {
         context = getApplicationContext();
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context , FriendCheckReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0,
-                intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() ,
+        Intent intent = new Intent(context, FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+                intent, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
                 30000,
                 pendingIntent);
     }
 
     public void restoreState() {
 
-        if (nameString != null)
-        {
+        if (nameString != null) {
             etEventName.setText(nameString);
         }
-        if (locationString != null)
-        {
+        if (locationString != null) {
             etEventLocation.setText(locationString);
         }
-        if (startTimeString != null)
-        {
+        if (startTimeString != null) {
             etStartTime.setText(startTimeString);
         }
-        if (endTimeString != null)
-        {
+        if (endTimeString != null) {
             etEndTime.setText(endTimeString);
         }
-        if (isAMStart)
-        {
+        if (isAMStart) {
             btnAM2.setBackgroundColor(Color.parseColor(TEAL));
             btnPM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
-        }
-        else {
+        } else {
             btnAM2.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
             btnPM2.setBackgroundColor(Color.parseColor(TEAL));
         }
-        if (isAMEnd)
-        {
+        if (isAMEnd) {
             btnAM.setBackgroundColor(Color.parseColor(TEAL));
             btnPM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
-        }
-        else {
+        } else {
             btnAM.setBackgroundColor(Color.parseColor(LIGHT_GRAY));
             btnPM.setBackgroundColor(Color.parseColor(TEAL));
         }
@@ -368,11 +356,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
         });
     }
 
-    /**
-     * TODO -- ADD JAVADOC
-     *
-     * @param loc
-     */
     public void saveLocation(Location loc) {
         //retrieve location from best existing source
         double longitude = loc.getLongitude();
@@ -498,25 +481,22 @@ public class MainActivity extends BaseActivity implements LocationListener {
     }
 
 
-
-    public void friendsCheck(){
+    public void friendsCheck() {
 //        alert = new FriendAlert();
 //        currentUser = (User) ParseUser.getCurrentUser();
 //        alert.alertNeeded(context);
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context , FriendCheckReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0,
-                intent , 0);
+        Intent intent = new Intent(context, FriendCheckReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+                intent, 0);
         // execute a friend check every minute
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() ,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
                 60000,
                 pendingIntent);
     }
 
 
-
     /**
-     * TODO -- ADD JAVADOC
      */
     // this will open a prompt to let the user know that gps is not enabled on their phone and will
     // allow the user to turn it on
@@ -568,21 +548,18 @@ public class MainActivity extends BaseActivity implements LocationListener {
                                                 .getObjectId()))
                                 ) {
                             rawEvents.add(objects.get(i));
-                            if (!currentUser.getEventIds().contains(objects.get(i).getObjectId()))
-                            {
+                            if (!currentUser.getEventIds().contains(objects.get(i).getObjectId())) {
                                 currentUser.addEvent(objects.get(i));
                                 currentUser.saveInBackground();
                             }
                         }
                     }
-                    if (rawEvents != null)
-                    {
+                    if (rawEvents != null) {
                         removeExpiredEvents(rawEvents);
                         sortEvents(rawEvents);
                         events.clear();
 
-                        for (int i = 0; i < rawEvents.size(); i++)
-                        {
+                        for (int i = 0; i < rawEvents.size(); i++) {
                             events.add(rawEvents.get(i));
                             eventAdapter.notifyDataSetChanged();
                         }
@@ -615,8 +592,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
      * @param view: the checkin button
      */
     public void onCheckin(View view) {
-        if (isCheckedIn)
-        {
+        if (isCheckedIn) {
             // If the user is checking in again when they are already checked in, we need to
             // cancel the scheduled notification.
             notificationUtil.cancelCheckinNotification();
@@ -764,14 +740,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         String startTime = etStartTime.getText().toString();
         String endTime = etEndTime.getText().toString();
-        if (!startTime.contains(":") || startTime.length() < 4)
-        {
+        if (!startTime.contains(":") || startTime.length() < 4) {
             Toast.makeText(context, "Please enter a valid start time XX:XX",
                     Toast.LENGTH_LONG).show();
             return;
-        }
-        else if (!endTime.contains(":") || endTime.length() < 4)
-        {
+        } else if (!endTime.contains(":") || endTime.length() < 4) {
             Toast.makeText(context, "Please enter a valid start time XX:XX",
                     Toast.LENGTH_LONG).show();
             return;
@@ -820,11 +793,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public void onSelectStart(View view) {
         Intent intent = new Intent(MainActivity.this, CalendarChoiceActivity.class);
         intent.putExtra("start", true);
-        if (tvEndDate.getText() == null)
-        {
+        if (tvEndDate.getText() == null) {
             endString = null;
-        }
-        else {
+        } else {
             endString = tvEndDate.getText().toString();
         }
         saveState();
@@ -834,11 +805,9 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public void onSelectEnd(View view) {
         Intent intent = new Intent(MainActivity.this, CalendarChoiceActivity.class);
         intent.putExtra("end", true);
-        if (tvStartDate.getText() == null)
-        {
+        if (tvStartDate.getText() == null) {
             startString = null;
-        }
-        else {
+        } else {
             startString = tvStartDate.getText().toString();
         }
         saveState();
@@ -877,15 +846,14 @@ public class MainActivity extends BaseActivity implements LocationListener {
                 + calendarUtil.getPrettyDay(dateRaw[1]) + " "
                 + getMilitaryTime(time, startValue) + ":00 "
                 + dateVals[dateVals.length - 1] + " "
-                + calendarUtil.getPrettyYear(dateRaw[2]) + " " ;
+                + calendarUtil.getPrettyYear(dateRaw[2]) + " ";
         return ret;
     }
 
-    public String getMilitaryTime(String time, boolean startValue){
+    public String getMilitaryTime(String time, boolean startValue) {
         String milTime = time;
         String[] timeArr = time.split(":");
-        if ((startValue && !isAMStart) || (!startValue && !isAMEnd))
-        {
+        if ((startValue && !isAMStart) || (!startValue && !isAMEnd)) {
             int timeInt = Integer.parseInt(timeArr[0]) + 12;
             milTime = timeInt + ":" + timeArr[1];
         }
@@ -895,23 +863,19 @@ public class MainActivity extends BaseActivity implements LocationListener {
     // Once an event has expired, remove it from the list.
     public void removeExpiredEvents(List<Event> rawEvents) {
         ArrayList<Event> eventsToRemove = new ArrayList<Event>();
-        for (int i = 0; i < rawEvents.size(); i++)
-        {
+        for (int i = 0; i < rawEvents.size(); i++) {
             Event event = rawEvents.get(i);
-            if (isExpired(event))
-            {
+            if (isExpired(event)) {
                 eventsToRemove.add(event);
             }
         }
-        while(!eventsToRemove.isEmpty())
-        {
+        while (!eventsToRemove.isEmpty()) {
             rawEvents.remove(eventsToRemove.get(0));
             eventsToRemove.remove(0);
         }
     }
 
-    public boolean isExpired(Event event)
-    {
+    public boolean isExpired(Event event) {
         String end = "";
         try {
             end = calendarUtil.getRelativeTimeAgo(event.fetchIfNeeded().getString(END_TIME_KEY));
@@ -919,13 +883,13 @@ public class MainActivity extends BaseActivity implements LocationListener {
             e.printStackTrace();
         }
 
-        if (end.contains(PAST_ID) || isExpiredEvent(event)){
+        if (end.contains(PAST_ID) || isExpiredEvent(event)) {
             return true;
         }
         return false;
     }
 
-    public boolean isExpiredEvent (Event event) {
+    public boolean isExpiredEvent(Event event) {
 
         // Define format type.
         DateFormat df = new SimpleDateFormat("MM/dd/yy/HH/mm");
@@ -937,11 +901,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
         String[] currDateArr = df.format(currDate).split("/");
         String[] endDatePreArr = new String[8];
         try {
-            endDatePreArr = event.fetchIfNeeded().getString("endTime").split(" |:");
+            endDatePreArr = event.fetchIfNeeded().getString(END_TIME_KEY).split(" |:");
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
-
         String year = endDatePreArr[7].substring(2, 4);
 
         String month = calendarUtil.getValMonth(endDatePreArr[1]) + "";
@@ -956,10 +919,12 @@ public class MainActivity extends BaseActivity implements LocationListener {
             endDateInts[i] = Integer.parseInt(endDateArr[i]);
         }
 
-        int trueCurr = (currDateInts[0] * 43800) + (currDateInts[1] * 1440)
-                + (currDateInts[2] * 525600) + (currDateInts[3] * 60) + currDateInts[4];
-        int trueEnd = (endDateInts[0] * 43800) + (endDateInts[1] * 1440)
-                + (endDateInts[2] * 525600) + (endDateInts[3] * 60) + endDateInts[4];
+        int trueCurr = (currDateInts[0] * MONTH_CONVERSION) + (currDateInts[1] * DAY_CONVERSION)
+                + (currDateInts[2] * YEAR_CONVERSION) + (currDateInts[3] * HOUR_CONVERSION) +
+                currDateInts[4];
+        int trueEnd = (endDateInts[0] * MONTH_CONVERSION) + (endDateInts[1] * DAY_CONVERSION)
+                + (endDateInts[2] * YEAR_CONVERSION) + (endDateInts[3] * HOUR_CONVERSION) +
+                endDateInts[4];
 
         // If the current time is greater than the end time, the event has expired.
         if (trueCurr > trueEnd) {
@@ -968,7 +933,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
         return false;
     }
-
     public void sortEvents(List<Event> inputEvents) {
         Collections.sort(inputEvents);
     }
