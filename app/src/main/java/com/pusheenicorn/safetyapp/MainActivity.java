@@ -55,7 +55,6 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements LocationListener {
-
     // Declare views
     private BottomNavigationView bottomNavigationView;
     private ImageButton ibEvents;
@@ -84,7 +83,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     private ImageButton btnSelectStart;
     private ImageButton btnSelectEnd;
     ImageButton ibVideo;
-
     //variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
@@ -106,7 +104,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     public Criteria criteria;
     public String bestProvider;
     public FriendAlert alert;
-
     // Declare adapter, events list, and events adapter
     // Declare adapter, events list, and events adapter.
     private EventAdapter eventAdapter;
@@ -123,7 +120,6 @@ public class MainActivity extends BaseActivity implements LocationListener {
     NotificationUtil notificationUtil;
     CheckinUtil checkinUtil;
     AlarmManager alarmManager;
-
     // Variables for saving state between restarts
     public static String startString;
     public static String endString;
@@ -244,8 +240,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
         context = getApplicationContext();
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context , FriendCheckReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 30000,
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0,
+                intent , 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() ,
+                30000,
                 pendingIntent);
     }
 
@@ -410,9 +408,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
                     checkin = objects.get(0);
-                    Date date = checkin.getCreatedAt();                     // Get date of creation.
+                    Date date = checkin.getCreatedAt();         // Get date of creation.
                     String formatedDate = DATE_FORMAT.format(date);
-                    String newString = calendarUtil.getRelativeTimeAgo(formatedDate);    // Get relative time.
+                    String newString =
+                            calendarUtil.getRelativeTimeAgo(formatedDate); // Get relative time.
                     formatedDate = getFormattedStringDate(formatedDate);    // Format nicely.
                     tvRelativeCheckinTime.setText(newString);               // Update TV's.
                     tvCheckinTime.setText(formatedDate);
@@ -506,9 +505,11 @@ public class MainActivity extends BaseActivity implements LocationListener {
 //        alert.alertNeeded(context);
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context , FriendCheckReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0, intent , 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context , 0,
+                intent , 0);
         // execute a friend check every minute
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() , 60000,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP , System.currentTimeMillis() ,
+                60000,
                 pendingIntent);
     }
 
@@ -561,8 +562,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
                     ArrayList<Event> rawEvents = new ArrayList<Event>();
                     for (int i = objects.size() - 1; i > -1; i--) {
                         if (currentUser.getEvents() != null &&
-                                (currentUser.getEventIds().contains(objects.get(i).getObjectId()) ||
-                                        objects.get(i).getUsersIds().contains(currentUser.getObjectId()))
+                                (currentUser.getEventIds().contains(objects.get(i)
+                                        .getObjectId()) ||
+                                        objects.get(i).getUsersIds().contains(currentUser
+                                                .getObjectId()))
                                 ) {
                             rawEvents.add(objects.get(i));
                             if (!currentUser.getEventIds().contains(objects.get(i).getObjectId()))
