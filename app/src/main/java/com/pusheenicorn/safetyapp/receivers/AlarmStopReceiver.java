@@ -10,6 +10,7 @@ import com.pusheenicorn.safetyapp.MessagesReceiver;
 public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     Context mContext;
     public static final int SERVICE_ID = 20;
+    public static final String ACTION_STOP = "stop";
     AlarmController alarmController;
 
 
@@ -17,10 +18,9 @@ public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-
-            alarmController = MessagesReceiver.ALARM_CONTROLELR;
-            alarmController.stopSound();
-            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            context.sendBroadcast(it);
+        alarmController = MessagesReceiver.ALARM_CONTROLELR;
+        alarmController.stopSound();
+        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        context.sendBroadcast(it);
     }
 }
