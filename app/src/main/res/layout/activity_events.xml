@@ -138,6 +138,7 @@
                 android:id="@+id/ibBanner"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:background="@color/white"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="76dp"
