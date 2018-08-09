@@ -24,7 +24,6 @@ public class ParseApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Friend.class);
         ParseObject.registerSubclass(Checkin.class);
@@ -32,12 +31,10 @@ public class ParseApp extends Application{
         ParseObject.registerSubclass(Perm.class);
         ParseObject.registerSubclass(Alert.class);
         ParseObject.registerSubclass(Keyword.class);
-
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
-
         final Parse.Configuration configuration = new Parse.Configuration.Builder(this)
                 .applicationId("sur-app")
                 .clientKey("pusheenicorn")
