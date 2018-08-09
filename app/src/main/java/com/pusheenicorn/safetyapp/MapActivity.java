@@ -266,8 +266,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-
     }
 
 
@@ -332,8 +330,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     .build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-
-        } else {
 
         }
     }
