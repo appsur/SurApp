@@ -51,9 +51,9 @@ import java.util.Random;
 
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+    //variable declaring the max length of the randomly generated sequence
     public static final int MAX_LENGTH = 16;
-    //    public static String KEYWORD;
-    // Declare views
+    //declare bottom navigation view
     BottomNavigationView bottomNavigationView;
 
     //variables for the draw out menu
@@ -61,11 +61,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-//    String keyword;
 
     ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
     List<Friend> friendList;
 
+    //declaring variables for various elements on the screen
     TextView tvBlocked;
     ImageView ivBlur;
     ImageButton ibPhone;
@@ -73,9 +73,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ImageButton ibSMS;
     EditText etMessage;
     ImageButton ibUnfriend;
-    Boolean isRinging;
     Context context;
     TextView alarm_text;
+
+    //variables for ringing the user if allowed
+    String userNum;
+    boolean ringable;
 
     private SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -101,29 +104,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ToggleButton tbMike;
 
     NotificationUtil notif;
-    String userNum;
-    boolean ringable;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
-//    IntentFilter intentFilter;
-//
-//    private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            keyword = intent.getExtras().getString("keyword");
-////        }
-//        }
-//    };
-
-//    String KEYWORD = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
 
-//        KEYWORD = random();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("SMS_RECEIVED_ACTION");
@@ -147,6 +135,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        //check to see if the user is ringable and set the boolean to the correct value
         try {
             ringable = friendUser.fetch().getBoolean("ringable");
         } catch (ParseException e) {
@@ -180,22 +169,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
             mapFragment.getView().setVisibility(View.INVISIBLE);
         }
-        // Logic for bottom navigation view
+
+        //initializing the bottom navigation view and setting the correct page and destinations
         bottomNavigationView = findViewById(R.id.bottom_navigation_more);
         bottomNavigationView.setSelectedItemId(R.id.action_friends);
         setNavigationDestinations(MapActivity.this, bottomNavigationView);
 
         initializeNavItems(mNavItems);
-        // DrawerLayout
+        //initializing the slide out menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Populate the Navigtion Drawer with options
         mDrawerPane = (RelativeLayout) findViewById(R.id.drawerPane);
         mDrawerList = (ListView) findViewById(R.id.navList);
         DrawerListAdapter adapter = new DrawerListAdapter(this, mNavItems);
         mDrawerList.setAdapter(adapter);
 
-        // Drawer Item click listeners
+        //setting the correct destinations for each item in the drawer list
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -231,11 +219,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
+        //initializng the alert button and label
         ibAlert = findViewById(R.id.ibAlert);
         alarm_text = findViewById(R.id.alarm_text);
+        //setting the default for the alert to be not visible
         ibAlert.setVisibility(View.INVISIBLE);
         alarm_text.setVisibility(View.INVISIBLE);
-
+        //if the user is ringable, show the button and label
         if (ringable) {
             ibAlert.setVisibility(View.VISIBLE);
             alarm_text.setVisibility(View.VISIBLE);
@@ -246,17 +236,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         ibAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE);
-//                // Check if the notification policy access has been granted for the app.
-//                if (!mNotificationManager.isNotificationPolicyAccessGranted()) {
-//                    Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-//                    startActivity(intent);
-//                }
+                //send a message with a randomly generated trigger word
                 sendSMS();
-
             }
         });
+        //initialize the views needed for sending a message to the friend
         ibSMS = findViewById(R.id.ibSMS);
         etMessage = findViewById(R.id.etMessage);
         ibSMS.setOnClickListener(new View.OnClickListener() {
@@ -379,6 +363,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
     }
 
+    /**
+     * send a message with the random key that is created, and create a new keyword parse object to be saved and accessed from other classes
+     */
     private void sendSMS() {
         String tempKey = random();
         Intent intent = new Intent(this, MapActivity.class);
@@ -392,9 +379,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         keyword.saveInBackground();
     }
 
+    /**
+     *
+     * @return a string of random length and characters that acts as a trigger word that is sent to the user to enable an alarm
+     */
     public static String random() {
+        //create a random object that generates a stream of somewhat random numbers
         Random generator = new Random();
+        //initialize a stringbuilder to create the sequence
         StringBuilder randomStringBuilder = new StringBuilder();
+        //setting the random length of the string (max 16 characters)
         int randomLength = generator.nextInt(MAX_LENGTH);
         char tempChar;
         for (int i = 0; i < randomLength; i++) {
