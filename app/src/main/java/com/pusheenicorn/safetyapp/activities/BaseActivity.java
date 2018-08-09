@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,11 +10,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.R;
 
 import java.util.ArrayList;
 

@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.pusheenicorn.safetyapp.AlarmController;
-import com.pusheenicorn.safetyapp.MessagesReceiver;
+import com.pusheenicorn.safetyapp.classes.AlarmController;
 
 public class AlarmStopReceiver extends WakefulBroadcastReceiver{
     Context mContext;

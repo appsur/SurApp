@@ -11,11 +11,11 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
-import com.pusheenicorn.safetyapp.AlarmController;
-import com.pusheenicorn.safetyapp.MainActivity;
-import com.pusheenicorn.safetyapp.MapActivity;
-import com.pusheenicorn.safetyapp.NotificationPublisher;
+import com.pusheenicorn.safetyapp.classes.AlarmController;
+import com.pusheenicorn.safetyapp.activities.MainActivity;
+import com.pusheenicorn.safetyapp.activities.MapActivity;
 import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.classes.NotificationPublisher;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.AlarmStopReceiver;

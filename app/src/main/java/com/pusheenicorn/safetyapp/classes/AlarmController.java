@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;//package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.classes;//package com.pusheenicorn.safetyapp;
 
 import android.content.Context;
 import android.media.AudioAttributes;
@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcelable;
+
+import com.pusheenicorn.safetyapp.R;
 
 import java.io.DataInputStream;
 import java.io.IOException;

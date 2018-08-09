@@ -1,6 +1,5 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.widget.EditText;
 
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.R;
 
 public class LoginActivity extends AppCompatActivity {
     //declare variables

@@ -43,7 +43,7 @@ public class CheckinReceiver extends WakefulBroadcastReceiver {
     public static final int YEARS_TO_SECONDS = 525600;
     public static final int MINS_TO_SECONDS = 60;
     public static final String PACKAGE_NAME = "com.pusheenicorn.safetyapp";
-    public static final String MAIN_CLASS_NAME = "com.pusheenicorn.safetyapp.MainActivity";
+    public static final String MAIN_CLASS_NAME = "com.pusheenicorn.safetyapp.activities.MainActivity";
     public static final String APP_NAME = "Sûr";
     public static final String NOTIFICATION_MESSAGE = "Please remember to check in!";
     public static final String ACTION_MESSAGE = "Check in now!";

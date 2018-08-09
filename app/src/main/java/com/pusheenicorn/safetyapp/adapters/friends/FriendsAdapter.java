@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.MapActivity;
+import com.pusheenicorn.safetyapp.activities.MapActivity;
 import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Friend;

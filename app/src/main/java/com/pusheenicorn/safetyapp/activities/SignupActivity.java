@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -25,6 +25,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 

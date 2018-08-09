@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.R;
 
 public class HomeActivity extends AppCompatActivity {
     //declared variables for the buttons available on the page

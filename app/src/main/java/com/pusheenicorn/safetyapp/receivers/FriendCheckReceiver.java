@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

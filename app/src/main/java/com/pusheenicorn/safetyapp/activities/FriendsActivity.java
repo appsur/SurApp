@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
@@ -40,7 +40,7 @@ public class FriendsActivity extends BaseActivity {
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
-    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     //declare adapter and associated variables for both safe and alert friends
     FriendsAdapter safeFriendsAdapter;

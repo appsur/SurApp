@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.adapters;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.activities.EventsActivity;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 

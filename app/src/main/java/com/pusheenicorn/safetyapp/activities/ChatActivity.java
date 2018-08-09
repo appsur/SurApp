@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
@@ -53,7 +54,7 @@ public class ChatActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
-    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     //created a broadcast receiver to receive sms messages by responding to system-wide broadcast announcements
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {

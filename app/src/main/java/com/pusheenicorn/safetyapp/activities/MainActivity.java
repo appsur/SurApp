@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.Manifest;
 import android.app.AlarmManager;
@@ -38,11 +38,14 @@ import com.parse.FindCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.adapters.EventAdapter;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.FriendAlert;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.receivers.CheckinReceiver;
+import com.pusheenicorn.safetyapp.receivers.FriendCheckReceiver;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
 import com.pusheenicorn.safetyapp.utils.NotificationUtil;

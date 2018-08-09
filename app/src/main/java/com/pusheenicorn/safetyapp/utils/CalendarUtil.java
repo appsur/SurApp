@@ -2,8 +2,7 @@ package com.pusheenicorn.safetyapp.utils;
 
 import android.text.format.DateUtils;
 
-import com.pusheenicorn.safetyapp.MainActivity;
-import com.pusheenicorn.safetyapp.models.Checkin;
+import com.pusheenicorn.safetyapp.activities.MainActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

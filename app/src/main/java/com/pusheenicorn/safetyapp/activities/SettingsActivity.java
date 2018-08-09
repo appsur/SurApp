@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +33,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.User;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +51,7 @@ public class SettingsActivity extends BaseActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
 
-    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
+    ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
     // Define profile image view.
     private ImageView ibProfileImage;

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.ChatActivity;
+import com.pusheenicorn.safetyapp.activities.ChatActivity;
 import com.pusheenicorn.safetyapp.R;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
