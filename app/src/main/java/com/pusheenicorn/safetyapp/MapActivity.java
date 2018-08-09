@@ -147,7 +147,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        ringable = friendUser.getRingable();
+        try {
+            ringable = friendUser.fetch().getBoolean("ringable");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if (trackable) {
             mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);

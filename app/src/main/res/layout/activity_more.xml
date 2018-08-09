@@ -230,9 +230,11 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="171dp"
                 android:elevation="3dp"
+                android:fontFamily="@font/arimo"
                 android:text="USER HAS DISABLED TRACKING"
                 android:textAppearance="@android:style/TextAppearance.Large"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvUnfriend"
