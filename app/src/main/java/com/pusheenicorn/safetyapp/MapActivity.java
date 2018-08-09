@@ -142,7 +142,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         friendUser = (User) friend.getUser();
         userNum = friendUser.getPhonNumber();
-        trackable = friendUser.getTrackable();
+        try {
+            trackable = friendUser.fetch().getBoolean("trackable");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         ringable = friendUser.getRingable();
 
         if (trackable) {
