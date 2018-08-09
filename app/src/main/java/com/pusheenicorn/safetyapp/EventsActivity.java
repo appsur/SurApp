@@ -43,7 +43,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsActivity extends BaseActivity {
-
+    //declare the bottom navigation view
+    private BottomNavigationView bottomNavigationView;
+    // Variables for the draw out menu
+    ListView mDrawerList;
+    RelativeLayout mDrawerPane;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
     //declared views
     private ImageButton ibBanner;
     private ImageButton ibAddMembers;
@@ -52,16 +59,9 @@ public class EventsActivity extends BaseActivity {
     private TextView tvEventTitle;
     private EditText tvMessage;
     private EditText etUsername;
-    private BottomNavigationView bottomNavigationView;
     private Button btnSend;
     // Declare notification utility
     NotificationUtil notificationUtil;
-    // Variables for the draw out menu
-    ListView mDrawerList;
-    RelativeLayout mDrawerPane;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    ArrayList<MainActivity.NavItem> mNavItems = new ArrayList<MainActivity.NavItem>();
     static final int REQUEST_CODE = 1;
     static final String TAG = "Success";
     private static int RESULT_LOAD_IMAGE = 1;
@@ -92,6 +92,7 @@ public class EventsActivity extends BaseActivity {
     /**
      * This is executed on creation. It performs all the tasks
      * that need to be done in the "main" for this activity.
+     *
      * @param savedInstanceState- the base bundle
      */
     @Override
@@ -228,8 +229,8 @@ public class EventsActivity extends BaseActivity {
      * the activity
      *
      * @param requestCode- the request code attached to the result
-     * @param resultCode- the result code attached to the result
-     * @param data- the data passed back.
+     * @param resultCode-  the result code attached to the result
+     * @param data-        the data passed back.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -276,8 +277,9 @@ public class EventsActivity extends BaseActivity {
 
     /**
      * This function converts the bitmap into a parse file
+     *
      * @param imageBitmap
-     * @return
+     * @return a parse file of the image that is uploaded
      */
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -289,6 +291,7 @@ public class EventsActivity extends BaseActivity {
 
     /**
      * This function makes the functionality for adding a new user visible.
+     *
      * @param view
      */
     public void onAddUser(View view) {
@@ -315,10 +318,8 @@ public class EventsActivity extends BaseActivity {
             ibAddMembers.setVisibility(View.VISIBLE);
             ibSearch.setVisibility(View.INVISIBLE);
             return;
-        }
-        else if (currentEvent.getUserNames() != null &&
-                currentEvent.getUserNames().contains(username))
-        {
+        } else if (currentEvent.getUserNames() != null &&
+                currentEvent.getUserNames().contains(username)) {
             Toast.makeText(this, "Sorry this user is already part of this event!",
                     Toast.LENGTH_LONG).show();
         }
@@ -368,6 +369,7 @@ public class EventsActivity extends BaseActivity {
     /**
      * This function is called when the send alert button is clicked. It
      * sets the visibility to add an event.
+     *
      * @param view- the sendAlert Button to toggle visibility
      */
     public void onSendAlert(View view) {
@@ -378,6 +380,7 @@ public class EventsActivity extends BaseActivity {
     /**
      * This function is called when the send button is clicked. It sends
      * an event alert to the group.
+     *
      * @param view- the button
      */
     public void onSend(View view) {
@@ -405,6 +408,7 @@ public class EventsActivity extends BaseActivity {
     /**
      * This function links to the Settings page when the settings button
      * is clicked.
+     *
      * @param view- the button
      */
     public void onSettings(View view) {

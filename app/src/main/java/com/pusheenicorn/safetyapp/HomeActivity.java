@@ -24,14 +24,26 @@ public class HomeActivity extends AppCompatActivity {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }
+        logInButton = findViewById(R.id.btnLogIn);
+        signUpButton = findViewById(R.id.btnSignUp);
     }
 
+    /**
+     * take user to the login activity
+     *
+     * @param view notify which object is clicked
+     */
     public void onLogInClick(View view) {
         //start intent to take user to the login activity class
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
+    /**
+     * take user to the sign up activity
+     *
+     * @param view notify which object is clicked
+     */
     public void onSignUpClick(View view) {
         //start intent to take user to the sign up activity class
         Intent signUp = new Intent(this, SignupActivity.class);

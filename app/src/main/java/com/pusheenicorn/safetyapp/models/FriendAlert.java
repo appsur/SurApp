@@ -30,7 +30,10 @@ public class FriendAlert {
     User primary;
     String their_id;
     String my_id;
-    int cycle;
+    public int cycle;
+    public int missed;
+    public int time;
+    public Date date;
 
     private int timeSinceLastCheckin (Date prevDate, User user) {
         // Define format type.
@@ -46,19 +49,16 @@ public class FriendAlert {
             currDateInts[i] = Integer.parseInt(currDateArr[i]);
             prevDateInts[i] = Integer.parseInt(prevDateArr[i]);
         }
-
         // true curr - truePrev is the number of minutes ago that the user checked in
         int trueCurr = (currDateInts[0] * MONTHS_TO_SECONDS) + (currDateInts[1] * DAYS_TO_SECONDS)
                 + (currDateInts[2] * YEARS_TO_SECONDS) + (currDateInts[3] * MINS_TO_SECONDS) + currDateInts[4];
         int truePrev = (prevDateInts[0] * MONTHS_TO_SECONDS) + (prevDateInts[1] * DAYS_TO_SECONDS)
                 + (prevDateInts[2] * YEARS_TO_SECONDS) + (prevDateInts[3] * MINS_TO_SECONDS) + prevDateInts[4];
         // threshold is the length of a user's checkin cycle
-
         return (trueCurr - truePrev);
     }
 
     public void alertNeeded(final Context context) {
-
         currentUser = (User) ParseUser.getCurrentUser();
         friends = currentUser.getFriends();
         notif = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -68,7 +68,6 @@ public class FriendAlert {
             e.printStackTrace();
         }
         if (friends != null && !friends.isEmpty()) {
-
             //iterate through friends and check each friend's check in status
             for (final Friend fr : friends) {
                 try {
@@ -90,15 +89,14 @@ public class FriendAlert {
                             if (e == null) {
                                 // Get the checkin object and format its date
                                 final Checkin checkin = objects.get(0);
-                                Date date = checkin.getCreatedAt();
+                                date = checkin.getCreatedAt();
                                 cycle = (int) myFriend.getNumber("checkin");
-                                int missed = (int) myFriend.getNotificationThreshold();
-                                int time = timeSinceLastCheckin(date, myFriend);
+                                missed = (int) myFriend.getNotificationThreshold();
+                                time = timeSinceLastCheckin(date, myFriend);
                                 if (time > (missed * cycle)) {
                                     NotificationUtil notificationUtil = new NotificationUtil(context, currentUser, fr);
                                     notificationUtil.createNotificationChannel();
                                     notificationUtil.scheduleNotification(notificationUtil.getReminderNotification(fr), 0);
-                                    //notif.notify(0, getNotification(currentUser , myFriend , context));
                                 }
                             } else {
                                 e.printStackTrace();

@@ -42,14 +42,18 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void logIn (String username, String password) {
+    /**
+     * @param username the username that current user inputs
+     * @param password password that current user inputs
+     */
+    public void logIn(String username, String password) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, com.parse.ParseException e) {
                 if (e == null) {
-                    Log.d("LoginActivity","Login Successful");
+                    Log.d("LoginActivity", "Login Successful");
                     Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                            MainActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
