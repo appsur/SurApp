@@ -14,6 +14,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.telephony.SmsManager;
+import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -237,22 +238,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 //send a message with a randomly generated trigger word
-                sendSMS();
+                sendAlarm();
             }
         });
         //initialize the views needed for sending a message to the friend
         ibSMS = findViewById(R.id.ibSMS);
         etMessage = findViewById(R.id.etMessage);
         ibSMS.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                String SENT = "Message Sent!!";
-                String DELIVERED = "Message Delivered!";
-                PendingIntent sentPI = PendingIntent.getBroadcast(context, 0, new Intent(SENT), 0);
-                PendingIntent delieveredPI = PendingIntent.getBroadcast(context, 0, new Intent(DELIVERED), 0);
-                SmsManager sms = SmsManager.getDefault();
-                sms.sendTextMessage(friendUser.getPhonNumber(), null, String.valueOf(etMessage.getText()), sentPI, delieveredPI);
+                sendSMS(friendUser.getPhonNumber(), String.valueOf(etMessage.getText()));
             }
         });
         notif = new NotificationUtil(MapActivity.this, currentUser);
@@ -366,7 +361,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     /**
      * send a message with the random key that is created, and create a new keyword parse object to be saved and accessed from other classes
      */
-    private void sendSMS() {
+    private void sendAlarm() {
         String tempKey = random();
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
@@ -398,5 +393,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         return randomStringBuilder.toString();
     }
 
+    /**
+     * code for sending a message to a user
+     */
+    private void sendSMS(String phoneNumber, String message) {
+        String SENT = "Message Sent!!";
+        String DELIVERED = "Message Delivered!";
+        PendingIntent sentPI = PendingIntent.getBroadcast(context, 0, new Intent(SENT), 0);
+        PendingIntent delieveredPI = PendingIntent.getBroadcast(context, 0, new Intent(DELIVERED), 0);
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, sentPI, delieveredPI);
+    }
 
 }
