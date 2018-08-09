@@ -94,10 +94,6 @@
             android:name="com.pusheenicorn.safetyapp.FriendCheckReceiver"
             android:exported="false">
         </receiver>
-        <receiver
-            android:name="com.pusheenicorn.safetyapp.EventAlertReceiver"
-            android:exported="false">
-        </receiver>
 
         <service
             android:name=".receivers.EventEmergencyService"

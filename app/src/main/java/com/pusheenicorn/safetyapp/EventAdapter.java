@@ -1,51 +1,47 @@
 package com.pusheenicorn.safetyapp;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.parse.FindCallback;
-import com.parse.ParseUser;
-import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.Event;
-import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.CalendarUtil;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.pusheenicorn.safetyapp.MainActivity.TWITTER_FORMAT;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     List<Event> mEvents;
     Context context;
     public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+    public static final String START = "STARTS: ";
+    public static final String END = "       ENDS: ";
     CalendarUtil calendarUtil;
 
-    // constructor
+    /**
+     * This is a constructor for the class
+     * @param events- the events to link this adapter to
+     */
     public EventAdapter(List<Event> events) {
         mEvents = events;
     }
 
+    /**
+     * This function is executed on creation. It initializes the fields and returns
+     * a viewholder for the items.
+     *
+     * @param parent- the layout parent
+     * @param viewType- the type of view
+     * @return a viewholder
+     */
     @NonNull
     @Override
     public EventAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,6 +53,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         return viewHolder;
     }
 
+    /**
+     * Set the start and end times for the event, in addition to the location and name.
+     *
+     * @param holder- the holder for the current item
+     * @param position- the position of the current item
+     */
     @Override
     public void onBindViewHolder(@NonNull EventAdapter.ViewHolder holder, int position) {
         // get the data according to position
@@ -64,7 +66,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.tvEventName.setText(event.getName());
         holder.tvEventLocation.setText(event.getLocation());
 
-        String time = "STARTS: " + calendarUtil.getRelativeTimeAgo(event.getStart()) + "       ENDS: "
+        String time = START + calendarUtil.getRelativeTimeAgo(event.getStart()) + END
                 + calendarUtil.getRelativeTimeAgo(event.getEnd());
         if (time == null)
         {
@@ -75,31 +77,38 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         }
     }
 
+    /**
+     * This function returns the length of the recycler view's list.
+     *
+     * @return the length of the recycler view's list
+     */
     @Override
     public int getItemCount() {
         return mEvents.size();
     }
 
-    // Clean all elements of the recycler
+    /**
+     * This function clears the recycler view.
+     */
     public void clear() {
         mEvents.clear();
         notifyDataSetChanged();
     }
 
-    // Add a list of items -- change to type used
-    public void addAll(List<Event> list) {
-        mEvents.addAll(list);
-        notifyDataSetChanged();
-    }
-    // create ViewHolder class
+    /**
+     * This is a new view holder class.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tvEventName) TextView tvEventName;
         @BindView(R.id.tvEventLocation) TextView tvEventLocation;
         @BindView(R.id.tvStartTime) TextView tvTime;
 
+        /**
+         * This constructor takes an item an intializes a view holder for it.
+         * @param itemView
+         */
         public ViewHolder(View itemView) {
-
             super(itemView);
             ButterKnife.bind(this, itemView);
             int position = getAdapterPosition();
@@ -112,8 +121,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * A function that executes the item on click to go to the
+         * event detail page for that event item.
+         * @param v- the view that was clicked on
+         */
         @Override
-        // when the user clicks on a row, show DetailsActivity for the selected movie
         public void onClick(View v) {
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
