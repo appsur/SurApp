@@ -7,10 +7,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.widget.Toast;
-
-import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
 
 import java.io.DataInputStream;
 import java.io.IOException;

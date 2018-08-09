@@ -3,7 +3,6 @@ package com.pusheenicorn.safetyapp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -29,7 +28,6 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     public int count = 0;
     public int MAX = 10;
     ArrayList<Event> events;
-
 
     @Override
     public void onReceive(Context context , Intent intent ) {

@@ -54,11 +54,8 @@ public class EventsActivity extends BaseActivity {
     private EditText etUsername;
     private BottomNavigationView bottomNavigationView;
     private Button btnSend;
-
-
     // Declare notification utility
     NotificationUtil notificationUtil;
-
     // Variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
@@ -70,7 +67,6 @@ public class EventsActivity extends BaseActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     Event currentEvent;
     Context context;
-
     // Declare adapters.
     EventUsersAdapter eventUsersAdapter;
     ArrayList<User> users;
@@ -78,12 +74,10 @@ public class EventsActivity extends BaseActivity {
     EventFriendsAdapter eventFriendsAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvFriends;
-
     // Declare current user and instantiate fields for later use.
     User currentUser;
     User user;
     List<Alert> alerts;
-
     // Declare some keys.
     private static String KEY_USERNAME = "username";
     private static String KEY_BANNER = "bannerimage";
@@ -92,7 +86,14 @@ public class EventsActivity extends BaseActivity {
     public static String INTENT_USER_KEY = "user";
     public static String SERVICE_KEY = "service";
     public static String ALERT_EVENT = "eventAlert";
+    public static String IMAGE_KEY = "bannerimage";
+    public static String IMAGE_NAME = "image_file.png";
 
+    /**
+     * This is executed on creation. It performs all the tasks
+     * that need to be done in the "main" for this activity.
+     * @param savedInstanceState- the base bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +102,12 @@ public class EventsActivity extends BaseActivity {
         initializeViews();                          // Initialize all views.
         initializeNavigation();                     // Initialize navigation logic.
         allowBannerFunctionality();                 // Allow banner to change.
-        // getEmergencyNotifications();                // Get any notification.
         loadEventUsers();                           // Populate the recycler views appropriately.
     }
 
+    /***
+     * This functions sets the functionality for changing the banner image.
+     */
     public void allowBannerFunctionality() {
         ibBanner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +121,9 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * This function initializes the navigation view for the activity.
+     */
     public void initializeNavigation() {
         initializeNavItems(mNavItems);
         // DrawerLayout
@@ -139,10 +145,13 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * This function finds all the views and saves them
+     * for future use.
+     */
     public void initializeViews() {
         // Get the current user
         currentUser = (User) ParseUser.getCurrentUser();
-
         // Unwrap event
         currentEvent = (Event) getIntent().getParcelableExtra(KEY_EVENT);
         tvEventTitle = findViewById(R.id.tvEventTitle);
@@ -158,24 +167,19 @@ public class EventsActivity extends BaseActivity {
         setNavigationDestinations(EventsActivity.this, bottomNavigationView);
         btnSend = (Button) findViewById(R.id.btnSend);
         notificationUtil = new NotificationUtil(context, currentUser);
-
         rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
         users = new ArrayList<User>();
         rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
         friends = new ArrayList<Friend>();
-
         eventFriendsAdapter = new EventFriendsAdapter(friends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
-
         eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser, eventFriendsAdapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
         rvUsers.setAdapter(eventUsersAdapter);
-
         //set banner to allow user to access gallery
         ibBanner = (ImageButton) findViewById(R.id.ibBanner);
         ParseFile bannerImage = currentEvent.getParseFile(KEY_BANNER);
-
         if (bannerImage != null) {
             //load image using glide
             Glide.with(EventsActivity.this).load(bannerImage.getUrl())
@@ -184,38 +188,9 @@ public class EventsActivity extends BaseActivity {
         etUsername.setSelection(etUsername.getText().length());
     }
 
-    public void getEmergencyNotifications() {
-        alerts = currentEvent.getAlerts();
-        if (alerts == null) {
-            return;
-        } else {
-            for (int i = 0; i < alerts.size(); i++) {
-                Alert curr = alerts.get(i);
-                if (curr.getSeenBy() == null ||
-                        !curr.getSeenBy().contains(currentUser.getObjectId())) {
-                    // Schedule a notification for this alert
-                    try {
-                        String message = curr.fetchIfNeeded().getString(Alert.KEY_USERNAME) +
-                                " says: " + curr.getMessage();
-                        notificationUtil
-                                .scheduleNotification(notificationUtil
-                                        .getAlertNotification(message), 0);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    // Mark it as seen by this user
-                    curr.addSeenBy(currentUser.getObjectId());
-                    // Save the alert state to Parse
-                    try {
-                        curr.save();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
+    /**
+     * This function populates the events page.
+     */
     public void loadEventUsers() {
         final User.Query userQuery = new User.Query();
         userQuery.getTop();
@@ -248,11 +223,19 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * This function is called once the implicit intent for the camera returns to
+     * the activity
+     *
+     * @param requestCode- the request code attached to the result
+     * @param resultCode- the result code attached to the result
+     * @param data- the data passed back.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        //if request code matches and the data is not null, set the image bitmap to be that of the picture
+        // if request code matches and the data is not null, set the image bitmap to be
+        // that of the picture
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             //get file path from the URI
             Uri selectedImage = data.getData();
@@ -261,21 +244,20 @@ public class EventsActivity extends BaseActivity {
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-
             //set the banner to the image that is selected by the user
             ibBanner.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             //convert bitmap to a parsefile
-            final ParseFile parseFile = conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            final ParseFile parseFile = conversionBitmapParseFile(
+                    BitmapFactory.decodeFile(picturePath));
             //save in background so the image updates correctly
             parseFile.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     currentEvent.setBannerImage(parseFile);
-                    currentEvent.put("bannerimage", parseFile);
+                    currentEvent.put(IMAGE_KEY, parseFile);
                     currentEvent.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -292,15 +274,23 @@ public class EventsActivity extends BaseActivity {
         }
     }
 
-    //converts bitmap to parse file
+    /**
+     * This function converts the bitmap into a parse file
+     * @param imageBitmap
+     * @return
+     */
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.png", imageByte);
+        ParseFile parseFile = new ParseFile(IMAGE_NAME, imageByte);
         return parseFile;
     }
 
+    /**
+     * This function makes the functionality for adding a new user visible.
+     * @param view
+     */
     public void onAddUser(View view) {
         etUsername.setVisibility(View.VISIBLE);
         ibAddMembers.setVisibility(View.INVISIBLE);
@@ -308,8 +298,13 @@ public class EventsActivity extends BaseActivity {
     }
 
 
+    /**
+     * This function is called when the user hits the search button
+     * to search for a user to add to the event.
+     *
+     * @param view- the search button to be clicked.
+     */
     public void onSearchUser(View view) {
-
         String username = etUsername.getText().toString();
         // Do not allow user to add themselves to an event that they are already part of!
         if (username == currentUser.getUsername()) {
@@ -321,13 +316,12 @@ public class EventsActivity extends BaseActivity {
             ibSearch.setVisibility(View.INVISIBLE);
             return;
         }
-
-        else if (currentEvent.getUserNames() != null && currentEvent.getUserNames().contains(username))
+        else if (currentEvent.getUserNames() != null &&
+                currentEvent.getUserNames().contains(username))
         {
             Toast.makeText(this, "Sorry this user is already part of this event!",
                     Toast.LENGTH_LONG).show();
         }
-
         // Allow them to enter other users as long as they can provide a valid username.
         final User.Query userQuery = new User.Query();
         userQuery.getTop().whereEqualTo(KEY_USERNAME, username);
@@ -356,7 +350,6 @@ public class EventsActivity extends BaseActivity {
                             }
                         });
                     }
-
                     // If the username is invalid, toast a message to this effect.
                     else {
                         Toast.makeText(context, "Sorry, you entered an invalid username.",
@@ -372,11 +365,21 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * This function is called when the send alert button is clicked. It
+     * sets the visibility to add an event.
+     * @param view- the sendAlert Button to toggle visibility
+     */
     public void onSendAlert(View view) {
         tvMessage.setVisibility(View.VISIBLE);
         btnSend.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This function is called when the send button is clicked. It sends
+     * an event alert to the group.
+     * @param view- the button
+     */
     public void onSend(View view) {
         String message = tvMessage.getText().toString();
         final Alert alert = new Alert();
@@ -390,7 +393,6 @@ public class EventsActivity extends BaseActivity {
                 currentEvent.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        Toast.makeText(context, "hello", Toast.LENGTH_LONG).show();
                         tvMessage.setVisibility(View.INVISIBLE);
                         btnSend.setVisibility(View.INVISIBLE);
                         // getEmergencyNotifications();
@@ -400,6 +402,11 @@ public class EventsActivity extends BaseActivity {
         });
     }
 
+    /**
+     * This function links to the Settings page when the settings button
+     * is clicked.
+     * @param view- the button
+     */
     public void onSettings(View view) {
         Intent intent = new Intent(EventsActivity.this, SettingsActivity.class);
         startActivity(intent);
