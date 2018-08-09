@@ -2,11 +2,10 @@ package com.pusheenicorn.safetyapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,9 +13,12 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
+/**
+ * This class holds the activity for hotlines.
+ */
 public class HotlineActivity extends BaseActivity {
 
-    //declare constants for the phone numbers for hotlines
+    // Declare constants for the phone numbers for hotlines
     private static final String SUICIDE_NUMBER = "18008277571";
     private static final String DOMESTIC_NUMBER = "18007997233";
     private static final String SPANISH_NUMBER = "18009426908";
@@ -27,16 +29,19 @@ public class HotlineActivity extends BaseActivity {
     private static final String SOCIAL_SERVICES_NUMBER = "18003423720";
     private static final String SEXUAL_ABUSE_NUMBER = "18006564673";
     private static final String TELEPHONE_KEY = "tel";
-    //declare bottom navigation bar
+    // Declare bottom navigation bar
     private BottomNavigationView bottomNavigationView;
-
-    //variables for the draw out menu
+    // Variables for the draw out menu
     ListView mDrawerList;
     RelativeLayout mDrawerPane;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
 
+    /**
+     * On creation, the buttons are found, context is set, and listeners are set.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,12 @@ public class HotlineActivity extends BaseActivity {
         });
 
     }
+
+    /*
+     * The following functions set hardcoded string phone numbers to dial when the appropriate
+     * hotline is clicked.
+     */
+
 
     public void onSettings(View view) {
         Intent i = new Intent(HotlineActivity.this, SettingsActivity.class);

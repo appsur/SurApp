@@ -410,9 +410,10 @@ public class MainActivity extends BaseActivity implements LocationListener {
             public void done(List<Checkin> objects, com.parse.ParseException e) {
                 if (e == null) {
                     checkin = objects.get(0);
-                    Date date = checkin.getCreatedAt();                     // Get date of creation.
+                    Date date = checkin.getCreatedAt();         // Get date of creation.
                     String formatedDate = DATE_FORMAT.format(date);
-                    String newString = calendarUtil.getRelativeTimeAgo(formatedDate);    // Get relative time.
+                    String newString =
+                            calendarUtil.getRelativeTimeAgo(formatedDate); // Get relative time.
                     formatedDate = getFormattedStringDate(formatedDate);    // Format nicely.
                     tvRelativeCheckinTime.setText(newString);               // Update TV's.
                     tvCheckinTime.setText(formatedDate);
