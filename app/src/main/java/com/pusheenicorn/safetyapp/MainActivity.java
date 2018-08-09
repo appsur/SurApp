@@ -781,6 +781,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
         event.setStart(startTotalTime);
         event.setEnd(endTotalTime);
         event.addUser(currentUser);
+
         event.saveInBackground(new SaveCallback() {
             @Override
             public void done(com.parse.ParseException e) {
