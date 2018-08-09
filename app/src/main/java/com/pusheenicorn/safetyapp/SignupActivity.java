@@ -6,19 +6,20 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class SignupActivity extends AppCompatActivity {
     //declare variables
@@ -109,6 +111,20 @@ public class SignupActivity extends AppCompatActivity {
             public void done(com.parse.ParseException e) {
                 if (e == null) {
                     checkin.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        final User.Query userQuery = new User.Query();
+        userQuery.whereEqualTo("objectId", "WIfsetxLFu");
+        userQuery.findInBackground(new FindCallback<User>() {
+            @Override
+            public void done(List<User> objects, ParseException e) {
+                if (e == null) {
+                    final User newUser = objects.get(0);
+                    user.put("primaryContact", newUser);
                 } else {
                     e.printStackTrace();
                 }

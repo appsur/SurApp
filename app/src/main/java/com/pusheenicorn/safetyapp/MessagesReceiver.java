@@ -59,7 +59,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                                         alarmController);
 //                                notificationUtil.cancelAlarmNotification();
                                 notificationUtil.scheduleNotification(
-                                        notificationUtil.getAlarmNotification(), 999,0);
+                                        notificationUtil.getAlarmNotification(), 2027,0);
                                 Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
                             }
                         }
