@@ -282,7 +282,8 @@ public class SettingsActivity extends BaseActivity {
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(SettingsActivity.this);
                     mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Uri notification = RingtoneManager.getDefaultUri(
+                            RingtoneManager.TYPE_NOTIFICATION);
                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                     r.play();
                     currentUser.saveInBackground();
@@ -301,12 +302,6 @@ public class SettingsActivity extends BaseActivity {
 
         if (currentUser.getRingable()) {
             tbRing.setChecked(true);
-//            NotificationCompat.Builder mBuilder =
-//                    new NotificationCompat.Builder(SettingsActivity.this);
-//            mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//            r.play();
         } else {
             tbRing.setChecked(false);
         }
@@ -559,7 +554,8 @@ public class SettingsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //if request code matches and the data is not null, set the image bitmap to be that of the picture
+        //if request code matches and the data is not null, set the image bitmap to be that
+        // of the picture
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             //get file path from the URI
             Uri selectedImage = data.getData();
@@ -576,7 +572,8 @@ public class SettingsActivity extends BaseActivity {
             //set the banner to the image that is selected by the user
             ibProfileImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             //convert bitmap to a parsefile
-            final ParseFile parseFile = conversionBitmapParseFile(BitmapFactory.decodeFile(picturePath));
+            final ParseFile parseFile = conversionBitmapParseFile(
+                    BitmapFactory.decodeFile(picturePath));
             currentUser.setProfileImage(parseFile);
             //save in background so the image updates correctly
             parseFile.saveInBackground(new SaveCallback() {
