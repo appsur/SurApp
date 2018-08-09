@@ -17,10 +17,14 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 import java.util.List;
 
 public class MessagesReceiver extends WakefulBroadcastReceiver {
+    //declare a static alarm controller that will be used to start and stop ringing a friend
+    public static AlarmController alarmController;
+    //declare the unique idea for the notification that is sent when the user receives a trigger word
+    public static final int ID = 2027;
+    //declare class variables
     User mCurrentUser;
     Keyword messageComp;
     String messageBody = "";
-    public static AlarmController alarmController;
 
     @Override
     public void onReceive(final Context context, Intent intent) {
@@ -28,7 +32,6 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
         Bundle bundle = intent.getExtras();
         SmsMessage[] messages;
         String str = "";
-//        String messageBody = "";
         mCurrentUser = (User) ParseUser.getCurrentUser();
 
         if (bundle != null) {
@@ -42,8 +45,9 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                 str += messages[i].getMessageBody();
                 str += "\n";
             }
-            //display message
+            //display message on the screen for users to see
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+            //create a keyword query to see if a random trigger code has been sent to the user through the ring friend feature
             final Keyword.Query keywordQuery = new Keyword.Query();
             keywordQuery.findInBackground(new FindCallback<Keyword>() {
                 @Override
@@ -52,21 +56,21 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                         if (objects != null) {
                             messageComp = objects.get(objects.size() - 1);
                             String keyword = messageComp.getKeyword();
+                            //check to see if the body of the message has the most recently created keyword
                             if (messageBody.equals(keyword)) {
+                                //create an alarm controller that will play a sound
                                 alarmController = new AlarmController(context);
                                 alarmController.playSound();
+                                //create a notification that allows the user to stop the alarm from the push notification button
                                 NotificationUtil notificationUtil = new NotificationUtil(context,
                                         alarmController);
-//                                notificationUtil.cancelAlarmNotification();
                                 notificationUtil.scheduleNotification(
-                                        notificationUtil.getAlarmNotification(), 2027,0);
-                                Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show();
+                                        notificationUtil.getAlarmNotification(), ID,0);
                             }
                         }
                     }
                 }
             });
-
 
             //send a broadcast intent to update the Sms received in a TextView
             Intent broadcastIntent = new Intent();
