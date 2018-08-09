@@ -251,7 +251,7 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
      */
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.v(LOGTAG, "surfaceChanged");
-        
+
         if (!recording && usecamera) {
             if (previewRunning) {
                 camera.stopPreview();

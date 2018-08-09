@@ -75,13 +75,20 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    //check permissions for user to upload an image
+    /**
+     * check permissions for user to upload an image
+     */
     private void checkPermissionsPlease() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 0);
         }
     }
 
+    /**
+     * takes user information and creates a new user (sets defaults for parameters that are not set in sign up)
+     *
+     * @param v current view
+     */
     public void signUpOnClick(View v) {
         //declare and initialize variable sfor sign up
         String username = etUsername.getText().toString();
