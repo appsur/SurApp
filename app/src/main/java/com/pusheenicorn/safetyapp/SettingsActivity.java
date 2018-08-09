@@ -104,6 +104,13 @@ public class SettingsActivity extends BaseActivity {
 
     private Context context;
 
+    private final static String KEY_HOUR = "Hourly";
+    private final static String KEY_DAY = "Daily";
+    private final static String KEY_WEEK = "Weekly";
+    private final static String KEY_EVERY_HOUR = "Every hour";
+    private final static String KEY_EVERY_DAY = "Every day";
+    private final static String KEY_EVERY_WEEK = "Every week";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -388,9 +395,9 @@ public class SettingsActivity extends BaseActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
-                    user.setFrequency("Hourly");
+                    user.setFrequency(KEY_HOUR);
                     user.saveInBackground();
-                    tvCheckinFrequency.setText("Every hour");
+                    tvCheckinFrequency.setText(KEY_EVERY_HOUR);
                     tvNum.setText(num);
                     isClock = !isClock;
                 } else {
@@ -413,7 +420,7 @@ public class SettingsActivity extends BaseActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
-                    user.setFrequency("Weekly");
+                    user.setFrequency(KEY_WEEK);
                     user.saveInBackground();
                     tvCheckinFrequency.setText(user.getFrequency());
                     tvNum.setText(num);
@@ -438,7 +445,7 @@ public class SettingsActivity extends BaseActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     final User user = (User) ParseUser.getCurrentUser();
-                    user.setFrequency("Daily");
+                    user.setFrequency(KEY_DAY);
                     user.saveInBackground();
                     tvCheckinFrequency.setText(user.getFrequency());
                     tvNum.setText(num);

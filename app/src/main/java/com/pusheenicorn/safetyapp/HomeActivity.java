@@ -1,9 +1,8 @@
 package com.pusheenicorn.safetyapp;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -21,7 +20,6 @@ public class HomeActivity extends AppCompatActivity {
         //initialized the parse user
         ParseUser currentUser = ParseUser.getCurrentUser();
         //makes sure that login or sign up occurs only if there is no current user
-
         if (currentUser != null) {
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);

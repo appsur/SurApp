@@ -93,7 +93,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 number.substring(3, 6) + "-" +
                 number.substring(6, 10);
         holder.tvPhoneNumber.setText(number);
-//
+
 //        // Get the friend's last checkin id
 //        Toast.makeText(context, friend.getUser().getObjectId(), Toast.LENGTH_LONG).show();
 

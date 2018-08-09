@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
     List<Event> mEvents;
     Context context;
-    public static final String TWITTER_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
     public static final String START = "STARTS: ";
     public static final String END = "       ENDS: ";
     CalendarUtil calendarUtil;
