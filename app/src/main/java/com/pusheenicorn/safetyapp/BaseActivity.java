@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
                                 return true;
                             case R.id.action_emergency:
                                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                                        "6304862146", null)));
+                                        "811", null)));
                                 return true;
                             case R.id.action_friends:
                                 Intent friendsAction = new Intent(activity,

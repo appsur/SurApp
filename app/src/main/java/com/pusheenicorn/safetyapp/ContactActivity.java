@@ -35,16 +35,17 @@ import com.pusheenicorn.safetyapp.models.User;
 import java.util.ArrayList;
 
 public class ContactActivity extends BaseActivity {
-    //declared variables
+    //declared bottom navigation view
     BottomNavigationView bottomNavigationView; //bottom navigation view that allows user to toggle between screens
+    //declared views
     ImageButton btnSendMessage; //button that sends the sms message
     EditText etMessage; //text field that can be edited to include user's message
     EditText etPhoneNumber; //text field for the phone number that the user wishes to message or call
     String phonenumber; //phone number that should be contacted
     TextView tvFriendsTitle; //title to display name of current activity
     ImageButton btnCall; //button that allows user to call given phone number
-    // Define global current user.
-    User currentUser;
+    // declare current user
+    User mCurrentUser;
     static final int MAX_SMS_MESSAGE_LENGTH = 160; //max length for a message before it is split
 
     //variables for the draw out menu
@@ -60,10 +61,12 @@ public class ContactActivity extends BaseActivity {
     ArrayList<Friend> friends;
     RecyclerView rvChatFriendList;
 
+    //initializing variables to populate a chat button for each friend object
     ChatAdapter chatAdapter;
     ArrayList<Friend> chats;
     RecyclerView rvChatList;
 
+    //variables for adding functionality where two recycler views scroll together
     NestedScrollView nvMine;
 
     private RecyclerView.OnScrollListener myScrollListener;
@@ -83,13 +86,13 @@ public class ContactActivity extends BaseActivity {
         btnSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check to make sure the phone number is not invalid input (null or too long)
                 if (etPhoneNumber.getText().toString() == null ||
-                        etPhoneNumber.getText().toString().length() != 10)
-                {
+                        etPhoneNumber.getText().toString().length() != 10) {
                     Toast.makeText(ContactActivity.this,
                             "You must enter a phone number first!", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
+                    //send message to the given phone number with the pre-set text
                     sendSMS(etPhoneNumber.getText().toString(), etMessage.getText().toString());
                     Toast.makeText(ContactActivity.this, "Message sent!",
                             Toast.LENGTH_LONG).show();
@@ -111,8 +114,8 @@ public class ContactActivity extends BaseActivity {
         nvMine = findViewById(R.id.nvMine);
 
         // Get the current user and cast appropriately.
-        currentUser = (User) ParseUser.getCurrentUser();
-        phonenumber = currentUser.getPhonNumber();
+        mCurrentUser = (User) ParseUser.getCurrentUser();
+        phonenumber = mCurrentUser.getPhonNumber();
         etMessage = findViewById(R.id.etMessage);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         //initialize the bottom navigation view
@@ -158,7 +161,7 @@ public class ContactActivity extends BaseActivity {
         rvChatFriendList.setTag(0);
         rvChatList.setTag(1);
 
-       myScrollListener = new RecyclerView.OnScrollListener() {
+        myScrollListener = new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -189,15 +192,12 @@ public class ContactActivity extends BaseActivity {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         };
-
         rvChatFriendList.addOnScrollListener(myScrollListener);
         rvChatList.addOnScrollListener(myScrollListener);
 
@@ -205,12 +205,19 @@ public class ContactActivity extends BaseActivity {
         rvChatList.addOnItemTouchListener(myTouchListener);
     }
 
+    /**
+     * check to see if permissions are enabled, and if not, to prompt user to enable the permissions
+     */
     private void checkPermissionsPlease() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 0);
         }
     }
 
+    /**
+     * @param phoneNumber phone number to send sms to
+     * @param message     the message that should be sent through SMS
+     */
     private void sendSMS(String phoneNumber, String message) {
         Log.v("phoneNumber", phoneNumber);
         Log.v("Message", message);
@@ -228,22 +235,32 @@ public class ContactActivity extends BaseActivity {
         }
     }
 
-    //method for dialing the contact number provided
+    /**
+     * function to allow user to dial a given phone number
+     *
+     * @param phoneNumber the phone number that should be called
+     */
     private void dialContactPhone(final String phoneNumber) {
         startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
     }
 
-
+    /**
+     * takes user to the settings page
+     *
+     * @param view button that takes user to settings
+     */
     public void onSettings(View view) {
         Intent intent = new Intent(ContactActivity.this, SettingsActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * populate the friends adapter and chat adapter to display a list of friends that allow access to chat pages
+     */
     public void populateFriendList() {
-        if (currentUser != null && currentUser.getFriends() != null)
-        {
-            for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
-                Friend newFriend = currentUser.getFriends().get(i);
+        if (mCurrentUser != null && mCurrentUser.getFriends() != null) {
+            for (int i = 0; i < mCurrentUser.getFriendUsers().size(); i++) {
+                Friend newFriend = mCurrentUser.getFriends().get(i);
                 friends.add(newFriend);
                 chats.add(newFriend);
                 friendAdapter.notifyDataSetChanged();
