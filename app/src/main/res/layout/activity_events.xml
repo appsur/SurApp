@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/tvMembersTitle"
-                android:layout_marginTop="298dp"
+                android:layout_marginTop="296dp"
                 android:fontFamily="@font/arimo"
                 android:text="FRIENDS"
                 android:textColor="#000000"
