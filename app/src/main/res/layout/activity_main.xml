@@ -211,7 +211,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvEvents"
-                android:layout_width="334dp"
+                android:layout_width="327dp"
                 android:layout_height="303dp"
                 android:layout_above="@+id/bottom_navigation"
                 android:layout_alignStart="@+id/etStartTime"
