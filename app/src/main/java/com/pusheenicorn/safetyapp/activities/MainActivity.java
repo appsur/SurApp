@@ -564,8 +564,8 @@ public class MainActivity extends BaseActivity implements LocationListener {
 
                         for (int i = 0; i < rawEvents.size(); i++) {
                             events.add(rawEvents.get(i));
-                            eventAdapter.notifyDataSetChanged();
                         }
+                        eventAdapter.notifyDataSetChanged();
                     }
                 } else {
                     e.printStackTrace();

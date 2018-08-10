@@ -210,14 +210,12 @@ public class EventsActivity extends BaseActivity {
                                         .indexOf(objects.get(i).getObjectId());
                                 Friend newFriend = currentUser.getFriends().get(index);
                                 friends.add(newFriend);
-                                eventFriendsAdapter.notifyDataSetChanged();
                             } else {
                                 users.add(objects.get(i));
-                                // notify the adapter
-                                eventUsersAdapter.notifyDataSetChanged();
                             }
                         }
                     }
+                    eventUsersAdapter.notifyDataSetChanged();
                 } else {
                     e.printStackTrace();
                 }
