@@ -383,9 +383,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         StringBuilder randomStringBuilder = new StringBuilder();
         //setting the random length of the string (max 16 characters)
         int randomLength = generator.nextInt(MAX_LENGTH);
-        while (randomLength == 0) {
-            randomLength = generator.nextInt(MAX_LENGTH);
-        }
         char tempChar;
         for (int i = 0; i < randomLength; i++) {
             tempChar = (char) (generator.nextInt(96) + 32);
