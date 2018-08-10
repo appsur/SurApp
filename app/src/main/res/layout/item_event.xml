@@ -8,12 +8,13 @@
 
     <TextView
         android:id="@+id/tvEventName"
-        android:layout_width="171dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:fontFamily="@font/arimo"
+        android:paddingLeft="10dp"
         android:paddingTop="5dp"
         android:text="NAME"
         android:textColor="@color/teal"
@@ -22,13 +23,13 @@
 
     <TextView
         android:id="@+id/tvEventLocation"
-        android:layout_width="166dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/tvEventName"
         android:layout_below="@+id/tvEventName"
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/arimo"
-        android:paddingLeft="0dp"
+        android:paddingLeft="10dp"
         android:text="LOCATION"
         android:textAlignment="textStart"
         android:textColor="@android:color/black" />
@@ -41,6 +42,7 @@
         android:layout_alignParentStart="true"
         android:fontFamily="@font/arimo"
         android:paddingBottom="6dp"
+        android:paddingLeft="10dp"
         android:text="START TIME"
         android:textColor="@color/black" />
 
@@ -132,7 +134,16 @@
         android:layout_below="@+id/tvStartTime"
         android:fontFamily="@font/arimo"
         android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
         android:text="END TIME"
         android:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/rectangle_shape" />
 
 </RelativeLayout>
