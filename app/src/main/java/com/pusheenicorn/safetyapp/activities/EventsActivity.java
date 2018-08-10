@@ -31,8 +31,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.R;
-import com.pusheenicorn.safetyapp.adapters.events.EventFriendsAdapter;
 import com.pusheenicorn.safetyapp.adapters.events.EventUsersAdapter;
+import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Alert;
 import com.pusheenicorn.safetyapp.models.Event;
 import com.pusheenicorn.safetyapp.models.Friend;
@@ -72,7 +72,7 @@ public class EventsActivity extends BaseActivity {
     EventUsersAdapter eventUsersAdapter;
     ArrayList<User> users;
     RecyclerView rvUsers;
-    EventFriendsAdapter eventFriendsAdapter;
+    FriendsAdapter eventFriendsAdapter;
     ArrayList<Friend> friends;
     RecyclerView rvFriends;
     // Declare current user and instantiate fields for later use.
@@ -173,7 +173,7 @@ public class EventsActivity extends BaseActivity {
         users = new ArrayList<User>();
         rvFriends = (RecyclerView) findViewById(R.id.rvFriends);
         friends = new ArrayList<Friend>();
-        eventFriendsAdapter = new EventFriendsAdapter(friends);
+        eventFriendsAdapter = new FriendsAdapter(friends);
         rvFriends.setLayoutManager(new LinearLayoutManager(this));
         rvFriends.setAdapter(eventFriendsAdapter);
         eventUsersAdapter = new EventUsersAdapter(users, friends, currentUser, eventFriendsAdapter);
