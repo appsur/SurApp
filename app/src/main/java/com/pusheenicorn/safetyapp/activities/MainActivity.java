@@ -410,7 +410,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                         ibCheckin.setImageResource(R.drawable.check_outline);
                         // Send an immediate notification.
                         notificationUtil.scheduleNotification(
-                                notificationUtil.getNotification(), 0);
+                                notificationUtil.getNotification(), 463, 0);
                     }
                 } else {
                     e.printStackTrace();
@@ -633,7 +633,7 @@ public class MainActivity extends BaseActivity implements LocationListener {
                                 // Schedule the next notification.
                                 int mins = (int) currentUser.getNumber("checkin");
                                 notificationUtil.scheduleNotification(
-                                        notificationUtil.getNotification(), mins *
+                                        notificationUtil.getNotification(), 439,mins *
                                                 CheckinReceiver.SECOND_TO_MILLIS);
                             } else {
                                 e.printStackTrace();
