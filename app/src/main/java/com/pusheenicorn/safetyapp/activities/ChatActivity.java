@@ -30,22 +30,7 @@ import com.pusheenicorn.safetyapp.models.User;
 import java.util.ArrayList;
 
 public class ChatActivity extends BaseActivity {
-    //declare necessary variables for fields on the screen
-    Button btnSendText;
-    EditText etTextMessage;
-    IntentFilter intentFilter;
-    TextView tvTextMessage;
-    TextView tbTitle;
-
-    //initializing variables to populate the friend recycler view
-    FriendsAdapter friendAdapter;
-    ArrayList<Friend> friends;
-    RecyclerView rvChatFriendList;
-
-    //initializing the current user
-    User currentUser;
-
-    // Declare views
+    //declare views
     BottomNavigationView bottomNavigationView;
 
     //variables for the draw out menu
@@ -55,18 +40,30 @@ public class ChatActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
 
     ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
+    //declare necessary variables for fields on the screen
+    Button btnSendText;
+    EditText etTextMessage;
+    TextView tvTextMessage;
+    TextView tbTitle;
 
-    //created a broadcast receiver to receive sms messages by responding to system-wide broadcast announcements
+    //intent filter for declaring the correct intent
+    IntentFilter intentFilter;
+
+    //initializing variables to populate the friend recycler view
+    FriendsAdapter friendAdapter;
+    ArrayList<Friend> friends;
+    RecyclerView rvChatFriendList;
+
+    //initializing the current user
+    User mCurrentUser;
+
+    //created a broadcast receiver to receive SMS messages by responding to system-wide broadcast announcements
     private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //display message in the text view
             tvTextMessage = (TextView) findViewById(R.id.tvTextMessage);
-            //TODO - figure this out?? if the check is added then the message will not display :O
-//            if (intent.equals("SMS_RECEIVED_ACTION")) {
-            //set text view with the message and phone number from the reply
             tvTextMessage.setText(intent.getExtras().getString("message"));
-//        }
         }
     };
 
@@ -109,7 +106,6 @@ public class ChatActivity extends BaseActivity {
             public void onClick(View v) {
                 //code for sending the message
                 String message = etTextMessage.getText().toString();
-                //TODO - allow clicking on the friend object to take user to chat activity and auto-populate phone number
                 Intent intent = getIntent();
                 String number = intent.getStringExtra("number");
                 sendMessage(number, message);
@@ -125,9 +121,10 @@ public class ChatActivity extends BaseActivity {
         rvChatFriendList.setAdapter(friendAdapter);
 
         //initialize current user
-        currentUser = (User) ParseUser.getCurrentUser();
+        mCurrentUser = (User) ParseUser.getCurrentUser();
         //populate the friends list
         populateFriendList();
+        //set the title for the page to be the friend's name
         tbTitle = findViewById(R.id.tbTitle);
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
@@ -135,14 +132,22 @@ public class ChatActivity extends BaseActivity {
 
     }
 
+    /**
+     * function for populating the friend list adapter
+     */
     public void populateFriendList() {
-        for (int i = 0; i < currentUser.getFriendUsers().size(); i++) {
-            Friend newFriend = currentUser.getFriends().get(i);
+        for (int i = 0; i < mCurrentUser.getFriendUsers().size(); i++) {
+            Friend newFriend = mCurrentUser.getFriends().get(i);
             friends.add(newFriend);
             friendAdapter.notifyDataSetChanged();
         }
     }
 
+    /**
+     * function that sends a typed message to a specified phone number
+     * @param number the phone number
+     * @param message message that is sent to the user
+     */
     protected void sendMessage(String number, String message) {
         String SENT = "Message Sent!!";
         String DELIVERED = "Message Delivered!";
@@ -157,18 +162,26 @@ public class ChatActivity extends BaseActivity {
         etTextMessage.setText(" ");
     }
 
+    /**
+     * register the receiver
+     */
     protected void onResume() {
-        //register the receiver
         registerReceiver(intentReceiver, intentFilter);
         super.onResume();
     }
 
+    /**
+     * unregister the receiver
+     */
     protected void onPause() {
-        //unregister the receiver
         unregisterReceiver(intentReceiver);
         super.onPause();
     }
 
+    /**
+     * allow user to access the settings page from the chat activity
+     * @param view the view that leads to settings page
+     */
     public void onSettings(View view) {
         Intent intent = new Intent(ChatActivity.this, SettingsActivity.class);
         startActivity(intent);
