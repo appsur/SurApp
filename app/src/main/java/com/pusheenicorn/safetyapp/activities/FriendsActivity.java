@@ -126,8 +126,7 @@ public class FriendsActivity extends BaseActivity {
      */
     public void populateList() {
         //check to make sure that the current user isn't null
-        if (mCurrentUser != null && mCurrentUser.getFriends() != null)
-        {
+        if (mCurrentUser != null && mCurrentUser.getFriends() != null) {
             for (int i = 0; i < mCurrentUser.getFriendUsers().size(); i++) {
                 Friend newFriend = null;
                 try {
@@ -146,13 +145,13 @@ public class FriendsActivity extends BaseActivity {
                 //if the user is safe, add them to the safe friends recycler view
                 if (isSafe) {
                     safeFriends.add(newFriend);
-                    safeFriendsAdapter.notifyDataSetChanged();
                     //else add the user to the alert friends recycler view
                 } else {
                     alertFriends.add(newFriend);
-                    alertFriendsAdapter.notifyDataSetChanged();
                 }
             }
+            safeFriendsAdapter.notifyDataSetChanged();
+            alertFriendsAdapter.notifyDataSetChanged();
         }
     }
 

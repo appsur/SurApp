@@ -139,8 +139,8 @@ public class ChatActivity extends BaseActivity {
         for (int i = 0; i < mCurrentUser.getFriendUsers().size(); i++) {
             Friend newFriend = mCurrentUser.getFriends().get(i);
             friends.add(newFriend);
-            friendAdapter.notifyDataSetChanged();
         }
+        friendAdapter.notifyDataSetChanged();
     }
 
     /**
