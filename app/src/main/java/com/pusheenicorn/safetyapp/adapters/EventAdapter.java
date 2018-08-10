@@ -67,15 +67,29 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
         holder.tvEventName.setText(event.getName());
         holder.tvEventLocation.setText(event.getLocation());
 
-        String time = START + calendarUtil.getRelativeTimeAgo(event.getStart()) + END
+        String time = calendarUtil.getRelativeTimeAgo(event.getStart()) + END
                 + calendarUtil.getRelativeTimeAgo(event.getEnd());
         if (time == null)
         {
-            holder.tvTime.setText(event.getStart() + " to " + event.getEnd());
+            holder.tvStartTime.setText("TBD");
+            holder.tvStartTime.setText("TBD");
         }
         else {
-            holder.tvTime.setText(time);
+            String start = "STARTS: " + calendarUtil.getRelativeTimeAgo(event.getStart());
+            holder.tvStartTime.setText(start);
+            String end = "ENDS: " + calendarUtil.getRelativeTimeAgo(event.getEnd());
+            holder.tvEndTime.setText(end);
         }
+
+        String startMonth = event.getStart().substring(4, 7);
+        String endMonth = event.getEnd().substring(4, 7);
+        String startDay = event.getStart().substring(8, 10);
+        String endDay = event.getEnd().substring(8,10);
+
+        holder.tvDayE.setText(endDay);
+        holder.tvDayS.setText(startDay);
+        holder.tvMonthE.setText(endMonth);
+        holder.tvMonthS.setText(startMonth);
     }
 
     /**
@@ -103,7 +117,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder>{
 
         @BindView(R.id.tvEventName) TextView tvEventName;
         @BindView(R.id.tvEventLocation) TextView tvEventLocation;
-        @BindView(R.id.tvStartTime) TextView tvTime;
+        @BindView(R.id.tvStartTime) TextView tvStartTime;
+        @BindView(R.id.tvEndTime) TextView tvEndTime;
+        @BindView(R.id.tvMonthE) TextView tvMonthE;
+        @BindView(R.id.tvMonthS) TextView tvMonthS;
+        @BindView(R.id.tvDayE) TextView tvDayE;
+        @BindView(R.id.tvDayS) TextView tvDayS;
 
         /**
          * This constructor takes an item an intializes a view holder for it.
