@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.R;
+import com.pusheenicorn.safetyapp.adapters.friends.FriendsAdapter;
 import com.pusheenicorn.safetyapp.models.Friend;
 import com.pusheenicorn.safetyapp.models.User;
 
@@ -28,11 +29,11 @@ public class EventUsersAdapter extends RecyclerView.Adapter<EventUsersAdapter.Vi
     List<Friend> mFriends;
     Context context;
     User mCurrentUser;
-    EventFriendsAdapter mEventFriendsAdapter;
+    FriendsAdapter mEventFriendsAdapter;
 
     // constructor
     public EventUsersAdapter(List<User> users, List<Friend> friends, User currentUser,
-                             EventFriendsAdapter eventFriendsAdapter) {
+                             FriendsAdapter eventFriendsAdapter) {
         mUsers = users;
         mFriends = friends;
         mCurrentUser = currentUser;
