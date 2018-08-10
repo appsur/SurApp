@@ -24,32 +24,40 @@ import com.pusheenicorn.safetyapp.R;
 
 import java.util.ArrayList;
 
-public class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class BaseActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
     }
 
-    public void setNavigationDestinations (final Activity activity, final BottomNavigationView bottomNavigationView) {
+    /**
+     * @param activity             the activity that the bottom navigation view is being added to
+     * @param bottomNavigationView the bottom navigation view that has been initialized in the given activity
+     */
+    public void setNavigationDestinations(final Activity activity, final BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
+                            //home activity
                             case R.id.action_person:
                                 Intent goHome = new Intent(activity, MainActivity.class);
                                 startActivity(goHome);
                                 return true;
+                            //contact activity
                             case R.id.action_message:
                                 Intent contactAction = new Intent(activity,
                                         ContactActivity.class);
                                 startActivity(contactAction);
                                 return true;
+                            //emergency call activity
                             case R.id.action_emergency:
                                 startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
                                         "811", null)));
                                 return true;
+                            //friends activity
                             case R.id.action_friends:
                                 Intent friendsAction = new Intent(activity,
                                         FriendsActivity.class);
@@ -62,16 +70,27 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
                 });
     }
 
-
+    /**
+     * initialize the items that will be used in the side navigation menu
+     *
+     * @param mNavItems arraylist of navigation items that will be edited
+     */
     public void initializeNavItems(ArrayList<NavItem> mNavItems) {
         mNavItems.add(new NavItem("Home", "Main Screen", R.drawable.ic_vector_home));
-        mNavItems.add(new NavItem("Messages", "Contact your friends", R.drawable.ic_vector_messages));
-//        mNavItems.add(new NavItem("Chat", "Chat with your friends here", R.drawable.ic_vector_compose));
+        mNavItems.add(new NavItem("Contact", "Contact your friends", R.drawable.ic_vector_messages));
         mNavItems.add(new NavItem("Friends", "See your friends", R.drawable.ic_vector_person));
         mNavItems.add(new NavItem("Hotlines", "Easy access to a list of hotlines that you can call", R.drawable.phoneicon));
         mNavItems.add(new NavItem("Log out", "Log out", R.drawable.logout));
     }
 
+    /**
+     * @param position      the position of the selected item
+     * @param mDrawerList   list view of the current items
+     * @param mDrawerPane   relative layout
+     * @param mDrawerLayout drawer layout item
+     * @param activity      the activity that the navigation menu is located in
+     * @param mNavItems     navigation items
+     */
     public void selectItemFromDrawer(int position, ListView mDrawerList, RelativeLayout mDrawerPane,
                                      DrawerLayout mDrawerLayout, Activity activity,
                                      ArrayList<NavItem> mNavItems) {
@@ -83,9 +102,6 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
             case 1:
                 startActivity(new Intent(activity, ContactActivity.class));
                 break;
-//            case 2:
-//                startActivity(new Intent(activity, ChatActivity.class));
-//                break;
             case 2:
                 startActivity(new Intent(activity, FriendsActivity.class));
                 break;
@@ -105,12 +121,19 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
         mDrawerLayout.closeDrawer(mDrawerPane);
     }
 
+    /**
+     * @param item item that has been selected
+     * @return true after the item has been set checked
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);
         return true;
     }
 
+    /**
+     * create a NavItem object that has a title, subtitle, and icon
+     */
     class NavItem {
         String mTitle;
         String mSubtitle;
@@ -123,6 +146,9 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
+    /**
+     * adapter that inflates the drawer list
+     */
     class DrawerListAdapter extends BaseAdapter {
 
         Context mContext;
@@ -155,8 +181,7 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.drawer_item, null);
-            }
-            else {
+            } else {
                 view = convertView;
             }
 
@@ -164,8 +189,8 @@ public class BaseActivity extends AppCompatActivity implements BottomNavigationV
             TextView subtitleView = (TextView) view.findViewById(R.id.subTitle);
             ImageView iconView = (ImageView) view.findViewById(R.id.icon);
 
-            titleView.setText( mNavItems.get(position).mTitle );
-            subtitleView.setText( mNavItems.get(position).mSubtitle );
+            titleView.setText(mNavItems.get(position).mTitle);
+            subtitleView.setText(mNavItems.get(position).mSubtitle);
             iconView.setImageResource(mNavItems.get(position).mIcon);
 
             return view;
