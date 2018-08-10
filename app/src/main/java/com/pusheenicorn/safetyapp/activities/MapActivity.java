@@ -359,12 +359,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("friend", friend);
 
-        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
-        SmsManager sms = SmsManager.getDefault();
+        final PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
+        final SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(userNum, null, tempKey, pi, null);
         final Keyword keyword = new Keyword();
         keyword.setKeyword(tempKey);
-        keyword.saveInBackground();
+        keyword.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                sms.sendTextMessage(userNum, null, keyword.getKeyword(), pi, null);
+            }
+        });
     }
 
     /**
