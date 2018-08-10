@@ -95,21 +95,21 @@
                 android:fontFamily="@font/arimo"
                 android:text="SAFE"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvAlert2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/rvFriendList"
-        android:layout_marginTop="70dp"
-        android:fontFamily="@font/arimo"
-        android:text="ALERT"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvAlert2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/rvFriendList"
+                android:layout_marginTop="70dp"
+                android:fontFamily="@font/arimo"
+                android:text="ALERT"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvFriendList"
