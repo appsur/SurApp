@@ -1,20 +1,9 @@
 package com.pusheenicorn.safetyapp.receivers;
 
-import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.models.Checkin;
 import com.pusheenicorn.safetyapp.models.User;
 import com.pusheenicorn.safetyapp.utils.CheckinUtil;
@@ -22,8 +11,6 @@ import com.pusheenicorn.safetyapp.utils.NotificationUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class CheckinReceiver extends WakefulBroadcastReceiver {
 
@@ -69,7 +56,7 @@ public class CheckinReceiver extends WakefulBroadcastReceiver {
             checkinUtil = new CheckinUtil(context, currentUser);
             mins = (int) currentUser.getNumber(CHECKIN_FREQUENCY_KEY);
             notificationUtil.scheduleNotification(
-                    notificationUtil.getNotification(), mins * SECOND_TO_MILLIS);
+                    notificationUtil.getNotification(), 439,mins * SECOND_TO_MILLIS);
             checkinUtil.startCheckIn();
         }
 

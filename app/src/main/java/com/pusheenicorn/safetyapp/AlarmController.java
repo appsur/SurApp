@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp.classes;//package com.pusheenicorn.safetyapp;
+package com.pusheenicorn.safetyapp;//package com.pusheenicorn.safetyapp;
 
 import android.content.Context;
 import android.media.AudioAttributes;
@@ -7,8 +7,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcelable;
-
-import com.pusheenicorn.safetyapp.R;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -84,7 +82,6 @@ public class AlarmController implements Parcelable {
 
 
         try {
-
             if (!mp.isPlaying()) {
                 mp.setDataSource(context, alarmSound);
                 mp.setAudioAttributes(
@@ -97,15 +94,14 @@ public class AlarmController implements Parcelable {
                 mp.prepare();
                 mp.start();
             }
-
-
         } catch (IOException e) {
 
 
         }
         // set the volume to max volume
-        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), AudioManager.FLAG_PLAY_SOUND);
-
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM,
+                mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+                AudioManager.FLAG_PLAY_SOUND);
     }
 
     public void stopSound() {

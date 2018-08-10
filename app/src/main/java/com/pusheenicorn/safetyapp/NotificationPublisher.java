@@ -1,4 +1,4 @@
-package com.pusheenicorn.safetyapp.classes;
+package com.pusheenicorn.safetyapp;
 
 import android.app.Notification;
 import android.app.NotificationManager;
