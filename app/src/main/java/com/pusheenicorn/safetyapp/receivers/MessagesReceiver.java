@@ -31,7 +31,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         //get message passed in
         Bundle bundle = intent.getExtras();
-        SmsMessage[] messages;
+        final SmsMessage[] messages;
         String str = "";
         mCurrentUser = (User) ParseUser.getCurrentUser();
 
@@ -56,6 +56,11 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                     if (e == null) {
                         if (objects != null) {
                             messageComp = objects.get(objects.size() - 1);
+                            if (objects.size() >= 2)
+                            {
+                                objects.get(objects.size() - 2).deleteInBackground();
+                            }
+                            Toast.makeText(context, messageComp.getKeyword(), Toast.LENGTH_LONG).show();
                             String keyword = messageComp.getKeyword();
                             //check to see if the body of the message has the most recently created keyword
                             if (messageBody.equals(keyword)) {

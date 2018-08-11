@@ -18,16 +18,6 @@ public class Keyword extends ParseObject {
         public Query() {
             super(Keyword.class);
         }
-
-        /**
-         * Modifies the query such that only the top 20 entries are returned.
-         *
-         * @return this: a modified query.
-         */
-        public Keyword.Query getTop() {
-            setLimit(20);
-            return this;
-        }
     }
 
 }
