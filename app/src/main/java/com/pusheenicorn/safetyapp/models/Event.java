@@ -140,8 +140,7 @@ public class Event extends ParseObject implements Comparable<Event> {
     public List<String> getUserNames() {
         ArrayList<String> userNames = new ArrayList<String>();
         if (getUsers() != null) {
-            for (int i = 0; i < getUsers().size(); i++)
-            {
+            for (int i = 0; i < getUsers().size(); i++) {
                 try {
                     userNames.add(getUsers().get(i).fetchIfNeeded().getString("username"));
                 } catch (ParseException e) {
@@ -154,18 +153,14 @@ public class Event extends ParseObject implements Comparable<Event> {
 
     public void sendNotifications(String id, NotificationUtil notificationUtil, Context context, int notifId) {
         ArrayList<Alert> alerts = (ArrayList) getAlerts();
-        if (alerts == null || alerts.isEmpty())
-        {
+        if (alerts == null || alerts.isEmpty()) {
             return;
-        }
-        else {
-            for (int i = 0; i < alerts.size(); i++)
-            {
+        } else {
+            for (int i = 0; i < alerts.size(); i++) {
                 Alert alert = alerts.get(i);
                 if (alert.getSeenBy() == null || alert.getSeenBy().isEmpty() ||
-                        alert.getSeenBy().contains(id))
-                {
-                    String message = getName() + " alert: " + alert.getMessage()
+                        alert.getSeenBy().contains(id)) {
+                    String message = getName() + ": " + alert.getMessage()
                             + "\n (from " +
                             alert.getUsername() + " )";
 

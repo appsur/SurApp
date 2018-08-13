@@ -56,11 +56,9 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                     if (e == null) {
                         if (objects != null) {
                             messageComp = objects.get(objects.size() - 1);
-                            if (objects.size() >= 2)
-                            {
+                            if (objects.size() >= 2) {
                                 objects.get(objects.size() - 2).deleteInBackground();
                             }
-                            Toast.makeText(context, messageComp.getKeyword(), Toast.LENGTH_LONG).show();
                             String keyword = messageComp.getKeyword();
                             //check to see if the body of the message has the most recently created keyword
                             if (messageBody.equals(keyword)) {
@@ -70,7 +68,7 @@ public class MessagesReceiver extends WakefulBroadcastReceiver {
                                 //create a notification that allows the user to stop the alarm from the push notification button
                                 NotificationUtil notificationUtil = new NotificationUtil(context);
                                 notificationUtil.scheduleNotification(
-                                        notificationUtil.getAlarmNotification(), ID,0);
+                                        notificationUtil.getAlarmNotification(), ID, 0);
                             }
                         }
                     }
