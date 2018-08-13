@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.mindorks:placeholderview-0.2.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/placeholderview-0.2.7.aar/44c2e46e629600fba5d971d570d05287/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/placeholderview-0.2.7.aar/44c2e46e629600fba5d971d570d05287/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mindorks/placeholderview/0.2.7/b8658e6dc991681d77c6a68d894e5242e2678246/placeholderview-0.2.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
