@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.pusheenicorn.safetyapp.R;
@@ -88,7 +89,7 @@ public class EventsActivity extends BaseActivity {
     public static String SERVICE_KEY = "service";
     public static String ALERT_EVENT = "eventAlert";
     public static String IMAGE_KEY = "bannerimage";
-    public static String IMAGE_NAME = "image_file.png";
+    public static String IMAGE_NAME = "image_file.jpeg";
 
     /**
      * This is executed on creation. It performs all the tasks
@@ -281,12 +282,30 @@ public class EventsActivity extends BaseActivity {
      * @return a parse file of the image that is uploaded
      */
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        Bitmap newBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
-        newBitmap.compress(Bitmap.CompressFormat.PNG, 40, byteArrayOutputStream);
-        byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile(IMAGE_NAME, imageByte);
-        return parseFile;
+        //TODO - remove png version of conversion
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        Bitmap newBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
+//        newBitmap.compress(Bitmap.CompressFormat.PNG, 40, byteArrayOutputStream);
+//        byte[] imageByte = byteArrayOutputStream.toByteArray();
+//        ParseFile parseFile = new ParseFile(IMAGE_NAME, imageByte);
+//        return parseFile;
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 25, stream);
+        Bitmap resized = Bitmap.createScaledBitmap(imageBitmap, 150, 80, true);
+        byte[] image = stream.toByteArray();
+
+        // Create the ParseFile
+        final ParseFile file  = new ParseFile(IMAGE_NAME, image);
+        // Upload the image into Parse Cloud
+        currentEvent.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                currentEvent.put("bannerimage",file);
+            }
+        });
+        return file;
     }
 
     /**
