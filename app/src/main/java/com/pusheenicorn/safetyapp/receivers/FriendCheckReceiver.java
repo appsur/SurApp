@@ -62,7 +62,12 @@ public class FriendCheckReceiver extends BroadcastReceiver {
     public void receiveNotification() {
         for (int i = 0; i < events.size(); i++)
         {
-            Event event = events.get(i);
+            Event event = null;
+            try {
+                event = events.get(i).fetch();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             event.sendNotifications(mCurrentUser.getObjectId(), notificationUtil, mContext,
                     (i * 7));
             String name = event.getName();

@@ -79,7 +79,8 @@
         </provider>
 
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.ChatActivity" />
+        <activity android:name=".activities.ChatActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.ContactActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.CalendarChoiceActivity" />
