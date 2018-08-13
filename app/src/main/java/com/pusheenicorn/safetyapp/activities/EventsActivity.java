@@ -282,7 +282,8 @@ public class EventsActivity extends BaseActivity {
      */
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        Bitmap newBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
+        newBitmap.compress(Bitmap.CompressFormat.PNG, 40, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
         ParseFile parseFile = new ParseFile(IMAGE_NAME, imageByte);
         return parseFile;
