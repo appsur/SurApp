@@ -282,14 +282,6 @@ public class EventsActivity extends BaseActivity {
      * @return a parse file of the image that is uploaded
      */
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
-        //TODO - remove png version of conversion
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        Bitmap newBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
-//        newBitmap.compress(Bitmap.CompressFormat.PNG, 40, byteArrayOutputStream);
-//        byte[] imageByte = byteArrayOutputStream.toByteArray();
-//        ParseFile parseFile = new ParseFile(IMAGE_NAME, imageByte);
-//        return parseFile;
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 25, stream);
