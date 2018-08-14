@@ -118,13 +118,21 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 if (recording) {
                     //check to make sure that the video is not too short
                     if (duration != 0) {
-                        mRecorder.stop();
-                        releaseMediaRecorder();
-                        recording = false;
-                        //finish recording and notify user, then return to main activity
-                        Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
-                        Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
-                        startActivity(finishRecording);
+                        try {
+                            mRecorder.stop();
+                            releaseMediaRecorder();
+                            recording = false;
+                            //finish recording and notify user, then return to main activity
+                            Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+                            Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+                            startActivity(finishRecording);
+                        }
+                        catch (IllegalStateException e)
+                        {
+                            Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+                            Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+                            startActivity(finishRecording);
+                        }
                     }
                     if (usecamera) {
                         try {
@@ -141,11 +149,19 @@ public class VideoActivity extends BaseActivity implements DialogInterface.OnCli
                 } else if (!recording) {
                     if (duration == 0) {
                         ibRecord.setVisibility(View.INVISIBLE);
-                        mRecorder.start();
-                        tvStop.setVisibility(View.VISIBLE);
-                        ibRecord.setVisibility(View.VISIBLE);
-                        Log.v(LOGTAG, "Recording Started");
-                        recording = true;
+                        try {
+                            mRecorder.start();
+                            tvStop.setVisibility(View.VISIBLE);
+                            ibRecord.setVisibility(View.VISIBLE);
+                            Log.v(LOGTAG, "Recording Started");
+                            recording = true;
+                        }
+                        catch (IllegalStateException e)
+                        {
+                            Toast.makeText(VideoActivity.this, "Successfully recorded video", Toast.LENGTH_SHORT).show();
+                            Intent finishRecording = new Intent(VideoActivity.this, MainActivity.class);
+                            startActivity(finishRecording);
+                        }
                     }
                 }
             }

@@ -31,6 +31,8 @@ public class ParseApp extends Application{
         ParseObject.registerSubclass(Perm.class);
         ParseObject.registerSubclass(Alert.class);
         ParseObject.registerSubclass(Keyword.class);
+
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
